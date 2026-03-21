@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import menuItemsRouter from './routes/menuItemsRoutes.js';
+import orderRouter from './routes/orderRoutes.js';
 import errorHandler from './middleware/errorHandler.js';
 
 const app = express();
@@ -16,6 +17,7 @@ app.get('/', (req, res) => {
 
 // API Routes
 app.use('/api/menu-items', menuItemsRouter);
+app.use('/api/orders', orderRouter);
 
 // Global error handler (must be last)
 app.use(errorHandler);
