@@ -141,8 +141,36 @@ export default function StudentOrderPage() {
   /* ================================================================
      CHECKOUT
      ================================================================ */
+  const validatePhoneNumber = (phone) => {
+    if (!phone) return '';
+    return phone.length === 10
+      ? ''
+      : 'Phone number must be exactly 10 digits';
+  };
+
+  const handlePhoneKeyDown = (e) => {
+    const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Home', 'End'];
+
+    if (e.ctrlKey || e.metaKey || allowedKeys.includes(e.key)) return;
+
+    const hasSelection = e.currentTarget.selectionStart !== e.currentTarget.selectionEnd;
+    const isDigit = /^\d$/.test(e.key);
+
+    if (!isDigit || (checkoutForm.phone.length >= 10 && !hasSelection)) {
+      e.preventDefault();
+    }
+  };
+
   const handleCheckoutChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === 'phone') {
+      const sanitizedPhone = value.replace(/\D/g, '').slice(0, 10);
+      setCheckoutForm((prev) => ({ ...prev, phone: sanitizedPhone }));
+      setPhoneError(validatePhoneNumber(sanitizedPhone));
+      return;
+    }
+
     setCheckoutForm((prev) => ({ ...prev, [name]: value }));
 
     if (name === 'studentId') {
@@ -156,16 +184,6 @@ export default function StudentOrderPage() {
       }
     }
 
-    if (name === 'phone') {
-      const phoneRegex = /^\d{10}$/;
-      if (!value.trim()) {
-        setPhoneError('');
-      } else if (!phoneRegex.test(value.trim())) {
-        setPhoneError('Phone number must be exactly 10 digits');
-      } else {
-        setPhoneError('');
-      }
-    }
   };
 
   const handlePlaceOrder = async (e) => {
@@ -179,9 +197,9 @@ export default function StudentOrderPage() {
     }
 
     // Validate phone number before submitting
-    const phoneRegex = /^\d{10}$/;
-    if (!phoneRegex.test(checkoutForm.phone.trim())) {
-      setPhoneError('Phone number must be exactly 10 digits');
+    const phoneValidationMessage = validatePhoneNumber(checkoutForm.phone.trim());
+    if (phoneValidationMessage) {
+      setPhoneError(phoneValidationMessage);
       return;
     }
 
@@ -660,10 +678,13 @@ export default function StudentOrderPage() {
                 <input
                   id="phone"
                   name="phone"
-                  type="tel"
+                  type="text"
                   value={checkoutForm.phone}
                   onChange={handleCheckoutChange}
+                  onKeyDown={handlePhoneKeyDown}
                   placeholder="07X XXX XXXX"
+                  inputMode="numeric"
+                  pattern="\d{10}"
                   maxLength={10}
                   required
                   className={phoneError ? 'input-error' : ''}
