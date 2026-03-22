@@ -141,6 +141,54 @@ export default function StudentOrderPage() {
   /* ================================================================
      CHECKOUT
      ================================================================ */
+  const STUDENT_ID_ERROR_MESSAGE = 'Student ID must start with 2 letters followed by 8 numbers';
+
+  const validateStudentId = (studentId) => {
+    if (!studentId) return '';
+    return /^[A-Za-z]{2}\d{8}$/.test(studentId)
+      ? ''
+      : STUDENT_ID_ERROR_MESSAGE;
+  };
+
+  const sanitizeStudentId = (value) => {
+    const upperValue = value.toUpperCase();
+    let formatted = '';
+
+    for (const ch of upperValue) {
+      if (formatted.length < 2) {
+        if (/^[A-Z]$/.test(ch)) formatted += ch;
+      } else if (/^\d$/.test(ch)) {
+        formatted += ch;
+      }
+
+      if (formatted.length === 10) break;
+    }
+
+    return formatted;
+  };
+
+  const handleStudentIdKeyDown = (e) => {
+    const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Home', 'End'];
+
+    if (e.ctrlKey || e.metaKey || allowedKeys.includes(e.key)) return;
+
+    const { selectionStart, selectionEnd, value } = e.currentTarget;
+    const hasSelection = selectionStart !== selectionEnd;
+    const cursorPos = selectionStart ?? value.length;
+
+    if (value.length >= 10 && !hasSelection) {
+      e.preventDefault();
+      return;
+    }
+
+    if (cursorPos < 2) {
+      if (!/^[a-zA-Z]$/.test(e.key)) e.preventDefault();
+      return;
+    }
+
+    if (!/^\d$/.test(e.key)) e.preventDefault();
+  };
+
   const validatePhoneNumber = (phone) => {
     if (!phone) return '';
     return phone.length === 10
@@ -164,6 +212,13 @@ export default function StudentOrderPage() {
   const handleCheckoutChange = (e) => {
     const { name, value } = e.target;
 
+    if (name === 'studentId') {
+      const sanitizedStudentId = sanitizeStudentId(value);
+      setCheckoutForm((prev) => ({ ...prev, studentId: sanitizedStudentId }));
+      setStudentIdError(validateStudentId(sanitizedStudentId));
+      return;
+    }
+
     if (name === 'phone') {
       const sanitizedPhone = value.replace(/\D/g, '').slice(0, 10);
       setCheckoutForm((prev) => ({ ...prev, phone: sanitizedPhone }));
@@ -173,26 +228,15 @@ export default function StudentOrderPage() {
 
     setCheckoutForm((prev) => ({ ...prev, [name]: value }));
 
-    if (name === 'studentId') {
-      const idRegex = /^[A-Za-z]{2}\d{8}$/;
-      if (!value.trim()) {
-        setStudentIdError('');
-      } else if (!idRegex.test(value.trim())) {
-        setStudentIdError('Must be 2 English letters followed by 8 digits (e.g. AB12345678)');
-      } else {
-        setStudentIdError('');
-      }
-    }
-
   };
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
 
     // Validate student ID before submitting
-    const idRegex = /^[A-Za-z]{2}\d{8}$/;
-    if (!idRegex.test(checkoutForm.studentId.trim())) {
-      setStudentIdError('Must be 2 English letters followed by 8 digits (e.g. AB12345678)');
+    const studentIdValidationMessage = validateStudentId(checkoutForm.studentId.trim());
+    if (studentIdValidationMessage) {
+      setStudentIdError(studentIdValidationMessage);
       return;
     }
 
@@ -663,7 +707,11 @@ export default function StudentOrderPage() {
                   name="studentId"
                   value={checkoutForm.studentId}
                   onChange={handleCheckoutChange}
-                  placeholder="e.g. AB12345678"
+                  onKeyDown={handleStudentIdKeyDown}
+                  placeholder="e.g. IT12345678"
+                  type="text"
+                  inputMode="text"
+                  pattern="[A-Za-z]{2}\d{8}"
                   maxLength={10}
                   required
                   className={studentIdError ? 'input-error' : ''}
