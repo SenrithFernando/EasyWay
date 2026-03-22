@@ -31,10 +31,12 @@ export default function StudentOrderPage() {
   const [showCheckout, setShowCheckout] = useState(false);
   const [checkoutForm, setCheckoutForm] = useState({
     studentName: '',
+    studentId: '',
     phone: '',
     orderType: 'Pickup',
     deliveryAddress: '',
   });
+  const [studentIdError, setStudentIdError] = useState('');
   const [placing, setPlacing] = useState(false);
 
   /* ---- order confirmation ---- */
@@ -141,14 +143,34 @@ export default function StudentOrderPage() {
   const handleCheckoutChange = (e) => {
     const { name, value } = e.target;
     setCheckoutForm((prev) => ({ ...prev, [name]: value }));
+
+    if (name === 'studentId') {
+      const idRegex = /^[A-Za-z]{2}\d{8}$/;
+      if (!value.trim()) {
+        setStudentIdError('');
+      } else if (!idRegex.test(value.trim())) {
+        setStudentIdError('Must be 2 English letters followed by 8 digits (e.g. AB12345678)');
+      } else {
+        setStudentIdError('');
+      }
+    }
   };
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
+
+    // Validate student ID before submitting
+    const idRegex = /^[A-Za-z]{2}\d{8}$/;
+    if (!idRegex.test(checkoutForm.studentId.trim())) {
+      setStudentIdError('Must be 2 English letters followed by 8 digits (e.g. AB12345678)');
+      return;
+    }
+
     setPlacing(true);
     try {
       const payload = {
         studentName: checkoutForm.studentName.trim(),
+        studentId: checkoutForm.studentId.trim().toUpperCase(),
         phone: checkoutForm.phone.trim(),
         orderType: checkoutForm.orderType,
         deliveryAddress:
@@ -595,6 +617,23 @@ export default function StudentOrderPage() {
                   placeholder="Enter your name"
                   required
                 />
+              </div>
+
+              <div className="so-form-group">
+                <label htmlFor="studentId">Student ID Number</label>
+                <input
+                  id="studentId"
+                  name="studentId"
+                  value={checkoutForm.studentId}
+                  onChange={handleCheckoutChange}
+                  placeholder="e.g. AB12345678"
+                  maxLength={10}
+                  required
+                  className={studentIdError ? 'input-error' : ''}
+                />
+                {studentIdError && (
+                  <span className="field-error">{studentIdError}</span>
+                )}
               </div>
 
               <div className="so-form-group">
