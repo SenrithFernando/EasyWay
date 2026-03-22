@@ -37,6 +37,7 @@ export default function StudentOrderPage() {
     deliveryAddress: '',
   });
   const [studentIdError, setStudentIdError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
   const [placing, setPlacing] = useState(false);
 
   /* ---- order confirmation ---- */
@@ -154,6 +155,17 @@ export default function StudentOrderPage() {
         setStudentIdError('');
       }
     }
+
+    if (name === 'phone') {
+      const phoneRegex = /^\d{10}$/;
+      if (!value.trim()) {
+        setPhoneError('');
+      } else if (!phoneRegex.test(value.trim())) {
+        setPhoneError('Phone number must be exactly 10 digits');
+      } else {
+        setPhoneError('');
+      }
+    }
   };
 
   const handlePlaceOrder = async (e) => {
@@ -163,6 +175,13 @@ export default function StudentOrderPage() {
     const idRegex = /^[A-Za-z]{2}\d{8}$/;
     if (!idRegex.test(checkoutForm.studentId.trim())) {
       setStudentIdError('Must be 2 English letters followed by 8 digits (e.g. AB12345678)');
+      return;
+    }
+
+    // Validate phone number before submitting
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(checkoutForm.phone.trim())) {
+      setPhoneError('Phone number must be exactly 10 digits');
       return;
     }
 
@@ -641,11 +660,17 @@ export default function StudentOrderPage() {
                 <input
                   id="phone"
                   name="phone"
+                  type="tel"
                   value={checkoutForm.phone}
                   onChange={handleCheckoutChange}
                   placeholder="07X XXX XXXX"
+                  maxLength={10}
                   required
+                  className={phoneError ? 'input-error' : ''}
                 />
+                {phoneError && (
+                  <span className="field-error">{phoneError}</span>
+                )}
               </div>
 
               <div className="so-form-group">
