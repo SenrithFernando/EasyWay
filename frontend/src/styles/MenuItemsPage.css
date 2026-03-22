@@ -1,5 +1,5 @@
 /* ============================================================
-   Menu Items Page — Dark Glassmorphism UI
+   Menu Items Page — Dark Glassmorphism UI (EasyWay Theme)
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -7,9 +7,9 @@
 /* ---------- page wrapper ---------- */
 .menu-items-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f0c29 0%, #1a1a3e 40%, #24243e 100%);
+  background: linear-gradient(135deg, var(--color-surface-900) 0%, #1e293b 40%, var(--color-surface-800) 100%);
   font-family: 'Inter', system-ui, sans-serif;
-  color: #e0e0e0;
+  color: var(--color-surface-300);
   padding: 0;
 }
 
@@ -27,7 +27,7 @@
   font-size: 32px;
   font-weight: 800;
   letter-spacing: -0.5px;
-  background: linear-gradient(135deg, #a78bfa, #818cf8, #6366f1);
+  background: linear-gradient(135deg, var(--color-brand-400), var(--color-brand-500), var(--color-brand-600));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -36,7 +36,7 @@
 
 .menu-header-subtitle {
   font-size: 14px;
-  color: #9ca3af;
+  color: var(--color-surface-400);
   margin-top: 4px;
 }
 
@@ -47,17 +47,17 @@
   padding: 12px 24px;
   border: none;
   border-radius: 14px;
-  background: linear-gradient(135deg, #7c3aed, #6366f1);
+  background: linear-gradient(135deg, var(--color-brand-600), var(--color-brand-500));
   color: #fff;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--color-brand-500) 35%, transparent);
 }
 .btn-add-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+  box-shadow: 0 8px 30px color-mix(in srgb, var(--color-brand-500) 50%, transparent);
 }
 .btn-add-item:active {
   transform: translateY(0);
@@ -82,7 +82,7 @@
   font-weight: 600;
   border: 1.5px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.05);
-  color: #d1d5db;
+  color: var(--color-surface-300);
   cursor: pointer;
   transition: all 0.25s ease;
   user-select: none;
@@ -93,10 +93,10 @@
   border-color: rgba(255, 255, 255, 0.2);
 }
 .chip.active {
-  background: linear-gradient(135deg, #7c3aed, #6366f1);
+  background: linear-gradient(135deg, var(--color-brand-600), var(--color-brand-500));
   color: #fff;
   border-color: transparent;
-  box-shadow: 0 2px 15px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 2px 15px color-mix(in srgb, var(--color-brand-500) 40%, transparent);
 }
 
 /* ---------- stats bar ---------- */
@@ -118,11 +118,11 @@
 .stat-value {
   font-size: 28px;
   font-weight: 700;
-  color: #f3f4f6;
+  color: var(--color-surface-100);
 }
 .stat-label {
   font-size: 12px;
-  color: #9ca3af;
+  color: var(--color-surface-400);
   margin-top: 2px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -156,7 +156,7 @@
   border-radius: 20px;
   background: linear-gradient(
     135deg,
-    rgba(124, 58, 237, 0.08) 0%,
+    color-mix(in srgb, var(--color-brand-500) 10%, transparent) 0%,
     transparent 50%
   );
   opacity: 0;
@@ -166,7 +166,7 @@
 .item-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
-  border-color: rgba(124, 58, 237, 0.25);
+  border-color: color-mix(in srgb, var(--color-brand-500) 25%, transparent);
 }
 .item-card:hover::before {
   opacity: 1;
@@ -186,12 +186,12 @@
 .item-name {
   font-size: 18px;
   font-weight: 700;
-  color: #f3f4f6;
+  color: var(--color-surface-100);
   margin: 0;
 }
 .item-description {
   font-size: 13px;
-  color: #9ca3af;
+  color: var(--color-surface-400);
   line-height: 1.5;
   margin: 0 0 16px;
   flex: 1;
@@ -208,7 +208,7 @@
 .item-price {
   font-size: 22px;
   font-weight: 800;
-  background: linear-gradient(135deg, #34d399, #10b981);
+  background: linear-gradient(135deg, var(--color-success-400), var(--color-success-500));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -224,14 +224,14 @@
   border-radius: 50px;
 }
 .badge-rice {
-  background: rgba(251, 191, 36, 0.15);
-  color: #fbbf24;
-  border: 1px solid rgba(251, 191, 36, 0.3);
+  background: color-mix(in srgb, var(--color-warm-400) 15%, transparent);
+  color: var(--color-warm-400);
+  border: 1px solid color-mix(in srgb, var(--color-warm-400) 30%, transparent);
 }
 .badge-snack {
-  background: rgba(249, 115, 22, 0.15);
-  color: #fb923c;
-  border: 1px solid rgba(249, 115, 22, 0.3);
+  background: color-mix(in srgb, var(--color-brand-500) 15%, transparent);
+  color: var(--color-brand-400);
+  border: 1px solid color-mix(in srgb, var(--color-brand-500) 30%, transparent);
 }
 .badge-beverage {
   background: rgba(56, 189, 248, 0.15);
@@ -244,14 +244,14 @@
   border: 1px solid rgba(244, 114, 182, 0.3);
 }
 .badge-other {
-  background: rgba(148, 163, 184, 0.15);
-  color: #94a3b8;
-  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: color-mix(in srgb, var(--color-surface-400) 15%, transparent);
+  color: var(--color-surface-400);
+  border: 1px solid color-mix(in srgb, var(--color-surface-400) 30%, transparent);
 }
 
 .prep-time {
   font-size: 12px;
-  color: #9ca3af;
+  color: var(--color-surface-400);
   display: flex;
   align-items: center;
   gap: 4px;
@@ -266,7 +266,7 @@
 }
 .toggle-label {
   font-size: 13px;
-  color: #9ca3af;
+  color: var(--color-surface-400);
 }
 .toggle {
   position: relative;
@@ -282,7 +282,7 @@
 .toggle-slider {
   position: absolute;
   inset: 0;
-  background: #374151;
+  background: var(--color-surface-600);
   border-radius: 24px;
   cursor: pointer;
   transition: 0.3s;
@@ -299,7 +299,7 @@
   transition: 0.3s;
 }
 .toggle input:checked + .toggle-slider {
-  background: linear-gradient(135deg, #7c3aed, #6366f1);
+  background: linear-gradient(135deg, var(--color-brand-600), var(--color-brand-500));
 }
 .toggle input:checked + .toggle-slider::after {
   transform: translateX(20px);
@@ -325,12 +325,12 @@
   transition: all 0.2s;
 }
 .btn-edit {
-  background: rgba(99, 102, 241, 0.12);
-  color: #818cf8;
-  border: 1px solid rgba(99, 102, 241, 0.2);
+  background: color-mix(in srgb, var(--color-brand-500) 12%, transparent);
+  color: var(--color-brand-400);
+  border: 1px solid color-mix(in srgb, var(--color-brand-500) 20%, transparent);
 }
 .btn-edit:hover {
-  background: rgba(99, 102, 241, 0.25);
+  background: color-mix(in srgb, var(--color-brand-500) 25%, transparent);
 }
 .btn-delete {
   background: rgba(239, 68, 68, 0.1);
@@ -360,7 +360,7 @@
 }
 
 .modal {
-  background: #1e1e2e;
+  background: var(--color-surface-800);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 24px;
   width: 100%;
@@ -379,7 +379,7 @@
 .modal h2 {
   font-size: 22px;
   font-weight: 700;
-  color: #f3f4f6;
+  color: var(--color-surface-100);
   margin: 0 0 24px;
 }
 
@@ -390,7 +390,7 @@
   display: block;
   font-size: 13px;
   font-weight: 600;
-  color: #d1d5db;
+  color: var(--color-surface-300);
   margin-bottom: 6px;
 }
 .form-group input,
@@ -401,7 +401,7 @@
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 12px;
-  color: #f3f4f6;
+  color: var(--color-surface-100);
   font-size: 14px;
   font-family: inherit;
   outline: none;
@@ -411,8 +411,8 @@
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-  border-color: #7c3aed;
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+  border-color: var(--color-brand-500);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-brand-500) 15%, transparent);
 }
 .form-group textarea {
   resize: vertical;
@@ -426,8 +426,8 @@
   cursor: pointer;
 }
 .form-group select option {
-  background: #1e1e2e;
-  color: #f3f4f6;
+  background: var(--color-surface-800);
+  color: var(--color-surface-100);
 }
 
 .form-row {
@@ -444,7 +444,7 @@
 }
 .form-toggle span {
   font-size: 14px;
-  color: #d1d5db;
+  color: var(--color-surface-300);
 }
 
 .modal-actions {
@@ -465,19 +465,19 @@
 }
 .btn-cancel {
   background: rgba(255, 255, 255, 0.06);
-  color: #d1d5db;
+  color: var(--color-surface-300);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 .btn-cancel:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 .btn-save {
-  background: linear-gradient(135deg, #7c3aed, #6366f1);
+  background: linear-gradient(135deg, var(--color-brand-600), var(--color-brand-500));
   color: #fff;
-  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--color-brand-500) 35%, transparent);
 }
 .btn-save:hover {
-  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+  box-shadow: 0 8px 30px color-mix(in srgb, var(--color-brand-500) 50%, transparent);
   transform: translateY(-1px);
 }
 .btn-save:disabled {
@@ -496,13 +496,13 @@
   margin-bottom: 12px;
 }
 .delete-modal p {
-  color: #9ca3af;
+  color: var(--color-surface-400);
   font-size: 14px;
   line-height: 1.6;
   margin: 0 0 8px;
 }
 .delete-modal .delete-item-name {
-  color: #f3f4f6;
+  color: var(--color-surface-100);
   font-weight: 600;
 }
 .btn-confirm-delete {
@@ -556,13 +556,13 @@
   margin-bottom: 16px;
 }
 .empty-state h3 {
-  color: #f3f4f6;
+  color: var(--color-surface-100);
   font-size: 20px;
   font-weight: 600;
   margin: 0 0 8px;
 }
 .empty-state p {
-  color: #9ca3af;
+  color: var(--color-surface-400);
   font-size: 14px;
   margin: 0 0 24px;
 }
@@ -581,7 +581,7 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 .toast-success {
-  background: linear-gradient(135deg, #059669, #10b981);
+  background: linear-gradient(135deg, var(--color-success-600), var(--color-success-500));
   color: #fff;
 }
 .toast-error {
