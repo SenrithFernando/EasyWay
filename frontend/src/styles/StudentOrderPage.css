@@ -1065,3 +1065,100 @@
     padding: 32px 20px;
   }
 }
+
+/* ---------- white background + black text override ---------- */
+.student-order-page {
+  background: #ffffff;
+  color: #000000;
+}
+
+.so-header-left h1,
+.so-item-price,
+.cart-total-amount,
+.order-total strong {
+  background: none;
+  -webkit-text-fill-color: #000000;
+  color: #000000;
+}
+
+.so-header-subtitle,
+.tab-btn,
+.so-item-desc,
+.so-prep-time,
+.search-bar input::placeholder,
+.cart-empty,
+.cart-empty p,
+.cart-empty span,
+.cart-total-row,
+.checkout-items-count,
+.so-form-group label,
+.type-btn,
+.so-btn-cancel,
+.conf-details,
+.conf-status,
+.order-date,
+.order-item-row,
+.order-total,
+.order-type-tag,
+.so-empty-state p {
+  color: #374151;
+}
+
+.tab-switcher,
+.so-chip,
+.search-bar input,
+.so-menu-card,
+.so-qty-controls,
+.cart-panel,
+.cart-close,
+.cart-item,
+.cart-summary,
+.btn-clear-cart,
+.so-modal,
+.checkout-summary,
+.so-form-group input,
+.so-form-group textarea,
+.type-btn,
+.so-btn-cancel,
+.confirmation-banner,
+.order-card,
+.order-type-tag,
+.so-skeleton-card {
+  background: #ffffff;
+  border-color: #d1d5db;
+}
+
+.so-item-name,
+.so-qty-value,
+.cart-header h2,
+.cart-item-name,
+.so-modal h2,
+.confirmation-banner h2,
+.my-orders-header h2,
+.order-id,
+.so-empty-state h3,
+.search-bar input,
+.so-form-group input,
+.so-form-group textarea,
+.so-btn-cancel,
+.btn-clear-cart {
+  color: #000000;
+}
+
+.so-chip {
+  color: #000000;
+}
+
+.cart-overlay {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.so-modal-overlay {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.cart-summary,
+.order-items-list {
+  border-top-color: #e5e7eb;
+  border-bottom-color: #e5e7eb;
+}

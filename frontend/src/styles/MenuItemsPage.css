@@ -663,3 +663,76 @@
     margin: 16px 20px;
   }
 }
+
+/* ---------- white background + black text override ---------- */
+.menu-items-page {
+  background: #ffffff;
+  color: #000000;
+}
+
+.menu-header h1 {
+  background: none;
+  -webkit-text-fill-color: #000000;
+  color: #000000;
+}
+
+.menu-header-subtitle,
+.stat-label,
+.item-description,
+.prep-time,
+.toggle-label,
+.form-group label,
+.form-toggle span,
+.delete-modal p,
+.empty-state p {
+  color: #374151;
+}
+
+.chip {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  color: #000000;
+}
+
+.stat-card,
+.item-card,
+.modal,
+.skeleton-card {
+  background: #ffffff;
+  border-color: #e5e7eb;
+}
+
+.stat-value,
+.item-name,
+.modal h2,
+.delete-modal .delete-item-name,
+.empty-state h3,
+.form-group input,
+.form-group select,
+.form-group textarea,
+.form-group select option,
+.btn-cancel {
+  color: #000000;
+}
+
+.item-price {
+  background: none;
+  -webkit-text-fill-color: #000000;
+  color: #000000;
+}
+
+.card-actions {
+  border-top-color: #e5e7eb;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea,
+.btn-cancel {
+  background: #ffffff;
+  border-color: #d1d5db;
+}
+
+.modal-overlay {
+  background: rgba(0, 0, 0, 0.35);
+}
