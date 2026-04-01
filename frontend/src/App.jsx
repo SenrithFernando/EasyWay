@@ -4,6 +4,7 @@ import { ReservationPage } from './pages/ReservationPage'
 import { StudentDashboard } from './pages/StudentDashboard'
 import { ProfilePage } from './pages/ProfilePage'
 import { LandingPage } from './pages/LandingPage'
+import { TableCheckInPage } from './pages/TableCheckInPage'
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path="/admin" element={<Navigate to="/login" replace />} />
         <Route path="/student" element={<StudentDashboard />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/checkin/:location/:tableId" element={<TableCheckInPage />} />
       </Routes>
     </BrowserRouter>
   )

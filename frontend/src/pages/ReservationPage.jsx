@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CalendarIcon, UsersIcon, CheckCircleIcon, QrCodeIcon, } from 'lucide-react';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
@@ -80,14 +81,91 @@ const LOCATIONS = [
 ];
 
 export function ReservationPage() {
+    const navigate = useNavigate();
     const [step, setStep] = useState(1);
     const [selectedDate, setSelectedDate] = useState('Today');
     const [selectedTime, setSelectedTime] = useState(null);
     const [selectedSeats, setSelectedSeats] = useState(1);
     const [selectedLocation, setSelectedLocation] = useState(LOCATIONS[0].id);
     const [selectedTable, setSelectedTable] = useState(null);
-    const handleConfirm = () => {
-        setStep(2);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [reservations, setReservations] = useState([]);
+    const [reservationCode, setReservationCode] = useState("");
+
+    useEffect(() => {
+        const fetchReservations = async () => {
+            try {
+                const response = await fetch('/api/reservations');
+                if (response.ok) {
+                    const data = await response.json();
+                    setReservations(data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch reservations", error);
+            }
+        };
+        fetchReservations();
+    }, []);
+
+    const generateDateOptions = () => {
+        const today = new Date();
+        const options = ['Today', 'Tomorrow'];
+        
+        for (let i = 2; i < 4; i++) {
+            const date = new Date(today);
+            date.setDate(today.getDate() + i);
+            options.push(date.toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric' }));
+        }
+        return options;
+    };
+    
+    const DATE_OPTIONS = React.useMemo(() => generateDateOptions(), []);
+
+    const handleConfirm = async () => {
+        setIsSubmitting(true);
+        try {
+            const userStr = localStorage.getItem('user');
+            if (!userStr) {
+                alert("Please log in to make a reservation.");
+                navigate('/login');
+                return;
+            }
+            const user = JSON.parse(userStr);
+            const userId = user.id || user._id;
+
+            const payload = {
+                userId,
+                date: selectedDate,
+                time: selectedTime,
+                seats: selectedSeats,
+                location: LOCATIONS.find(l => l.id === selectedLocation)?.name || selectedLocation,
+                tableId: selectedTable
+            };
+
+            const response = await fetch('/api/reservations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const data = await response.json().catch(() => ({}));
+                throw new Error(data.message || 'Failed to create reservation');
+            } else {
+                const data = await response.json();
+                setReservationCode(data.reservationCode);
+            }
+
+            setStep(2);
+        } catch (error) {
+            console.error("Reservation failed:", error);
+            alert("Reservation failed: " + error.message);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
     return (<DashboardLayout role="student">
       <div className="mb-8">
@@ -109,7 +187,7 @@ export function ReservationPage() {
               </h2>
 
               <div className="flex gap-3 mb-6 overflow-x-auto pb-2 hide-scrollbar">
-                {['Today', 'Tomorrow', 'Tue, March 31', 'Wed, April 1'].map((date) => (<button key={date} onClick={() => setSelectedDate(date)} className={`px-5 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${selectedDate === date ? 'bg-surface-900 text-white shadow-md' : 'bg-surface-50 text-surface-600 hover:bg-surface-100'}`}>
+                {DATE_OPTIONS.map((date) => (<button key={date} onClick={() => { setSelectedDate(date); setSelectedTable(null); }} className={`px-5 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${selectedDate === date ? 'bg-surface-900 text-white shadow-md' : 'bg-surface-50 text-surface-600 hover:bg-surface-100'}`}>
                       {date}
                     </button>))}
               </div>
@@ -135,12 +213,12 @@ export function ReservationPage() {
                   }
 
                   return (
-                    <button 
-                      key={i} 
-                      disabled={!isSlotAvailable} 
-                      onClick={() => setSelectedTime(slot.time)} 
-                      className={`py-3 rounded-xl text-sm font-medium transition-all border ${!isSlotAvailable ? 'bg-surface-50 border-surface-100 text-surface-400 cursor-not-allowed' : selectedTime === slot.time ? 'bg-brand-50 border-brand-500 text-brand-700 shadow-sm' : 'bg-surface-0 border-surface-200 text-surface-700 hover:border-brand-300'}`}
-                    >
+                      <button 
+                        key={i} 
+                        disabled={!isSlotAvailable} 
+                        onClick={() => { setSelectedTime(slot.time); setSelectedTable(null); }} 
+                        className={`py-3 rounded-xl text-sm font-medium transition-all border ${!isSlotAvailable ? 'bg-surface-50 border-surface-100 text-surface-400 cursor-not-allowed' : selectedTime === slot.time ? 'bg-brand-50 border-brand-500 text-brand-700 shadow-sm' : 'bg-surface-0 border-surface-200 text-surface-700 hover:border-brand-300'}`}
+                      >
                       {slot.time}
                     </button>
                   );
@@ -195,8 +273,12 @@ export function ReservationPage() {
                       Available
                     </div>
                     <div className="flex items-center gap-1.5">
+                      <div className="w-3 h-3 rounded-full border-2 border-yellow-400 bg-yellow-50"></div>
+                      Available (Shared)
+                    </div>
+                    <div className="flex items-center gap-1.5">
                       <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                      Occupied
+                      Full
                     </div>
                   </div>
                 </div>
@@ -210,9 +292,24 @@ export function ReservationPage() {
 
                   <div className="grid grid-cols-4 gap-6">
                     {LOCATIONS.find(l => l.id === selectedLocation)?.tables.map((table) => {
-                      const isTooSmall = table.seats < selectedSeats;
-                      const isOccupied = table.status === 'occupied';
-                      const isDisabled = isOccupied || isTooSmall;
+                      const locationName = LOCATIONS.find(l => l.id === selectedLocation)?.name || selectedLocation;
+                      
+                      // sum all active reservations for this specific table slot
+                      const reservedSeats = reservations
+                        .filter(r => 
+                            r.date === selectedDate && 
+                            r.time === selectedTime && 
+                            r.location === locationName && 
+                            String(r.tableId) === String(table.id) &&
+                            r.status !== 'Cancelled'
+                        )
+                        .reduce((sum, r) => sum + Number(r.seats), 0);
+
+                      const availableSeats = table.seats - reservedSeats;
+                      const isTooSmall = availableSeats < selectedSeats;
+                      const isFullyOccupied = availableSeats <= 0;
+                      
+                      const isDisabled = isTooSmall || isFullyOccupied;
                       
                       return (
                         <button 
@@ -221,17 +318,18 @@ export function ReservationPage() {
                           onClick={() => setSelectedTable(table.id)} 
                           className={`
                             relative aspect-square rounded-2xl flex flex-col items-center justify-center transition-all
-                            ${isOccupied ? 'bg-red-50 border-2 border-red-200 text-red-400 cursor-not-allowed' 
+                            ${isFullyOccupied ? 'bg-red-50 border-2 border-red-200 text-red-400 cursor-not-allowed' 
                               : isTooSmall ? 'bg-surface-100 border-2 border-surface-200 text-surface-400 cursor-not-allowed opacity-60'
                               : selectedTable === table.id ? 'bg-brand-500 border-2 border-brand-600 text-white shadow-glow-orange scale-105 z-10' 
+                              : reservedSeats > 0 ? 'bg-yellow-50 border-2 border-yellow-400 text-yellow-700 hover:bg-yellow-100' // Partially occupied
                               : 'bg-success-50 border-2 border-success-400 text-success-700 hover:bg-success-100'}
                           `}
                         >
                           <span className="font-bold text-lg mb-1">
                             T{table.id}
                           </span>
-                          <span className="text-xs opacity-80">
-                            {table.seats} {table.seats === 1 ? 'Seat' : 'Seats'}
+                          <span className="text-xs opacity-80 font-medium tracking-tight">
+                            {reservedSeats > 0 && !isFullyOccupied ? `${availableSeats} Seats Left` : isFullyOccupied ? 'Full' : `${table.seats} Seats`}
                           </span>
                         </button>
                       );
@@ -282,8 +380,8 @@ export function ReservationPage() {
                 </div>
               </div>
 
-              <button className="w-full inline-flex items-center justify-center font-medium rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-brand-500 to-brand-400 text-white hover:from-brand-600 hover:to-brand-500 focus:ring-brand-500 shadow-soft px-8 py-3.5 text-lg" disabled={!selectedTime || !selectedTable || !selectedSeats} onClick={handleConfirm}>
-                Confirm Reservation
+              <button className={`w-full inline-flex items-center justify-center font-medium rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-brand-500 to-brand-400 text-white hover:from-brand-600 hover:to-brand-500 focus:ring-brand-500 shadow-soft px-8 py-3.5 text-lg ${isSubmitting ? 'opacity-75 cursor-wait' : ''}`} disabled={!selectedTime || !selectedTable || !selectedSeats || isSubmitting} onClick={handleConfirm}>
+                {isSubmitting ? 'Confirming...' : 'Confirm Reservation'}
               </button>
             </div>
           </div>
@@ -308,12 +406,25 @@ export function ReservationPage() {
             </div>
 
             <div className="p-8">
-              <div className="bg-surface-50 p-4 rounded-2xl border border-surface-200 inline-block mb-6">
+              <div 
+                className="bg-surface-50 p-4 rounded-2xl border border-surface-200 inline-block mb-6 relative group cursor-pointer transition-transform hover:scale-105" 
+                onClick={() => navigate(`/checkin/${selectedLocation}/${selectedTable}`)}
+                title="Click to simulate scanning QR code on table"
+              >
+                <div className="absolute inset-0 bg-brand-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <span className="text-brand-600 font-bold text-xs bg-white px-2 py-1 rounded shadow-sm">Scan</span>
+                </div>
                 <QrCodeIcon size={120} className="text-surface-800"/>
               </div>
-              <p className="text-sm text-surface-500 mb-6">
-                Show this QR code at the entrance to check in.
-              </p>
+              
+              <div className="mb-6 -mt-2">
+                <span className="inline-block px-4 py-2 bg-brand-50 text-brand-700 font-bold text-2xl rounded-xl tracking-widest border border-brand-200 uppercase">
+                    {reservationCode}
+                </span>
+                <p className="text-sm text-surface-500 mt-3">
+                  Click the QR code above or enter this PIN at the table to check in.
+                </p>
+              </div>
 
               <div className="grid grid-cols-2 gap-4 text-left bg-surface-50 p-4 rounded-xl mb-8">
                 <div>
