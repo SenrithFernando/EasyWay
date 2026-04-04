@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getAllMenuItems } from '../../api/menuItemsApi.js';
 import { createOrder, getAllOrders, cancelOrder } from '../../api/ordersApi.js';
 import '../../styles/StudentOrderPage.css';
@@ -12,11 +13,74 @@ const CATEGORY_EMOJIS = {
   other: '📦',
 };
 
-const CANCELLATION_WINDOW_MS = 2 * 60 * 1000;
+const FALLBACK_MENU_ITEMS = [
+  {
+    _id: 'ui-fallback-1',
+    name: 'Veg Rice Bowl',
+    description: 'Healthy rice bowl with mixed vegetables.',
+    price: 450,
+    category: 'rice',
+    preparationTime: 15,
+    available: true,
+  },
+  {
+    _id: 'ui-fallback-2',
+    name: 'Chicken Kottu',
+    description: 'Classic spicy kottu with chicken.',
+    price: 650,
+    category: 'snack',
+    preparationTime: 20,
+    available: true,
+  },
+  {
+    _id: 'ui-fallback-3',
+    name: 'Fruit Smoothie',
+    description: 'Fresh seasonal fruit smoothie.',
+    price: 350,
+    category: 'beverage',
+    preparationTime: 8,
+    available: true,
+  },
+];
 
-export default function StudentOrderPage() {
+const CANCELLATION_WINDOW_MS = 2 * 60 * 1000;
+const LOCAL_ORDERS_KEY = 'easyway_orders_cache';
+
+const loadLocalOrders = () => {
+  try {
+    const raw = localStorage.getItem(LOCAL_ORDERS_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+};
+
+const saveLocalOrders = (orders) => {
+  localStorage.setItem(LOCAL_ORDERS_KEY, JSON.stringify(orders));
+};
+
+const mergeOrdersById = (primary, secondary) => {
+  const map = new Map();
+  [...primary, ...secondary].forEach((order) => {
+    if (order && order._id) map.set(order._id, order);
+  });
+  return Array.from(map.values()).sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+};
+
+const getFallbackMenuByCategory = (category) => {
+  if (category === 'all') return FALLBACK_MENU_ITEMS;
+  return FALLBACK_MENU_ITEMS.filter((item) => item.category === category);
+};
+
+export default function StudentOrderPage({ initialTab = 'menu' }) {
+  const navigate = useNavigate();
+
   /* ---- tabs ---- */
-  const [activeTab, setActiveTab] = useState('menu'); // 'menu' | 'orders'
+  const [activeTab, setActiveTab] = useState(initialTab); // 'menu' | 'orders'
 
   /* ---- menu state ---- */
   const [menuItems, setMenuItems] = useState([]);
@@ -83,9 +147,16 @@ export default function StudentOrderPage() {
       const filters = { available: true };
       if (activeCategory !== 'all') filters.category = activeCategory;
       const data = await getAllMenuItems(filters);
-      setMenuItems(data);
+
+      if (Array.isArray(data) && data.length > 0) {
+        setMenuItems(data);
+      } else {
+        setMenuItems(getFallbackMenuByCategory(activeCategory));
+        setMenuError('Live menu is empty right now. Showing sample items.');
+      }
     } catch (err) {
-      setMenuError(err.message);
+      setMenuItems(getFallbackMenuByCategory(activeCategory));
+      setMenuError('Could not load live menu. Showing sample items.');
     } finally {
       setMenuLoading(false);
     }
@@ -102,9 +173,14 @@ export default function StudentOrderPage() {
     try {
       setOrdersLoading(true);
       const data = await getAllOrders();
-      setOrders(data);
+      const cached = loadLocalOrders();
+      const merged = mergeOrdersById(data || [], cached);
+      setOrders(merged);
+      saveLocalOrders(merged);
     } catch (err) {
-      showToast(err.message, 'error');
+      const cached = loadLocalOrders();
+      setOrders(cached);
+      showToast(cached.length ? 'Showing saved order history' : err.message, 'error');
     } finally {
       setOrdersLoading(false);
     }
@@ -296,10 +372,17 @@ export default function StudentOrderPage() {
 
       const order = await createOrder(payload);
       setConfirmedOrder(order);
+      setOrders((prev) => {
+        const next = mergeOrdersById([order], prev);
+        saveLocalOrders(next);
+        return next;
+      });
       clearCart();
       setShowCheckout(false);
       setCartOpen(false);
       showToast('Order placed successfully! 🎉');
+      setActiveTab('orders');
+      navigate('/student/order');
     } catch (err) {
       showToast(err.message, 'error');
     } finally {
@@ -319,12 +402,22 @@ export default function StudentOrderPage() {
 
     try {
       const updated = await cancelOrder(id);
-      setOrders((prev) =>
-        prev.map((o) => (o._id === updated._id ? updated : o))
-      );
+      setOrders((prev) => {
+        const next = prev.map((o) => (o._id === updated._id ? updated : o));
+        saveLocalOrders(next);
+        return next;
+      });
       showToast('Order cancelled');
     } catch (err) {
-      showToast(err.message, 'error');
+      // If API cancel fails (e.g., local fallback order id), cancel locally.
+      setOrders((prev) => {
+        const next = prev.map((o) =>
+          o._id === id ? { ...o, status: 'Cancelled' } : o
+        );
+        saveLocalOrders(next);
+        return next;
+      });
+      showToast('Order cancelled locally', 'error');
     }
   };
 
