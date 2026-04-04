@@ -22,7 +22,7 @@ const connectDB = async () => {
     console.log('✅ MongoDB connection successful');
 
     // ✅ Start the server **only after DB is connected**
-    const port = process.env.PORT || 3000;
+    const port = process.env.PORT || 5000;
     app.listen(port, () => {
       console.log(`✅ Server running on port ${port}...`);
     });
