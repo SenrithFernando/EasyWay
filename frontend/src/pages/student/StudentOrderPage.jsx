@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { UtensilsIcon } from 'lucide-react';
 import { getAllMenuItems } from '../../api/menuItemsApi.js';
 import { createOrder, getAllOrders, cancelOrder } from '../../api/ordersApi.js';
 import '../../styles/StudentOrderPage.css';
@@ -490,6 +491,9 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
               📋 My Orders
             </button>
           </div>
+          {activeTab === 'menu' && (
+            <Link to="/chatbot" className="btn-chatbot-nav">Chatbot</Link>
+          )}
           {activeTab === 'menu' && (
             <button
               className="cart-fab"
@@ -1033,6 +1037,71 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
           {toast.message}
         </div>
       )}
+
+      {/* ===== FOOTER ===== */}
+      <footer className="bg-surface-900 text-surface-400 py-12 border-t border-surface-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            <div className="col-span-1 md:col-span-2">
+              <Link to="/" className="flex items-center gap-2 mb-4">
+                <div className="bg-brand-500 p-1.5 rounded-lg text-white">
+                  <UtensilsIcon size={18} />
+                </div>
+                <span className="font-bold text-xl tracking-tight text-white">
+                  Easy<span className="text-brand-500">Food</span>
+                </span>
+              </Link>
+              <p className="max-w-xs mb-6">
+                Making university dining simpler, faster, and more enjoyable for
+                everyone.
+              </p>
+            </div>
+            <div>
+              <h4 className="text-white font-semibold mb-4">Quick Links</h4>
+              <ul className="space-y-2">
+                <li>
+                  <Link to="/menu" className="hover:text-brand-400 transition-colors">
+                    Menu
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/table" className="hover:text-brand-400 transition-colors">
+                    Reservations
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/" className="hover:text-brand-400 transition-colors">
+                    Home
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-white font-semibold mb-4">Legal</h4>
+              <ul className="space-y-2">
+                <li>
+                  <a href="#" className="hover:text-brand-400 transition-colors">
+                    Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-brand-400 transition-colors">
+                    Terms of Service
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-brand-400 transition-colors">
+                    Contact Us
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="pt-8 border-t border-surface-800 text-sm text-center md:text-left flex flex-col md:flex-row justify-between items-center">
+            <p>© 2026 EasyFood University System. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

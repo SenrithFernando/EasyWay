@@ -6,6 +6,7 @@ import { ProfilePage } from './pages/ProfilePage'
 import { LandingPage } from './pages/LandingPage'
 import MenuItemsPage from './pages/vendor/MenuItemsPage.jsx'
 import StudentOrderPage from './pages/student/StudentOrderPage.jsx'
+import ChatBotPage from './pages/student/ChatBotPage.jsx'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <Route path="/student" element={<StudentDashboard />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/menu" element={<StudentOrderPage initialTab="menu" />} />
+      <Route path="/chatbot" element={<ChatBotPage />} />
       <Route path="/vendor/menu-items" element={<MenuItemsPage />} />
       <Route path="/student/order" element={<StudentOrderPage initialTab="orders" />} />
       <Route path="*" element={<Navigate to="/" replace />} />

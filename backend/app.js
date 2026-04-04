@@ -4,6 +4,7 @@ import userRoutes from './routes/UserRoute.js';
 import reservationRoutes from './routes/ReservationRoute.js';
 import menuItemsRouter from './routes/menuItemsRoutes.js';
 import orderRouter from './routes/orderRoutes.js';
+import chatRouter from './routes/chatRoutes.js';
 import errorHandler from './middleware/errorHandler.js';
 
 const app = express();
@@ -22,6 +23,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/reservations', reservationRoutes);
 app.use('/api/menu-items', menuItemsRouter);
 app.use('/api/orders', orderRouter);
+app.use('/api/chat', chatRouter);
 
 app.get('/', (req, res) => {
   res.send('API is running...');
