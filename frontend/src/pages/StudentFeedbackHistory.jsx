@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { PencilIcon, Trash2Icon } from 'lucide-react';
-import { DashboardLayout } from '../components/layout/DashboardLayout';
-import { Card } from '../components/ui/Card';
-import { Button } from '../components/ui/Button';
-import { Badge } from '../components/ui/Badge';
-import { RatingStars } from '../components/feedback/RatingStars';
-import { FeedbackForm } from '../components/feedback/FeedbackForm';
-import { feedbackApi } from '../services/feedbackApi';
+import { DashboardLayout } from '../Components/layout/DashboardLayout';
+import { Card } from '../Components/ui/Card';
+import { Button } from '../Components/ui/Button';
+import { Badge } from '../Components/ui/Badge';
+import { RatingStars } from '../Components/feedback/RatingStars';
+import { FeedbackForm } from '../Components/feedback/FeedbackForm';
+import { feedbackApi } from '../Services/feedbackApi';
 import { formatTimeAgo } from '../utils/feedbackDate';
 
 const EDIT_WINDOW_MINUTES = 30;
@@ -77,11 +77,10 @@ export function StudentFeedbackHistory() {
 
       {message.text ? (
         <Card
-          className={`mb-6 ${
-            message.type === 'success'
+          className={`mb-6 ${message.type === 'success'
               ? 'border border-success-100 bg-success-50 text-success-700'
               : 'border border-red-100 bg-red-50 text-red-700'
-          }`}
+            }`}
         >
           {message.text}
         </Card>
@@ -129,7 +128,7 @@ export function StudentFeedbackHistory() {
                   <div className="space-y-3">
                     <div className="flex flex-wrap items-center gap-3">
                       <h3 className="text-xl font-semibold text-surface-900">
-                        {item.canteenId?.name || 'Canteen'}
+                        {item.vendorId?.name || 'Vendor'}
                       </h3>
                       <Badge variant={sentimentVariantMap[item.sentiment] || 'neutral'}>
                         {item.sentiment}
