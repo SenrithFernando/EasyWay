@@ -1,0 +1,126 @@
+
+
+[2026-03-29T12:35:48.655Z] Cannot read properties of null (reading '_id')
+TypeError: Cannot read properties of null (reading '_id')
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:73
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/utils/asyncHandler.js:2:19
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:32:46)
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireAuth (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:30:10)
+
+
+[2026-03-29T12:35:53.128Z] Cannot read properties of null (reading '_id')
+TypeError: Cannot read properties of null (reading '_id')
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:73
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/utils/asyncHandler.js:2:19
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:32:46)
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireAuth (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:30:10)
+
+
+[2026-03-29T12:35:53.271Z] Cannot read properties of null (reading '_id')
+TypeError: Cannot read properties of null (reading '_id')
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:73
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/utils/asyncHandler.js:2:19
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:32:46)
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireAuth (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:30:10)
+
+
+[2026-03-29T12:36:08.265Z] Cannot read properties of null (reading '_id')
+TypeError: Cannot read properties of null (reading '_id')
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:73
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/utils/asyncHandler.js:2:19
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:32:46)
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireAuth (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:30:10)
+
+
+[2026-03-29T12:36:28.277Z] Cannot read properties of null (reading '_id')
+TypeError: Cannot read properties of null (reading '_id')
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:73
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/utils/asyncHandler.js:2:19
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:32:46)
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireAuth (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:30:10)
+
+
+[2026-03-29T12:36:38.276Z] Cannot read properties of null (reading '_id')
+TypeError: Cannot read properties of null (reading '_id')
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:73
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/utils/asyncHandler.js:2:19
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:32:46)
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireAuth (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:30:10)
+
+
+[2026-03-29T12:36:52.723Z] Cannot read properties of null (reading '_id')
+TypeError: Cannot read properties of null (reading '_id')
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:20:25
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/utils/asyncHandler.js:2:19
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at validateCreateFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/middleware/feedback.validation.js:97:10)
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:32:46)
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+
+
+[2026-03-29T12:36:53.426Z] Cannot read properties of null (reading '_id')
+TypeError: Cannot read properties of null (reading '_id')
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:73
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/utils/asyncHandler.js:2:19
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:32:46)
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireAuth (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:30:10)
+
+
+[2026-03-29T12:36:58.326Z] connect ETIMEDOUT 159.41.207.18:27017
+MongoServerSelectionError: connect ETIMEDOUT 159.41.207.18:27017
+    at Topology.selectServer (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\sdam\topology.js:347:38)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:567:9)
+    at process.processTimers (node:internal/timers:541:7)
+    at async tryOperation (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\operations\execute_operation.js:150:18)
+    at async executeOperation (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\operations\execute_operation.js:80:16)
+    at async FindCursor._initialize (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:620:27)
+    at async FindCursor.fetchBatch (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:654:13)
+    at async FindCursor.next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:326:17)
+
+
+[2026-03-29T12:36:58.333Z] connect ETIMEDOUT 159.41.207.18:27017
+MongoServerSelectionError: connect ETIMEDOUT 159.41.207.18:27017
+    at Topology.selectServer (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\sdam\topology.js:347:38)
+    at async tryOperation (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\operations\execute_operation.js:150:18)
+    at async executeOperation (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\operations\execute_operation.js:80:16)
+    at async FindCursor._initialize (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:620:27)
+    at async FindCursor.fetchBatch (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:654:13)
+    at async FindCursor.next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:326:17)
+    at async Collection.findOne (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\collection.js:313:24)
+    at async ensureVendorExists (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/services/feedback.service.js:185:14)
+    at async Module.getVendorReviewSummary (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/services/feedback.service.js:346:3)

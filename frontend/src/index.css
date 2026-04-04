@@ -15,7 +15,7 @@
 }
 
 @theme {
-  --color-surface-0: 
+  --color-surface-0: #ffffff;
   --color-surface-50: var(--color-slate-50);
   --color-surface-100: var(--color-slate-100);
   --color-surface-200: var(--color-slate-200);
@@ -55,12 +55,14 @@
   --color-warm-300: var(--color-amber-300);
   --color-warm-400: var(--color-amber-400);
   --color-warm-500: var(--color-amber-500);
+
   --color-warm-600: var(--color-amber-600);
   --color-warm-700: var(--color-amber-700);
   --color-warm-800: var(--color-amber-800);
   --color-warm-900: var(--color-amber-900);
 }
 
+<<<<<<< HEAD
 @media (prefers-color-scheme: dark) {
   :root {
     --text: #9ca3af;
@@ -87,11 +89,22 @@ body {
 
 #root {
   width: 100%;
+=======
+body {
+  margin: 0;
+  background-color: #ffffff;
+  color: #000000;
+}
+
+#root {
+  max-width: 100%;
+>>>>>>> origin/Order-and-Menu
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
 }
+<<<<<<< HEAD
 
 h1,
 h2 {
@@ -136,3 +149,5 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+=======
+>>>>>>> origin/Order-and-Menu

@@ -19,8 +19,12 @@
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.13.1",
+<<<<<<< HEAD
     "recharts": "^3.8.0",
     "tailwind-merge": "^3.5.0"
+=======
+    "tailwindcss": "^4.2.2"
+>>>>>>> origin/Order-and-Menu
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
