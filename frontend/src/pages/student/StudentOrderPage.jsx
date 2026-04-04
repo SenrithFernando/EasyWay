@@ -50,6 +50,8 @@ export default function StudentOrderPage() {
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
   const [currentTime, setCurrentTime] = useState(Date.now());
+  const [orderStatusFilter, setOrderStatusFilter] = useState('all');
+  const [orderSearchQuery, setOrderSearchQuery] = useState('');
 
   /* ---- toast ---- */
   const [toast, setToast] = useState(null);
@@ -353,6 +355,22 @@ export default function StudentOrderPage() {
     return Math.max(0, Math.ceil(remainingMs / 1000));
   };
 
+  const filteredOrders = orders.filter((order) => {
+    const statusMatch =
+      orderStatusFilter === 'all' || order.status === orderStatusFilter;
+
+    const searchText = orderSearchQuery.trim().toLowerCase();
+    if (!searchText) return statusMatch;
+
+    const orderId = order._id?.slice(-8).toLowerCase() || '';
+    const orderItemsText = (order.orderItems || [])
+      .map((oi) => oi.name || '')
+      .join(' ')
+      .toLowerCase();
+
+    return statusMatch && (orderId.includes(searchText) || orderItemsText.includes(searchText));
+  });
+
   /* ================================================================
      RENDER
      ================================================================ */
@@ -562,6 +580,37 @@ export default function StudentOrderPage() {
         <div className="my-orders-section">
           <div className="my-orders-header">
             <h2>📋 My Orders</h2>
+            <div className="my-orders-tools">
+              <div className="my-orders-status-filters">
+                {['all', 'Pending', 'Completed', 'Cancelled'].map((status) => (
+                  <button
+                    key={status}
+                    className={`my-orders-filter-btn ${orderStatusFilter === status ? 'active' : ''}`}
+                    onClick={() => setOrderStatusFilter(status)}
+                  >
+                    {status === 'all' ? 'All' : status}
+                  </button>
+                ))}
+              </div>
+
+              <div className="my-orders-search">
+                <span className="my-orders-search-icon">🔍</span>
+                <input
+                  type="text"
+                  placeholder="Search by order ID or item"
+                  value={orderSearchQuery}
+                  onChange={(e) => setOrderSearchQuery(e.target.value)}
+                />
+                {orderSearchQuery && (
+                  <button
+                    className="my-orders-search-clear"
+                    onClick={() => setOrderSearchQuery('')}
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
 
           {ordersLoading && (
@@ -586,9 +635,17 @@ export default function StudentOrderPage() {
             </div>
           )}
 
-          {!ordersLoading && orders.length > 0 && (
+          {!ordersLoading && orders.length > 0 && filteredOrders.length === 0 && (
+            <div className="so-empty-state">
+              <div className="so-empty-icon">🔎</div>
+              <h3>No matching orders</h3>
+              <p>Try changing the status filter or search text</p>
+            </div>
+          )}
+
+          {!ordersLoading && filteredOrders.length > 0 && (
             <div className="orders-list">
-              {orders.map((order) => {
+              {filteredOrders.map((order) => {
                 const sc = statusConfig[order.status] || statusConfig.Pending;
                 return (
                   <div key={order._id} className="order-card">
