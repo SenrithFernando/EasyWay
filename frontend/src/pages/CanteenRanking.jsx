@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { TrophyIcon } from 'lucide-react';
-import { DashboardLayout } from '../components/layout/DashboardLayout';
-import { Card } from '../components/ui/Card';
-import { feedbackApi } from '../services/feedbackApi';
+import { DashboardLayout } from '../Components/layout/DashboardLayout';
+import { Card } from '../Components/ui/Card';
+import { feedbackApi } from '../Services/feedbackApi';
 
 export function CanteenRanking() {
   const [ranking, setRanking] = useState([]);
@@ -15,10 +15,10 @@ export function CanteenRanking() {
       setError('');
 
       try {
-        const response = await feedbackApi.getCanteenRanking();
+        const response = await feedbackApi.getVendorRanking();
         setRanking(response.data || []);
       } catch (requestError) {
-        setError(requestError.message || 'Unable to load canteen ranking.');
+        setError(requestError.message || 'Unable to load vendor ranking.');
       } finally {
         setLoading(false);
       }
@@ -68,7 +68,7 @@ export function CanteenRanking() {
                 ))
               ) : ranking.length ? (
                 ranking.map((item) => (
-                  <tr key={item.canteenId} className="hover:bg-surface-50">
+                  <tr key={item.vendorId} className="hover:bg-surface-50">
                     <td className="px-6 py-5">
                       <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 font-bold text-brand-700">
                         {item.rank}
