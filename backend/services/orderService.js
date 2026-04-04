@@ -1,10 +1,18 @@
 import Order from '../models/orderModel.js';
 
+const CANCELLATION_WINDOW_MS = 2 * 60 * 1000;
+
 /**
  * Create a new order.
  */
 export const createOrder = async (data) => {
-  const order = await Order.create(data);
+  const payload = {
+    ...data,
+    cancellationDeadline:
+      data.cancellationDeadline || new Date(Date.now() + CANCELLATION_WINDOW_MS),
+  };
+
+  const order = await Order.create(payload);
   return order;
 };
 
@@ -91,7 +99,11 @@ export const cancelOrder = async (id) => {
     throw error;
   }
 
-  if (order.cancellationDeadline && new Date() > order.cancellationDeadline) {
+  const effectiveDeadline =
+    order.cancellationDeadline ||
+    new Date(new Date(order.createdAt).getTime() + CANCELLATION_WINDOW_MS);
+
+  if (new Date() > effectiveDeadline) {
     const error = new Error('Cancellation deadline has passed');
     error.statusCode = 400;
     throw error;

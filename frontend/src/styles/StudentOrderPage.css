@@ -928,6 +928,18 @@
   color: var(--color-surface-300);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
+
+.order-cancel-window-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #facc15;
+  background: rgba(250, 204, 21, 0.12);
+  border: 1px solid rgba(250, 204, 21, 0.25);
+}
 .order-meta-tags {
   display: flex;
   gap: 8px;

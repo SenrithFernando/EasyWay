@@ -12,6 +12,8 @@ const CATEGORY_EMOJIS = {
   other: '📦',
 };
 
+const CANCELLATION_WINDOW_MS = 2 * 60 * 1000;
+
 export default function StudentOrderPage() {
   /* ---- tabs ---- */
   const [activeTab, setActiveTab] = useState('menu'); // 'menu' | 'orders'
@@ -47,6 +49,7 @@ export default function StudentOrderPage() {
   /* ---- my orders ---- */
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
+  const [currentTime, setCurrentTime] = useState(Date.now());
 
   /* ---- toast ---- */
   const [toast, setToast] = useState(null);
@@ -108,6 +111,14 @@ export default function StudentOrderPage() {
   useEffect(() => {
     if (activeTab === 'orders') fetchOrders();
   }, [activeTab, fetchOrders]);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   /* ================================================================
      SEARCH FILTER
@@ -298,6 +309,12 @@ export default function StudentOrderPage() {
      CANCEL ORDER
      ================================================================ */
   const handleCancelOrder = async (id) => {
+    const targetOrder = orders.find((order) => order._id === id);
+    if (targetOrder && !canCancelOrder(targetOrder)) {
+      showToast('You can cancel only within 2 minutes of placing an order', 'error');
+      return;
+    }
+
     try {
       const updated = await cancelOrder(id);
       setOrders((prev) =>
@@ -316,6 +333,24 @@ export default function StudentOrderPage() {
     Pending: { emoji: '⏳', cls: 'status-pending' },
     Completed: { emoji: '✅', cls: 'status-completed' },
     Cancelled: { emoji: '❌', cls: 'status-cancelled' },
+  };
+
+  const getCancellationDeadline = (order) => {
+    if (order.cancellationDeadline) {
+      return new Date(order.cancellationDeadline).getTime();
+    }
+
+    return new Date(order.createdAt).getTime() + CANCELLATION_WINDOW_MS;
+  };
+
+  const canCancelOrder = (order) => {
+    if (order.status !== 'Pending') return false;
+    return currentTime <= getCancellationDeadline(order);
+  };
+
+  const getRemainingCancelSeconds = (order) => {
+    const remainingMs = getCancellationDeadline(order) - currentTime;
+    return Math.max(0, Math.ceil(remainingMs / 1000));
   };
 
   /* ================================================================
@@ -597,8 +632,15 @@ export default function StudentOrderPage() {
                           {order.orderType === 'Delivery' ? '🚚' : '🏪'}{' '}
                           {order.orderType}
                         </span>
+                        {order.status === 'Pending' && (
+                          <span className="order-cancel-window-tag">
+                            {canCancelOrder(order)
+                              ? `Cancel in ${getRemainingCancelSeconds(order)}s`
+                              : 'Cancel window closed'}
+                          </span>
+                        )}
                       </div>
-                      {order.status === 'Pending' && (
+                      {canCancelOrder(order) && (
                         <button
                           className="btn-cancel-order"
                           onClick={() => handleCancelOrder(order._id)}
