@@ -43,7 +43,11 @@ export function LoginPage() {
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
 
-            navigate('/');
+            if (data.user?.role === 'vendor') {
+                navigate('/vendor-dashboard');
+            } else {
+                navigate('/');
+            }
 
         } catch (error) {
             setErrorMsg("Network error. Please try again later.");
