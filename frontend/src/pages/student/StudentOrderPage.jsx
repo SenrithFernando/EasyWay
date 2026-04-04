@@ -22,6 +22,7 @@ export default function StudentOrderPage() {
   const [menuError, setMenuError] = useState(null);
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [brokenImages, setBrokenImages] = useState({});
 
   /* ---- cart state ---- */
   const [cart, setCart] = useState([]);
@@ -53,6 +54,18 @@ export default function StudentOrderPage() {
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3000);
+  };
+
+  const resolveImageUrl = (imageUrl) => {
+    if (!imageUrl || !imageUrl.trim()) return null;
+
+    const trimmed = imageUrl.trim();
+    if (/^https?:\/\//i.test(trimmed)) return trimmed;
+
+    const backendOrigin = import.meta.env.VITE_API_ORIGIN || 'http://localhost:3000';
+    if (trimmed.startsWith('/')) return `${backendOrigin}${trimmed}`;
+
+    return `${backendOrigin}/${trimmed}`;
   };
 
   /* ================================================================
@@ -426,6 +439,27 @@ export default function StudentOrderPage() {
                 const inCart = cart.find((c) => c._id === item._id);
                 return (
                   <div key={item._id} className="so-menu-card">
+                    {resolveImageUrl(item.image) && !brokenImages[item._id] ? (
+                      <div className="so-item-image-wrap">
+                        <img
+                          className="so-item-image"
+                          src={resolveImageUrl(item.image)}
+                          alt={item.name}
+                          loading="lazy"
+                          onError={() =>
+                            setBrokenImages((prev) => ({
+                              ...prev,
+                              [item._id]: true,
+                            }))
+                          }
+                        />
+                      </div>
+                    ) : (
+                      <div className="so-item-image-fallback" aria-hidden="true">
+                        {CATEGORY_EMOJIS[item.category] || '🍽️'}
+                      </div>
+                    )}
+
                     <div className="so-card-top">
                       <h3 className="so-item-name">{item.name}</h3>
                       <span className={`so-badge so-badge-${item.category}`}>

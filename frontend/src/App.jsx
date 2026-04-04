@@ -17,7 +17,7 @@ function App() {
       <Route path="/admin" element={<Navigate to="/login" replace />} />
       <Route path="/student" element={<StudentDashboard />} />
       <Route path="/profile" element={<ProfilePage />} />
-      <Route path="/menu" element={<MenuItemsPage />} />
+      <Route path="/menu" element={<StudentOrderPage />} />
       <Route path="/vendor/menu-items" element={<MenuItemsPage />} />
       <Route path="/student/order" element={<StudentOrderPage />} />
       <Route path="*" element={<Navigate to="/" replace />} />

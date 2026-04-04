@@ -34,6 +34,7 @@ export default function MenuItemsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeCategory, setActiveCategory] = useState('all');
+  const [brokenImages, setBrokenImages] = useState({});
 
   // modal state
   const [showModal, setShowModal] = useState(false);
@@ -50,6 +51,20 @@ export default function MenuItemsPage() {
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3000);
+  };
+
+  const resolveImageUrl = (imageUrl) => {
+    if (!imageUrl || !imageUrl.trim()) return null;
+
+    const trimmed = imageUrl.trim();
+    if (/^https?:\/\//i.test(trimmed)) return trimmed;
+
+    const backendOrigin = import.meta.env.VITE_API_ORIGIN || 'http://localhost:3000';
+    if (trimmed.startsWith('/')) {
+      return `${backendOrigin}${trimmed}`;
+    }
+
+    return `${backendOrigin}/${trimmed}`;
   };
 
   /* ---- fetch ---- */
@@ -254,6 +269,24 @@ export default function MenuItemsPage() {
               key={item._id}
               className={`item-card ${!item.available ? 'unavailable' : ''}`}
             >
+              {resolveImageUrl(item.image) && !brokenImages[item._id] ? (
+                <div className="item-image-wrap">
+                  <img
+                    className="item-image"
+                    src={resolveImageUrl(item.image)}
+                    alt={item.name}
+                    loading="lazy"
+                    onError={() =>
+                      setBrokenImages((prev) => ({ ...prev, [item._id]: true }))
+                    }
+                  />
+                </div>
+              ) : (
+                <div className="item-image-fallback" aria-hidden="true">
+                  {CATEGORY_EMOJIS[item.category] || '🍽️'}
+                </div>
+              )}
+
               <div className="item-card-top">
                 <h3 className="item-name">{item.name}</h3>
                 <span className={`badge badge-${item.category}`}>
