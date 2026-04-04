@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { MessageSquareHeartIcon } from 'lucide-react';
-import { DashboardLayout } from '../components/layout/DashboardLayout';
-import { FeedbackList } from '../components/feedback/FeedbackList';
-import { Badge } from '../components/ui/Badge';
-import { Card } from '../components/ui/Card';
-import { feedbackApi } from '../services/feedbackApi';
+import { DashboardLayout } from "../Components/layout/DashboardLayout";
+import { FeedbackList } from "../Components/feedback/FeedbackList";
+import { Badge } from "../Components/ui/Badge";
+import { Card } from "../Components/ui/Card";
+import { feedbackApi } from "../Services/feedbackApi";
 
 export function CanteenFeedbackPage() {
-  const { canteenId } = useParams();
+  const { vendorId } = useParams();
   const [feedback, setFeedback] = useState([]);
   const [stats, setStats] = useState({ averageRating: 0, totalReviews: 0 });
   const [loading, setLoading] = useState(true);
@@ -21,23 +21,23 @@ export function CanteenFeedbackPage() {
 
       try {
         const [feedbackResponse, statsResponse] = await Promise.all([
-          feedbackApi.getCanteenFeedback(canteenId),
-          feedbackApi.getCanteenStats(canteenId),
+          feedbackApi.getVendorFeedback(vendorId),
+          feedbackApi.getVendorStats(vendorId),
         ]);
 
         setFeedback(feedbackResponse.data || []);
         setStats(statsResponse.data || { averageRating: 0, totalReviews: 0 });
       } catch (requestError) {
-        setError(requestError.message || 'Unable to load canteen feedback.');
+        setError(requestError.message || 'Unable to load vendor feedback.');
       } finally {
         setLoading(false);
       }
     };
 
-    if (canteenId) {
+    if (vendorId) {
       loadFeedback();
     }
-  }, [canteenId]);
+  }, [vendorId]);
 
   return (
     <DashboardLayout role="student">
