@@ -10,6 +10,7 @@ import { BlogDetailPage } from './pages/BlogDetailPage'
 import { CanteenPage } from './pages/CanteenPage'
 import { MenuPage } from './pages/MenuPage'
 import { AdminDashboard } from './pages/AdminDashboard'
+import { TableCheckInPage } from './pages/TableCheckInPage'
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:id" element={<BlogDetailPage />} />
+        <Route path="/checkin/:location/:tableId" element={<TableCheckInPage />} />
         <Route path="/canteen" element={<CanteenPage />} />
         <Route path="/menu" element={<MenuPage />} />
       </Routes>

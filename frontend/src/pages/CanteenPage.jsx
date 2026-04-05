@@ -87,12 +87,14 @@ export function CanteenPage() {
   };
 
   const getValidImageUrl = (imageUrl) => {
-    if (!imageUrl || imageUrl.startsWith('data:')) {
+    if (!imageUrl) {
       return "https://images.unsplash.com/photo-1554118811-1e0d58224f24?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80";
     }
-    if (imageUrl.startsWith('http') || imageUrl.startsWith('/')) {
+    // If it's a base64 image or valid URL, return as-is
+    if (imageUrl.startsWith('data:') || imageUrl.startsWith('http') || imageUrl.startsWith('/')) {
       return imageUrl;
     }
+    // Fallback to placeholder
     return "https://images.unsplash.com/photo-1554118811-1e0d58224f24?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80";
   };
 
