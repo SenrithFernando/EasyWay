@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UtensilsIcon } from 'lucide-react';
+import { Navbar } from '../../components/layout/Navbar';
 import { getAllMenuItems } from '../../api/menuItemsApi.js';
 import { createOrder, getAllOrders, cancelOrder } from '../../api/ordersApi.js';
 import '../../styles/StudentOrderPage.css';
@@ -470,6 +471,8 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
      ================================================================ */
   return (
     <div className="student-order-page">
+      <Navbar />
+
       {/* ===== HEADER ===== */}
       <header className="so-header">
         <div className="so-header-left">
