@@ -11,6 +11,7 @@ import {
   updateNoShowCount,
   updatePenaltyStatus,
   getAllUsers,
+  getAllVendors,
 } from "../controllers/UserController.js";
 
 import { authMiddleware } from "../middleware/authMiddleware.js";
@@ -33,5 +34,8 @@ router.patch("/penalty/:id", authMiddleware, adminMiddleware, updatePenaltyStatu
 
 // Get all users
 router.get("/all", getAllUsers);
+
+// Get all vendors
+router.get("/vendors", authMiddleware, getAllVendors);
 
 export default router;

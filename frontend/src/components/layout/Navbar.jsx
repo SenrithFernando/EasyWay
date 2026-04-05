@@ -20,7 +20,7 @@ export function Navbar() {
     let dashboardPath = '/login';
     if (user) {
         if (user.role === 'vendor') {
-            dashboardPath = '/vendor-dashboard';
+            dashboardPath = '/vendor';
         } else if (user.role === 'admin') {
             dashboardPath = '/admin-dashboard';
         } else {
@@ -42,7 +42,7 @@ export function Navbar() {
         { name: 'Reserve', path: '/table' },
         { name: 'Blog & News', path: '/blog' },
         { name: 'Canteen', path: '/canteen' },
-        { name: 'Vendor Dashboard', path: '/vendor' },
+        ...(user?.role === 'vendor' ? [{ name: 'Vendor Dashboard', path: '/vendor' }] : []),
     ];
     const isActive = (path) => {
         if (path === '/' && location.pathname !== '/')

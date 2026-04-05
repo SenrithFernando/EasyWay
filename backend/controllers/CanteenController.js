@@ -70,9 +70,19 @@ export const getAllVendors = async (req, res) => {
     const category = req.query.category;
     const search = req.query.search;
     const priceRange = req.query.priceRange;
-    const isActive = req.query.isActive !== 'false';
+    const owner = req.query.owner;
+    const isActiveParam = req.query.isActive;
 
     let query = {};
+
+    // If fetching by owner, don't filter by status (show all statuses)
+    if (owner) {
+      query.owner = owner;
+      // Don't set isActive filter when fetching by owner
+    } else if (isActiveParam !== 'all') {
+      // Only apply status filter when not fetching by owner and isActive is not 'all'
+      query.isActive = isActiveParam !== 'false';
+    }
 
     if (category && category !== 'all') {
       query.category = category;
@@ -90,8 +100,6 @@ export const getAllVendors = async (req, res) => {
     if (priceRange) {
       query.priceRange = priceRange;
     }
-
-    query.isActive = isActive;
 
     const vendors = await CanteenVendor.find(query)
       .populate('owner', 'fullName email')

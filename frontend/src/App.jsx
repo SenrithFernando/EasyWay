@@ -9,6 +9,7 @@ import { BlogPage } from './pages/BlogPage'
 import { BlogDetailPage } from './pages/BlogDetailPage'
 import { CanteenPage } from './pages/CanteenPage'
 import { MenuPage } from './pages/MenuPage'
+import { AdminDashboard } from './pages/AdminDashboard'
 
 
 function App() {
@@ -19,6 +20,8 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/table" element={<ReservationPage />} />
         <Route path="/vendor" element={<VendorDashboard />} />
+        <Route path="/vendor-dashboard" element={<Navigate to="/vendor" replace />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/admin" element={<Navigate to="/login" replace />} />
         <Route path="/student" element={<StudentDashboard />} />
         <Route path="/profile" element={<ProfilePage />} />
