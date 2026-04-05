@@ -45,7 +45,9 @@ export function LoginPage() {
 
             if (data.user?.role === 'vendor') {
                 navigate('/vendor-dashboard');
-            } else {
+            } else if (data.user?.role === 'admin'){
+                navigate('/admin-dashboard');
+            }else {
                 navigate('/');
             }
 
@@ -64,11 +66,11 @@ export function LoginPage() {
             label: 'Vendor',
             icon: StoreIcon,
         },
-        // {
-        //     id: 'admin',
-        //     label: 'Admin',
-        //     icon: ShieldCheckIcon,
-        // },
+        {
+            id: 'admin',
+            label: 'Admin',
+            icon: ShieldCheckIcon,
+        },
     ];
     return (<div className="min-h-screen flex items-center justify-center bg-surface-50 p-4 relative overflow-hidden">
       {/* Background decorative elements */}
