@@ -3,15 +3,18 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRightIcon, UtensilsIcon, CalendarCheckIcon, HeartIcon, StarIcon, ChevronRightIcon, } from 'lucide-react';
 import { Navbar } from '../components/layout/Navbar';
+import '../styles/StudentOrderPage.css';
 
-const FEATURED_MEALS = [
-    { id: 1, name: 'Jollof Rice & Chicken', vendor: "Mama's Kitchen", price: '₦1,500', rating: 4.8, emoji: '🍛', color: 'from-orange-400 to-red-500' },
-    { id: 2, name: 'Fresh Fruit Smoothie', vendor: 'Smoothie Bar', price: '₦800', rating: 4.9, emoji: '🥤', color: 'from-pink-400 to-rose-500' },
-    { id: 3, name: 'Grilled Chicken Salad', vendor: 'Fresh & Green', price: '₦2,000', rating: 4.7, emoji: '🥗', color: 'from-green-400 to-emerald-500' },
-    { id: 4, name: 'Spicy Shawarma', vendor: 'The Grill House', price: '₦1,200', rating: 4.6, emoji: '🌯', color: 'from-yellow-400 to-orange-500' },
-    { id: 5, name: 'Beef Burger & Fries', vendor: 'Campus Bites', price: '₦2,500', rating: 4.5, emoji: '🍔', color: 'from-amber-400 to-orange-600' },
-    { id: 6, name: 'Vegetable Pasta', vendor: "Mama's Kitchen", price: '₦1,800', rating: 4.4, emoji: '🍝', color: 'from-red-400 to-orange-500' },
-];
+import { getAllMenuItems } from '../api/menuItemsApi';
+
+const CATEGORY_EMOJIS = {
+  rice: '🍚',
+  snack: '🍔',
+  healthy: '🥗',
+  beverage: '🥤',
+  dessert: '🍦',
+  other: '🍽️',
+};
 
 const VENDORS = [
     { id: 1, name: "Mama's Kitchen", type: 'Local Cuisine', rating: 4.8 },
@@ -23,12 +26,30 @@ const VENDORS = [
 
 export function LandingPage() {
   const [user, setUser] = React.useState(null);
+  const [featuredMeals, setFeaturedMeals] = React.useState([]);
+  const [brokenImages, setBrokenImages] = React.useState({});
+
+  const resolveImageUrl = (imageUrl) => {
+    if (!imageUrl) return null;
+    if (imageUrl.startsWith('http')) return imageUrl;
+    return `${import.meta.env.VITE_API_BASE_URL || ''}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
+  };
 
   React.useEffect(() => {
     const storedUserStr = localStorage.getItem('user');
     if (storedUserStr) {
       setUser(JSON.parse(storedUserStr));
     }
+
+    const fetchMeals = async () => {
+      try {
+        const items = await getAllMenuItems({ available: true });
+        setFeaturedMeals(items.slice(0, 6)); 
+      } catch(err) {
+        console.error("Error fetching featured meals:", err);
+      }
+    };
+    fetchMeals();
   }, []);
 
   const isVendor = user?.role === 'vendor';
@@ -159,34 +180,46 @@ export function LandingPage() {
           </div>
 
           <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-100px' }} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {FEATURED_MEALS.map((meal) => (<motion.div key={meal.id} variants={itemVariants}>
-                <div className="bg-surface-0 rounded-2xl shadow-card border border-surface-100 overflow-hidden h-full flex flex-col group transition-all duration-300 hover:shadow-elevated hover:-translate-y-1 cursor-pointer">
-                  <div className={`h-48 w-full bg-gradient-to-br ${meal.color} flex items-center justify-center text-7xl group-hover:scale-105 transition-transform duration-500`}>
-                    {meal.emoji}
+            {featuredMeals.map((meal) => (<motion.div key={meal._id} variants={itemVariants}>
+                <div className="so-menu-card h-full cursor-pointer">
+                  {resolveImageUrl(meal.image) && !brokenImages[meal._id] ? (
+                    <div className="so-item-image-wrap">
+                      <img
+                        className="so-item-image"
+                        src={resolveImageUrl(meal.image)}
+                        alt={meal.name}
+                        loading="lazy"
+                        onError={() =>
+                          setBrokenImages((prev) => ({
+                            ...prev,
+                            [meal._id]: true,
+                          }))
+                        }
+                      />
+                    </div>
+                  ) : (
+                    <div className="so-item-image-fallback" aria-hidden="true" style={{ marginBottom: "0.5rem" }}>
+                      {CATEGORY_EMOJIS[meal.category] || '🍽️'}
+                    </div>
+                  )}
+                  <div className="so-card-top">
+                    <h3 className="so-item-name">{meal.name}</h3>
+                    <span className={`so-badge so-badge-${meal.category}`}>
+                      {CATEGORY_EMOJIS[meal.category] || '🍽️'} {meal.category}
+                    </span>
                   </div>
-                  <div className="p-6 flex flex-col flex-1 bg-surface-0 relative z-10">
-                    <div className="flex justify-between items-start mb-2">
-                      <h3 className="text-lg font-bold text-surface-900 line-clamp-1">
-                        {meal.name}
-                      </h3>
-                      <div className="flex items-center gap-1 bg-surface-100 px-2 py-1 rounded-md text-sm font-medium text-surface-700">
-                        <StarIcon size={14} className="text-warm-500 fill-warm-500"/>
-                        {meal.rating}
-                      </div>
+                  {meal.description && (
+                    <p className="so-item-desc line-clamp-2">{meal.description}</p>
+                  )}
+                  <div className="so-card-bottom mt-auto pt-4 border-t border-surface-100">
+                    <div className="so-item-meta">
+                      <span className="so-item-price">Rs. {meal.price?.toFixed(2)}</span>
                     </div>
-                    <p className="text-surface-500 text-sm mb-4">
-                      {meal.vendor}
-                    </p>
-                    <div className="mt-auto flex items-center justify-between pt-4 border-t border-surface-100">
-                      <span className="text-xl font-bold text-surface-900">
-                        {meal.price}
-                      </span>
-                      <Link to="/login">
-                        <button className="inline-flex items-center justify-center font-medium rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-surface-0 text-surface-800 border-2 border-surface-200 hover:border-brand-500 hover:text-brand-600 focus:ring-surface-200 px-3 py-1.5 text-sm">
-                          Order
-                        </button>
-                      </Link>
-                    </div>
+                    <Link to="/login">
+                      <button className="btn-add-to-cart">
+                        + Order
+                      </button>
+                    </Link>
                   </div>
                 </div>
               </motion.div>))}
