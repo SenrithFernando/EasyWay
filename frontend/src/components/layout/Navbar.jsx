@@ -17,7 +17,16 @@ export function Navbar() {
         }
     }, []);
 
-    const dashboardPath = user ? `/${user.role}` : '/login';
+    let dashboardPath = '/login';
+    if (user) {
+        if (user.role === 'vendor') {
+            dashboardPath = '/vendor-dashboard';
+        } else if (user.role === 'admin') {
+            dashboardPath = '/admin-dashboard';
+        } else {
+            dashboardPath = `/${user.role}`;
+        }
+    }
 
     const handleLogout = () => {
         localStorage.removeItem('token');
