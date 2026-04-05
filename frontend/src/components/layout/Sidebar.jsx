@@ -19,9 +19,9 @@ export function Sidebar({ role, onClose }) {
   const navLinks = [
     { name: 'Main Page', path: '/', icon: GlobeIcon },
     { name: 'Dashboard', path: `/${role}`, icon: HomeIcon },
-    { name: 'Reservations', path: '/table', icon: CalendarIcon },
+    // { name: 'Reservations', path: '/table', icon: CalendarIcon },
     { name: 'Profile', path: '/profile', icon: UserIcon },
-    { name: 'Settings', path: '/settings', icon: SettingsIcon },
+    // { name: 'Settings', path: '/settings', icon: SettingsIcon },
   ];
 
   const isActive = (path) => location.pathname === path;
