@@ -17,7 +17,16 @@ export function Navbar() {
         }
     }, []);
 
-    const dashboardPath = user ? `/${user.role}` : '/login';
+    let dashboardPath = '/login';
+    if (user) {
+        if (user.role === 'vendor') {
+            dashboardPath = '/vendor';
+        } else if (user.role === 'admin') {
+            dashboardPath = '/admin-dashboard';
+        } else {
+            dashboardPath = `/${user.role}`;
+        }
+    }
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -31,7 +40,9 @@ export function Navbar() {
         { name: 'Home', path: '/' },
         { name: 'Menu', path: '/menu' },
         { name: 'Reserve', path: '/table' },
-        { name: 'Blog & Feedback', path: '/blog' },
+        { name: 'Blog & News', path: '/blog' },
+        { name: 'Canteen', path: '/canteen' },
+        ...(user?.role === 'vendor' ? [{ name: 'Vendor Dashboard', path: '/vendor' }] : []),
     ];
     const isActive = (path) => {
         if (path === '/' && location.pathname !== '/')
