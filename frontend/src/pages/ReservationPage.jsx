@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 import { CalendarIcon, UsersIcon, CheckCircleIcon, QrCodeIcon, } from 'lucide-react';
-import { DashboardLayout } from '../components/layout/DashboardLayout';
+import { Navbar } from '../components/layout/Navbar';
 
 const generateDateOptions = () => {
     const today = new Date();
@@ -220,7 +219,10 @@ export function ReservationPage() {
             setIsSubmitting(false);
         }
     };
-    return (<DashboardLayout role="student">
+    return (
+        <div className="min-h-screen bg-surface-50 font-sans">
+            <Navbar />
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="mb-8">
         <h1 className="text-2xl md:text-3xl font-bold text-surface-900">
           Reserve a Table
@@ -517,5 +519,6 @@ export function ReservationPage() {
             </div>
           </div>
         </motion.div>)}
-    </DashboardLayout>);
+            </main>
+        </div>);
 }

@@ -35,7 +35,7 @@ export function MenuPage() {
         params.append('search', searchTerm);
       }
 
-      const response = await fetch(`http://localhost:3000/api/canteen?${params}`);
+      const response = await fetch(`/api/canteen?${params}`);
       const data = await response.json();
 
       if (data.success) {

@@ -8,13 +8,15 @@ import { LandingPage } from './pages/LandingPage'
 import { BlogPage } from './pages/BlogPage'
 import { BlogDetailPage } from './pages/BlogDetailPage'
 import { CanteenPage } from './pages/CanteenPage'
-import { MenuPage } from './pages/MenuPage'
 import { AdminDashboard } from './pages/AdminDashboard'
+import MenuItemsPage from './pages/vendor/MenuItemsPage.jsx'
+import StudentOrderPage from './pages/student/StudentOrderPage.jsx'
+import ChatBotPage from './pages/student/ChatBotPage.jsx'
 
 
 function App() {
   return (
-    <BrowserRouter>
+    <>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -28,9 +30,14 @@ function App() {
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:id" element={<BlogDetailPage />} />
         <Route path="/canteen" element={<CanteenPage />} />
-        <Route path="/menu" element={<MenuPage />} />
+        <Route path="/menu" element={<StudentOrderPage />} />
+        <Route path="/chatbot" element={<ChatBotPage />} />
+      <Route path="/vendor/menu-items" element={<MenuItemsPage />} />
+      <Route path="/student/order" element={<StudentOrderPage initialTab="orders" />} />
+
+
       </Routes>
-    </BrowserRouter>
+    </>
   )
 }
 
