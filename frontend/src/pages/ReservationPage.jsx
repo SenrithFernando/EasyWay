@@ -140,7 +140,7 @@ export function ReservationPage() {
                                 reservationTime.setHours(hours, minutes, 0, 0);
                                 
                                 const diffMins = (now - reservationTime) / (1000 * 60);
-                                if (diffMins >= 30) {
+                                if (diffMins >= 10) {
                                     shouldDelete = true;
                                 }
                             }
