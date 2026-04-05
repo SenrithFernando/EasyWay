@@ -10,6 +10,7 @@ export function AdminDashboard() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingCanteen, setEditingCanteen] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [formErrors, setFormErrors] = useState({});
   const [formData, setFormData] = useState({
     name: '',
     category: 'beverages',
@@ -86,6 +87,9 @@ export function AdminDashboard() {
       ...prev,
       [name]: value,
     }));
+    if (formErrors[name]) {
+      setFormErrors(prev => ({ ...prev, [name]: undefined }));
+    }
   };
 
   const handleSpecialtiesChange = (e) => {
@@ -94,10 +98,60 @@ export function AdminDashboard() {
       ...prev,
       specialties,
     }));
+    if (formErrors.specialties) {
+      setFormErrors(prev => ({ ...prev, specialties: undefined }));
+    }
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    
+    if (!formData.name.trim()) errors.name = 'Canteen name is required';
+    if (!formData.description.trim()) errors.description = 'Description is required';
+    if (!formData.location.trim()) errors.location = 'Location is required';
+    if (!formData.phone.trim()) errors.phone = 'Phone number is required';
+    
+    const parseTime = (timeStr) => {
+      const match = timeStr.trim().match(/^(1[0-2]|0?[1-9]):([0-5][0-9])\s?(AM|PM|am|pm)$/i);
+      if (!match) return null;
+      let hours = parseInt(match[1], 10);
+      const minutes = parseInt(match[2], 10);
+      const period = match[3].toUpperCase();
+      if (period === 'PM' && hours !== 12) hours += 12;
+      if (period === 'AM' && hours === 12) hours = 0;
+      return hours + (minutes / 60);
+    };
+
+    let openTimeVal = null;
+    let closeTimeVal = null;
+
+    if (!formData.openingTime.trim()) {
+      errors.openingTime = 'Opening time is required';
+    } else {
+      openTimeVal = parseTime(formData.openingTime);
+      if (openTimeVal === null) errors.openingTime = 'Please enter a valid time (e.g., 8:00 AM)';
+    }
+
+    if (!formData.closingTime.trim()) {
+      errors.closingTime = 'Closing time is required';
+    } else {
+      closeTimeVal = parseTime(formData.closingTime);
+      if (closeTimeVal === null) errors.closingTime = 'Please enter a valid time (e.g., 8:00 PM)';
+    }
+
+    if (openTimeVal !== null && closeTimeVal !== null) {
+      if (closeTimeVal <= openTimeVal) {
+        errors.closingTime = 'Closing time must be after opening time';
+      }
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
     try {
       const token = localStorage.getItem('token');
       const url = editingCanteen 
@@ -116,6 +170,7 @@ export function AdminDashboard() {
       if (response.ok) {
         setShowAddForm(false);
         setEditingCanteen(null);
+        setFormErrors({});
         fetchCanteens();
         setFormData({
           name: '',
@@ -245,6 +300,7 @@ export function AdminDashboard() {
                 onClick={() => {
                   setShowAddForm(false);
                   setEditingCanteen(null);
+                  setFormErrors({});
                   setFormData({
                     name: '',
                     category: 'beverages',
@@ -276,8 +332,9 @@ export function AdminDashboard() {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent ${formErrors.name ? 'border-red-500' : 'border-gray-300'}`}
                   />
+                  {formErrors.name && <p className="mt-1 text-sm text-red-600">{formErrors.name}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
@@ -303,8 +360,9 @@ export function AdminDashboard() {
                   onChange={handleInputChange}
                   required
                   rows={3}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent ${formErrors.description ? 'border-red-500' : 'border-gray-300'}`}
                 />
+                {formErrors.description && <p className="mt-1 text-sm text-red-600">{formErrors.description}</p>}
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
@@ -317,8 +375,9 @@ export function AdminDashboard() {
                     onChange={handleInputChange}
                     placeholder="e.g., 8:00 AM"
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent ${formErrors.openingTime ? 'border-red-500' : 'border-gray-300'}`}
                   />
+                  {formErrors.openingTime && <p className="mt-1 text-sm text-red-600">{formErrors.openingTime}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Closing Time *</label>
@@ -329,8 +388,9 @@ export function AdminDashboard() {
                     onChange={handleInputChange}
                     placeholder="e.g., 8:00 PM"
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent ${formErrors.closingTime ? 'border-red-500' : 'border-gray-300'}`}
                   />
+                  {formErrors.closingTime && <p className="mt-1 text-sm text-red-600">{formErrors.closingTime}</p>}
                 </div>
               </div>
 
@@ -343,8 +403,9 @@ export function AdminDashboard() {
                     value={formData.location}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent ${formErrors.location ? 'border-red-500' : 'border-gray-300'}`}
                   />
+                  {formErrors.location && <p className="mt-1 text-sm text-red-600">{formErrors.location}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Phone *</label>
@@ -354,8 +415,9 @@ export function AdminDashboard() {
                     value={formData.phone}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent ${formErrors.phone ? 'border-red-500' : 'border-gray-300'}`}
                   />
+                  {formErrors.phone && <p className="mt-1 text-sm text-red-600">{formErrors.phone}</p>}
                 </div>
               </div>
 

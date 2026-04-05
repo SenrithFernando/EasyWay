@@ -221,11 +221,20 @@ export function VendorDashboard() {
       ...prev,
       [name]: value,
     }));
+    // Clear the specific error when user starts typing
+    if (formErrors[name]) {
+      setFormErrors(prev => ({ ...prev, [name]: undefined }));
+    }
   };
 
   const handleSpecialtiesChange = (e) => {
     const value = e.target.value;
-    // If empty, set empty array
+    
+    // Clear error
+    if (formErrors.specialties) {
+      setFormErrors(prev => ({ ...prev, specialties: undefined }));
+    }
+
     if (!value.trim()) {
       setFormData(prev => ({
         ...prev,
@@ -233,7 +242,6 @@ export function VendorDashboard() {
       }));
       return;
     }
-    // Split by comma and clean up
     const specialties = value.split(',').map(s => s.trim()).filter(s => s);
     setFormData(prev => ({
       ...prev,
@@ -327,7 +335,6 @@ export function VendorDashboard() {
       ...prev,
       tags,
     }));
-    validateArticleForm();
   };
 
   const handleArticleInputChange = (e) => {
@@ -336,7 +343,9 @@ export function VendorDashboard() {
       ...prev,
       [name]: value,
     }));
-    validateArticleForm();
+    if (articleErrors[name]) {
+      setArticleErrors(prev => ({ ...prev, [name]: undefined }));
+    }
   };
 
   // Validation functions
@@ -366,18 +375,44 @@ export function VendorDashboard() {
       errors.description = 'Description must be less than 500 characters';
     }
     
+    const parseTime = (timeStr) => {
+      const match = timeStr.trim().match(/^(1[0-2]|0?[1-9]):([0-5][0-9])\s?(AM|PM|am|pm)$/i);
+      if (!match) return null;
+      let hours = parseInt(match[1], 10);
+      const minutes = parseInt(match[2], 10);
+      const period = match[3].toUpperCase();
+      if (period === 'PM' && hours !== 12) hours += 12;
+      if (period === 'AM' && hours === 12) hours = 0;
+      return hours + (minutes / 60);
+    };
+
+    let openTimeVal = null;
+    let closeTimeVal = null;
+    
     // Opening Time validation
     if (!formData.openingTime.trim()) {
       errors.openingTime = 'Opening time is required';
-    } else if (!/^(1[0-2]|0?[1-9]):[0-5][0-9]\s?(AM|PM|am|pm)$/i.test(formData.openingTime.trim())) {
-      errors.openingTime = 'Please enter a valid time (e.g., 8:00 AM)';
+    } else {
+      openTimeVal = parseTime(formData.openingTime);
+      if (openTimeVal === null) {
+        errors.openingTime = 'Please enter a valid time (e.g., 8:00 AM)';
+      }
     }
     
     // Closing Time validation
     if (!formData.closingTime.trim()) {
       errors.closingTime = 'Closing time is required';
-    } else if (!/^(1[0-2]|0?[1-9]):[0-5][0-9]\s?(AM|PM|am|pm)$/i.test(formData.closingTime.trim())) {
-      errors.closingTime = 'Please enter a valid time (e.g., 8:00 PM)';
+    } else {
+      closeTimeVal = parseTime(formData.closingTime);
+      if (closeTimeVal === null) {
+        errors.closingTime = 'Please enter a valid time (e.g., 8:00 PM)';
+      }
+    }
+
+    if (openTimeVal !== null && closeTimeVal !== null) {
+      if (closeTimeVal <= openTimeVal) {
+        errors.closingTime = 'Closing time must be after opening time';
+      }
     }
     
     // Location validation
@@ -937,7 +972,7 @@ export function VendorDashboard() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-6"
           >
-            {vendor ? (
+            {/* Vendor Profile Header */}
             <div className="bg-white rounded-xl shadow-lg p-8">
               <div className="flex justify-between items-start mb-6">
                 <div>
@@ -1114,14 +1149,7 @@ export function VendorDashboard() {
         </div>
       </div>
 
-    </div>
-            ) : (
-              <div className="bg-white rounded-xl shadow-lg p-16 text-center text-gray-500">
-                <StoreIcon size={64} className="mx-auto text-gray-300 mb-6" />
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">No Vendor Profile</h2>
-                <p className="text-lg">Please add a vendor profile to start managing your canteen.</p>
-              </div>
-            )}
+    </div> {/* card */}
   </motion.div>
 )} {/* end vendor tab */}
 
