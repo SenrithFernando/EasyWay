@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { PlusIcon, StoreIcon, UtensilsIcon, StarIcon, ClockIcon, DollarSignIcon, EditIcon, TrashIcon, FileTextIcon, PenToolIcon, SearchIcon, FilterIcon, CoffeeIcon, PizzaIcon, SandwichIcon, CheckCircleIcon, AlertCircleIcon, PauseCircleIcon } from 'lucide-react';
+import { PlusIcon, StoreIcon, UtensilsIcon, StarIcon, ClockIcon, DollarSignIcon, EditIcon, TrashIcon, FileTextIcon, PenToolIcon, SearchIcon, FilterIcon, CoffeeIcon, PizzaIcon, SandwichIcon, CheckCircleIcon, AlertCircleIcon, PauseCircleIcon, CalendarIcon, UserIcon } from 'lucide-react';
 import { Navbar } from '../components/layout/Navbar';
 
 export function VendorDashboard() {
@@ -16,6 +16,8 @@ export function VendorDashboard() {
   const [editingVendor, setEditingVendor] = useState(null);
   const [editingBlog, setEditingBlog] = useState(null);
   const [user, setUser] = useState(null);
+  const [formErrors, setFormErrors] = useState({});
+  const [articleErrors, setArticleErrors] = useState({});
   const [formData, setFormData] = useState({
     name: '',
     category: 'beverages',
@@ -128,6 +130,10 @@ export function VendorDashboard() {
 
   const handleAddVendor = async (e) => {
     e.preventDefault();
+    if (!validateVendorForm()) {
+      return;
+    }
+    
     try {
       const token = localStorage.getItem('token');
       const url = editingVendor 
@@ -146,6 +152,7 @@ export function VendorDashboard() {
       if (response.ok) {
         setShowAddForm(false);
         setEditingVendor(null);
+        setFormErrors({});
         fetchVendorProfile();
         setFormData({
           name: '',
@@ -171,17 +178,17 @@ export function VendorDashboard() {
   const handleEditVendor = (vendor) => {
     setEditingVendor(vendor);
     setFormData({
-      name: vendor.name,
-      category: vendor.category,
-      description: vendor.description,
-      openingTime: vendor.openingTime,
-      closingTime: vendor.closingTime,
-      location: vendor.location,
-      phone: vendor.phone,
-      specialties: vendor.specialties,
-      priceRange: vendor.priceRange,
-      image: vendor.image,
-      status: vendor.status,
+      name: vendor?.name || '',
+      category: vendor?.category || 'beverages',
+      description: vendor?.description || '',
+      openingTime: vendor?.openingTime || '',
+      closingTime: vendor?.closingTime || '',
+      location: vendor?.location || '',
+      phone: vendor?.phone || '',
+      specialties: vendor?.specialties || [],
+      priceRange: vendor?.priceRange || '$$',
+      image: vendor?.image || '',
+      status: vendor?.status || 'active',
     });
     setShowAddForm(true);
   };
@@ -217,7 +224,17 @@ export function VendorDashboard() {
   };
 
   const handleSpecialtiesChange = (e) => {
-    const specialties = e.target.value.split(',').map(s => s.trim()).filter(s => s);
+    const value = e.target.value;
+    // If empty, set empty array
+    if (!value.trim()) {
+      setFormData(prev => ({
+        ...prev,
+        specialties: [],
+      }));
+      return;
+    }
+    // Split by comma and clean up
+    const specialties = value.split(',').map(s => s.trim()).filter(s => s);
     setFormData(prev => ({
       ...prev,
       specialties,
@@ -226,6 +243,10 @@ export function VendorDashboard() {
 
   const handleAddArticle = async (e) => {
     e.preventDefault();
+    if (!validateArticleForm()) {
+      return;
+    }
+    
     try {
       const token = localStorage.getItem('token');
       const url = editingBlog 
@@ -247,6 +268,7 @@ export function VendorDashboard() {
       if (response.ok) {
         setShowArticleForm(false);
         setEditingBlog(null);
+        setArticleErrors({});
         fetchAllBlogs();
         setArticleData({
           title: '',
@@ -305,6 +327,7 @@ export function VendorDashboard() {
       ...prev,
       tags,
     }));
+    validateArticleForm();
   };
 
   const handleArticleInputChange = (e) => {
@@ -313,6 +336,111 @@ export function VendorDashboard() {
       ...prev,
       [name]: value,
     }));
+    validateArticleForm();
+  };
+
+  // Validation functions
+  const validateVendorForm = () => {
+    const errors = {};
+    
+    // Name validation
+    if (!formData.name.trim()) {
+      errors.name = 'Vendor name is required';
+    } else if (formData.name.trim().length < 2) {
+      errors.name = 'Vendor name must be at least 2 characters';
+    } else if (formData.name.trim().length > 50) {
+      errors.name = 'Vendor name must be less than 50 characters';
+    }
+    
+    // Category validation
+    if (!formData.category) {
+      errors.category = 'Category is required';
+    }
+    
+    // Description validation
+    if (!formData.description.trim()) {
+      errors.description = 'Description is required';
+    } else if (formData.description.trim().length < 10) {
+      errors.description = 'Description must be at least 10 characters';
+    } else if (formData.description.trim().length > 500) {
+      errors.description = 'Description must be less than 500 characters';
+    }
+    
+    // Opening Time validation
+    if (!formData.openingTime.trim()) {
+      errors.openingTime = 'Opening time is required';
+    } else if (!/^(1[0-2]|0?[1-9]):[0-5][0-9]\s?(AM|PM|am|pm)$/i.test(formData.openingTime.trim())) {
+      errors.openingTime = 'Please enter a valid time (e.g., 8:00 AM)';
+    }
+    
+    // Closing Time validation
+    if (!formData.closingTime.trim()) {
+      errors.closingTime = 'Closing time is required';
+    } else if (!/^(1[0-2]|0?[1-9]):[0-5][0-9]\s?(AM|PM|am|pm)$/i.test(formData.closingTime.trim())) {
+      errors.closingTime = 'Please enter a valid time (e.g., 8:00 PM)';
+    }
+    
+    // Location validation
+    if (!formData.location.trim()) {
+      errors.location = 'Location is required';
+    } else if (formData.location.trim().length < 3) {
+      errors.location = 'Location must be at least 3 characters';
+    } else if (formData.location.trim().length > 100) {
+      errors.location = 'Location must be less than 100 characters';
+    }
+    
+    // Phone validation
+    if (!formData.phone.trim()) {
+      errors.phone = 'Phone number is required';
+    } else if (!/^\+?[\d\s\-\(\)]{10}$/.test(formData.phone.replace(/\s/g, ''))) {
+      errors.phone = 'Phone number must be 10 digits (e.g., 0771234567 or +94771234567)';
+    } else if (formData.phone.replace(/\D/g, '').length < 10) {
+      errors.phone = 'Phone number must be at least 10 digits';
+    } else if (formData.phone.replace(/\D/g, '').length > 10) {
+      errors.phone = 'Phone number must not exceed 10 digits';
+    }
+    
+    // Image validation
+    if (formData.image && !formData.image.startsWith('data:') && !formData.image.startsWith('http') && !formData.image.startsWith('/')) {
+      errors.image = 'Please enter a valid image URL or base64 data';
+    }
+    
+    // Specialties validation
+    if (formData.specialties.length === 0) {
+      errors.specialties = 'Please add at least one specialty';
+    } else if (formData.specialties.length > 10) {
+      errors.specialties = 'Maximum 10 specialties allowed';
+    }
+    
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const validateArticleForm = () => {
+    const errors = {};
+    
+    if (!articleData.title.trim()) {
+      errors.title = 'Article title is required';
+    } else if (articleData.title.trim().length < 3) {
+      errors.title = 'Title must be at least 3 characters';
+    }
+    
+    if (!articleData.content.trim()) {
+      errors.content = 'Content is required';
+    } else if (articleData.content.trim().length < 20) {
+      errors.content = 'Content must be at least 20 characters';
+    }
+    
+    if (articleData.excerpt && articleData.excerpt.trim().length > 200) {
+      errors.excerpt = 'Excerpt must be less than 200 characters';
+    }
+    
+    if (articleData.imageUrl && !articleData.imageUrl.startsWith('http') && !articleData.imageUrl.startsWith('/') && !articleData.imageUrl.startsWith('data:')) {
+      errors.imageUrl = 'Please enter a valid image URL';
+    }
+    
+    setArticleErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   if (loading) {
@@ -403,6 +531,7 @@ export function VendorDashboard() {
                 onClick={() => {
                   setShowAddForm(false);
                   setEditingVendor(null);
+                  setFormErrors({});
                   setFormData({
                     name: '',
                     category: 'beverages',
@@ -433,8 +562,13 @@ export function VendorDashboard() {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent ${
+                      formErrors.name ? 'border-red-500' : 'border-gray-300'
+                    }`}
                   />
+                  {formErrors.name && (
+                    <p className="mt-1 text-sm text-red-600">{formErrors.name}</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
@@ -443,12 +577,17 @@ export function VendorDashboard() {
                     value={formData.category}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent ${
+                      formErrors.category ? 'border-red-500' : 'border-gray-300'
+                    }`}
                   >
                     {categories.map(cat => (
                       <option key={cat.id} value={cat.id}>{cat.name}</option>
                     ))}
                   </select>
+                  {formErrors.category && (
+                    <p className="mt-1 text-sm text-red-600">{formErrors.category}</p>
+                  )}
                 </div>
               </div>
 
@@ -460,8 +599,13 @@ export function VendorDashboard() {
                   onChange={handleInputChange}
                   required
                   rows={3}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent ${
+                    formErrors.description ? 'border-red-500' : 'border-gray-300'
+                  }`}
                 />
+                {formErrors.description && (
+                  <p className="mt-1 text-sm text-red-600">{formErrors.description}</p>
+                )}
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
@@ -474,8 +618,13 @@ export function VendorDashboard() {
                     onChange={handleInputChange}
                     placeholder="e.g., 8:00 AM"
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent ${
+                      formErrors.openingTime ? 'border-red-500' : 'border-gray-300'
+                    }`}
                   />
+                  {formErrors.openingTime && (
+                    <p className="mt-1 text-sm text-red-600">{formErrors.openingTime}</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Closing Time *</label>
@@ -486,8 +635,13 @@ export function VendorDashboard() {
                     onChange={handleInputChange}
                     placeholder="e.g., 8:00 PM"
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent ${
+                      formErrors.closingTime ? 'border-red-500' : 'border-gray-300'
+                    }`}
                   />
+                  {formErrors.closingTime && (
+                    <p className="mt-1 text-sm text-red-600">{formErrors.closingTime}</p>
+                  )}
                 </div>
               </div>
 
@@ -500,8 +654,13 @@ export function VendorDashboard() {
                     value={formData.location}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent ${
+                      formErrors.location ? 'border-red-500' : 'border-gray-300'
+                    }`}
                   />
+                  {formErrors.location && (
+                    <p className="mt-1 text-sm text-red-600">{formErrors.location}</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Phone *</label>
@@ -511,8 +670,13 @@ export function VendorDashboard() {
                     value={formData.phone}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent ${
+                      formErrors.phone ? 'border-red-500' : 'border-gray-300'
+                    }`}
                   />
+                  {formErrors.phone && (
+                    <p className="mt-1 text-sm text-red-600">{formErrors.phone}</p>
+                  )}
                 </div>
               </div>
 
@@ -554,8 +718,13 @@ export function VendorDashboard() {
                   value={formData.specialties.join(', ')}
                   onChange={handleSpecialtiesChange}
                   placeholder="e.g., Coffee, Sandwiches, Pasta"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent ${
+                    formErrors.specialties ? 'border-red-500' : 'border-gray-300'
+                  }`}
                 />
+                {formErrors.specialties && (
+                  <p className="mt-1 text-sm text-red-600">{formErrors.specialties}</p>
+                )}
               </div>
 
               <div>
@@ -566,8 +735,26 @@ export function VendorDashboard() {
                   value={formData.image}
                   onChange={handleInputChange}
                   placeholder="https://example.com/image.jpg"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent ${
+                    formErrors.image ? 'border-red-500' : 'border-gray-300'
+                  }`}
                 />
+                {formErrors.image && (
+                  <p className="mt-1 text-sm text-red-600">{formErrors.image}</p>
+                )}
+                {formData.image && (
+                  <div className="mt-2">
+                    <img 
+                      src={formData.image} 
+                      alt="Preview" 
+                      className="h-32 w-32 object-cover rounded-lg border border-gray-200"
+                      onError={(e) => {
+                        e.target.src = 'https://picsum.photos/seed/invalid/128/128.jpg';
+                      }}
+                    />
+                    <p className="text-xs text-gray-500 mt-1">Image preview</p>
+                  </div>
+                )}
               </div>
 
               <div className="flex justify-end gap-4">
@@ -576,6 +763,7 @@ export function VendorDashboard() {
                   onClick={() => {
                     setShowAddForm(false);
                     setEditingVendor(null);
+                    setFormErrors({});
                   }}
                   className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
                 >
@@ -631,8 +819,13 @@ export function VendorDashboard() {
                   value={articleData.title}
                   onChange={handleArticleInputChange}
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent ${
+                    articleErrors.title ? 'border-red-500' : 'border-gray-300'
+                  }`}
                 />
+                {articleErrors.title && (
+                  <p className="mt-1 text-sm text-red-600">{articleErrors.title}</p>
+                )}
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
@@ -670,8 +863,13 @@ export function VendorDashboard() {
                   onChange={handleArticleInputChange}
                   rows={2}
                   placeholder="Brief description of your article"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent ${
+                    articleErrors.excerpt ? 'border-red-500' : 'border-gray-300'
+                  }`}
                 />
+                {articleErrors.excerpt && (
+                  <p className="mt-1 text-sm text-red-600">{articleErrors.excerpt}</p>
+                )}
               </div>
 
               <div>
@@ -683,8 +881,13 @@ export function VendorDashboard() {
                   required
                   rows={8}
                   placeholder="Write your article content here..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent ${
+                    articleErrors.content ? 'border-red-500' : 'border-gray-300'
+                  }`}
                 />
+                {articleErrors.content && (
+                  <p className="mt-1 text-sm text-red-600">{articleErrors.content}</p>
+                )}
               </div>
 
               <div>
@@ -695,8 +898,13 @@ export function VendorDashboard() {
                   value={articleData.imageUrl}
                   onChange={handleArticleInputChange}
                   placeholder="https://example.com/image.jpg"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent ${
+                    articleErrors.imageUrl ? 'border-red-500' : 'border-gray-300'
+                  }`}
                 />
+                {articleErrors.imageUrl && (
+                  <p className="mt-1 text-sm text-red-600">{articleErrors.imageUrl}</p>
+                )}
               </div>
 
               <div className="flex justify-end gap-4">
@@ -705,6 +913,7 @@ export function VendorDashboard() {
                   onClick={() => {
                     setShowArticleForm(false);
                     setEditingBlog(null);
+                    setArticleErrors({});
                   }}
                   className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
                 >
@@ -739,17 +948,17 @@ export function VendorDashboard() {
                   onClick={() => {
                     setEditingVendor(vendor);
                     setFormData({
-                      name: vendor.name || '',
-                      category: vendor.category || 'beverages',
-                      description: vendor.description || '',
-                      openingTime: vendor.openingTime || '',
-                      closingTime: vendor.closingTime || '',
-                      location: vendor.location || '',
-                      phone: vendor.phone || '',
-                      specialties: vendor.specialties || [],
-                      priceRange: vendor.priceRange || '$$',
-                      image: vendor.image || '',
-                      status: vendor.status || 'active',
+                      name: vendor?.name || '',
+                      category: vendor?.category || 'beverages',
+                      description: vendor?.description || '',
+                      openingTime: vendor?.openingTime || '',
+                      closingTime: vendor?.closingTime || '',
+                      location: vendor?.location || '',
+                      phone: vendor?.phone || '',
+                      specialties: vendor?.specialties || [],
+                      priceRange: vendor?.priceRange || '$$',
+                      image: vendor?.image || '',
+                      status: vendor?.status || 'active',
                     });
                     setShowAddForm(true);
                   }}
@@ -761,6 +970,29 @@ export function VendorDashboard() {
               </div>
 
               <div className="grid md:grid-cols-2 gap-8">
+                {/* Image Display */}
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Canteen Image</h3>
+                    <div className="space-y-3">
+                      {vendor?.image ? (
+                        <img 
+                          src={vendor.image} 
+                          alt="Canteen" 
+                          className="w-full h-48 object-cover rounded-lg border border-gray-200"
+                          onError={(e) => {
+                            e.target.src = 'https://picsum.photos/seed/noimage/400/200.jpg';
+                          }}
+                        />
+                      ) : (
+                        <div className="w-full h-48 bg-gray-100 rounded-lg border border-gray-200 flex items-center justify-center">
+                          <p className="text-gray-500">No image uploaded</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
                 {/* Basic Info */}
                 <div className="space-y-4">
                   <div>
@@ -770,21 +1002,21 @@ export function VendorDashboard() {
                         <StoreIcon size={20} className="text-gray-400" />
                         <div>
                           <p className="text-sm text-gray-500">Business Name</p>
-                          <p className="font-medium text-gray-900">{vendor.name || 'Not specified'}</p>
+                          <p className="font-medium text-gray-900">{vendor?.name || 'Not specified'}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
                         <UtensilsIcon size={20} className="text-gray-400" />
                         <div>
                           <p className="text-sm text-gray-500">Category</p>
-                          <p className="font-medium text-gray-900 capitalize">{vendor.category || 'Not specified'}</p>
+                          <p className="font-medium text-gray-900 capitalize">{vendor?.category || 'Not specified'}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
                         <DollarSignIcon size={20} className="text-gray-400" />
                         <div>
                           <p className="text-sm text-gray-500">Price Range</p>
-                          <p className="font-medium text-gray-900">{vendor.priceRange || 'Not specified'}</p>
+                          <p className="font-medium text-gray-900">{vendor?.priceRange || 'Not specified'}</p>
                         </div>
                       </div>
                     </div>
@@ -801,7 +1033,7 @@ export function VendorDashboard() {
                         <div>
                           <p className="text-sm text-gray-500">Operating Hours</p>
                           <p className="font-medium text-gray-900">
-                            {vendor.openingTime && vendor.closingTime 
+                            {vendor?.openingTime && vendor?.closingTime 
                               ? `${vendor.openingTime} - ${vendor.closingTime}`
                               : 'Not specified'}
                           </p>
@@ -811,14 +1043,14 @@ export function VendorDashboard() {
                         <StoreIcon size={20} className="text-gray-400" />
                         <div>
                           <p className="text-sm text-gray-500">Location</p>
-                          <p className="font-medium text-gray-900">{vendor.location || 'Not specified'}</p>
+                          <p className="font-medium text-gray-900">{vendor?.location || 'Not specified'}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
                         <EditIcon size={20} className="text-gray-400" />
                         <div>
                           <p className="text-sm text-gray-500">Phone</p>
-                          <p className="font-medium text-gray-900">{vendor.phone || 'Not specified'}</p>
+                          <p className="font-medium text-gray-900">{vendor?.phone || 'Not specified'}</p>
                         </div>
                       </div>
                     </div>
@@ -827,19 +1059,19 @@ export function VendorDashboard() {
               </div>
 
               {/* Description */}
-      {vendor.description && (
+      {vendor?.description && (
         <div className="mt-6 pt-6 border-t border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900 mb-3">Description</h3>
-          <p className="text-gray-700 leading-relaxed">{vendor.description}</p>
+          <p className="text-gray-700 leading-relaxed">{vendor?.description}</p>
         </div>
       )}
 
       {/* Specialties */}
-      {vendor.specialties && vendor.specialties.length > 0 && (
+      {vendor?.specialties && vendor.specialties.length > 0 && (
         <div className="mt-6 pt-6 border-t border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900 mb-3">Specialties</h3>
           <div className="flex flex-wrap gap-2">
-            {vendor.specialties.map((specialty, index) => (
+            {vendor?.specialties?.map((specialty, index) => (
               <span
                 key={index}
                 className="px-3 py-1 bg-brand-100 text-brand-700 rounded-full text-sm font-medium"
@@ -858,17 +1090,17 @@ export function VendorDashboard() {
             <p className="text-sm text-gray-500">Status</p>
             <div className="flex items-center gap-2 mt-1">
              <div className="flex items-center gap-2 mt-1">
-  {vendor.status === 'active' ? (
+  {vendor?.status === 'active' ? (
     <>
       <CheckCircleIcon size={20} className="text-green-600" />
       <span className="font-medium text-green-600">Active</span>
     </>
-  ) : vendor.status === 'maintenance' ? (
+  ) : vendor?.status === 'maintenance' ? (
     <>
       <AlertCircleIcon size={20} className="text-yellow-600" />
       <span className="font-medium text-yellow-600">Maintenance</span>
     </>
-  ) : vendor.status === 'inactive' ? (
+  ) : vendor?.status === 'inactive' ? (
     <>
       <PauseCircleIcon size={20} className="text-gray-600" />
       <span className="font-medium text-gray-600">Inactive</span>
@@ -892,6 +1124,111 @@ export function VendorDashboard() {
             )}
   </motion.div>
 )} {/* end vendor tab */}
+
+        {/* Articles Tab */}
+        {activeTab === 'articles' && !showArticleForm && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-6"
+          >
+            <div className="bg-white rounded-xl shadow-lg p-8">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">Your Articles</h2>
+                <button
+                  onClick={() => setShowArticleForm(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                >
+                  <PlusIcon size={16} />
+                  Write Article
+                </button>
+              </div>
+
+              {blogs.length === 0 ? (
+                <div className="text-center py-12">
+                  <FileTextIcon size={48} className="mx-auto text-gray-300 mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No articles yet</h3>
+                  <p className="text-gray-500 mb-4">Start by writing your first article</p>
+                  <button
+                    onClick={() => setShowArticleForm(true)}
+                    className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                  >
+                    Write Article
+                  </button>
+                </div>
+              ) : (
+                <div className="grid gap-6">
+                  {blogs.map((blog) => (
+                    <motion.div
+                      key={blog._id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex justify-between items-start mb-4">
+                        <div className="flex-1">
+                          <h3 className="text-xl font-semibold text-gray-900 mb-2">{blog.title}</h3>
+                          {blog.excerpt && (
+                            <p className="text-gray-600 mb-3">{blog.excerpt}</p>
+                          )}
+                          <div className="flex items-center gap-4 text-sm text-gray-500">
+                            <span className="flex items-center gap-1">
+                              <CalendarIcon size={16} />
+                              {new Date(blog.createdAt).toLocaleDateString()}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <UserIcon size={16} />
+                              {blog.author?.fullName || blog.author || 'Unknown'}
+                            </span>
+                            <span className="px-2 py-1 bg-gray-100 rounded-full text-xs">
+                              {blog.category}
+                            </span>
+                          </div>
+                          {blog.tags && blog.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mt-3">
+                              {blog.tags.map((tag, index) => (
+                                <span
+                                  key={index}
+                                  className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                        {blog.imageUrl && (
+                          <img
+                            src={blog.imageUrl}
+                            alt={blog.title}
+                            className="w-24 h-24 object-cover rounded-lg ml-4"
+                            onError={(e) => {
+                              e.target.src = 'https://picsum.photos/seed/article/96/96.jpg';
+                            }}
+                          />
+                        )}
+                      </div>
+                      <div className="flex justify-end gap-2">
+                        <button
+                          onClick={() => handleEditBlog(blog)}
+                          className="px-3 py-1 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        >
+                          <EditIcon size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteBlog(blog._id)}
+                          className="px-3 py-1 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        >
+                          <TrashIcon size={16} />
+                        </button>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
 
       </div> 
     </div> 

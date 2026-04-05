@@ -15,7 +15,6 @@ import ChatBotPage from './pages/student/ChatBotPage.jsx'
 import { TableCheckInPage } from './pages/TableCheckInPage'
 
 
-
 function App() {
   return (
     <>
@@ -31,12 +30,13 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:id" element={<BlogDetailPage />} />
+        <Route path="/checkin/:location/:tableId" element={<TableCheckInPage />} />
         <Route path="/canteen" element={<CanteenPage />} />
         <Route path="/menu" element={<StudentOrderPage />} />
         <Route path="/chatbot" element={<ChatBotPage />} />
       <Route path="/vendor/menu-items" element={<MenuItemsPage />} />
       <Route path="/student/order" element={<StudentOrderPage initialTab="orders" />} />
-      <Route path="/checkin/:location/:tableId" element={<TableCheckInPage />} />
+
 
       
 

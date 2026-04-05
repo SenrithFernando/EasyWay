@@ -76,11 +76,13 @@ export function Navbar() {
                 <span className="text-sm font-medium text-surface-700 hidden lg:inline">
                   Welcome, {user.fullName?.split(" ")[0]}!
                 </span>
-                <Link to={dashboardPath}>
-                  <button className="inline-flex items-center justify-center font-medium rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-brand-500 to-brand-400 text-white hover:from-brand-600 hover:to-brand-500 shadow-soft px-4 py-2 text-sm">
-                    Dashboard
-                  </button>
-                </Link>
+                {user.role === 'admin' && (
+                  <Link to={dashboardPath}>
+                    <button className="inline-flex items-center justify-center font-medium rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-brand-500 to-brand-400 text-white hover:from-brand-600 hover:to-brand-500 shadow-soft px-4 py-2 text-sm">
+                      Dashboard
+                    </button>
+                  </Link>
+                )}
                 <button
                   onClick={handleLogout}
                   className="inline-flex items-center justify-center font-medium rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 bg-surface-100 text-surface-700 hover:bg-red-50 hover:text-red-600 px-4 py-2 text-sm"
@@ -134,11 +136,13 @@ export function Navbar() {
                     <span className="text-sm font-medium text-surface-700 bg-surface-50 p-3 rounded-xl border border-surface-200 text-center">
                       Logged in as {user.fullName}
                     </span>
-                    <Link to={dashboardPath} onClick={() => setIsMobileMenuOpen(false)}>
-                      <button className="w-full inline-flex items-center justify-center font-medium rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-brand-500 to-brand-400 text-white hover:from-brand-600 hover:to-brand-500 shadow-soft px-5 py-2.5 text-base">
-                        Go to Dashboard
-                      </button>
-                    </Link>
+                    {user.role === 'admin' && (
+                      <Link to={dashboardPath} onClick={() => setIsMobileMenuOpen(false)}>
+                        <button className="w-full inline-flex items-center justify-center font-medium rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 bg-gradient-to-r from-brand-500 to-brand-400 text-white hover:from-brand-600 hover:to-brand-500 shadow-soft px-5 py-2.5 text-base">
+                          Go to Dashboard
+                        </button>
+                      </Link>
+                    )}
                     <button
                       onClick={handleLogout}
                       className="w-full inline-flex items-center justify-center font-medium rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 bg-surface-100 text-surface-700 hover:bg-red-50 hover:text-red-600 px-5 py-2.5 text-base"
