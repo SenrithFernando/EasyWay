@@ -4,6 +4,28 @@ import { motion } from 'framer-motion';
 import { CalendarIcon, UsersIcon, CheckCircleIcon, QrCodeIcon, } from 'lucide-react';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 
+const generateDateOptions = () => {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    const formatDate = (date) => `${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+    
+    const options = [
+        `Today ${formatDate(today)}`, 
+        `Tomorrow ${formatDate(tomorrow)}`
+    ];
+    
+    for (let i = 2; i < 4; i++) {
+        const date = new Date(today);
+        date.setDate(today.getDate() + i);
+        options.push(date.toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric' }));
+    }
+    return options;
+};
+
+const INITIAL_DATE_OPTIONS = generateDateOptions();
+
 const TIME_SLOTS = [
 
     { time: '8:30 AM', available: true },
@@ -83,7 +105,7 @@ const LOCATIONS = [
 export function ReservationPage() {
     const navigate = useNavigate();
     const [step, setStep] = useState(1);
-    const [selectedDate, setSelectedDate] = useState('Today');
+    const [selectedDate, setSelectedDate] = useState(INITIAL_DATE_OPTIONS[0]);
     const [selectedTime, setSelectedTime] = useState(null);
     const [selectedSeats, setSelectedSeats] = useState(1);
     const [selectedLocation, setSelectedLocation] = useState(LOCATIONS[0].id);
@@ -98,7 +120,49 @@ export function ReservationPage() {
                 const response = await fetch('/api/reservations');
                 if (response.ok) {
                     const data = await response.json();
-                    setReservations(data);
+                    
+                    const validReservations = [];
+                    const now = new Date();
+                    
+                    for (const r of data) {
+                        let shouldDelete = false;
+                        
+                        // Check if the reservation is past 30 mins
+                        if (r.date && r.date.startsWith('Today') && r.time) {
+                            const [timePart, modifier] = r.time.split(' ');
+                            if (timePart && modifier) {
+                                let [hours, minutes] = timePart.split(':').map(Number);
+                                
+                                if (modifier === 'PM' && hours !== 12) hours += 12;
+                                if (modifier === 'AM' && hours === 12) hours = 0;
+                                
+                                const reservationTime = new Date();
+                                reservationTime.setHours(hours, minutes, 0, 0);
+                                
+                                const diffMins = (now - reservationTime) / (1000 * 60);
+                                if (diffMins >= 30) {
+                                    shouldDelete = true;
+                                }
+                            }
+                        }
+                        
+                        if (shouldDelete) {
+                            try {
+                                await fetch(`/api/reservations/${r._id}`, {
+                                    method: 'DELETE',
+                                    headers: {
+                                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                    }
+                                });
+                            } catch (e) {
+                                console.error('Failed to auto-delete check', e);
+                            }
+                        } else {
+                            validReservations.push(r);
+                        }
+                    }
+
+                    setReservations(validReservations);
                 }
             } catch (error) {
                 console.error("Failed to fetch reservations", error);
@@ -107,19 +171,7 @@ export function ReservationPage() {
         fetchReservations();
     }, []);
 
-    const generateDateOptions = () => {
-        const today = new Date();
-        const options = ['Today', 'Tomorrow'];
-        
-        for (let i = 2; i < 4; i++) {
-            const date = new Date(today);
-            date.setDate(today.getDate() + i);
-            options.push(date.toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric' }));
-        }
-        return options;
-    };
-    
-    const DATE_OPTIONS = React.useMemo(() => generateDateOptions(), []);
+
 
     const handleConfirm = async () => {
         setIsSubmitting(true);
@@ -187,7 +239,7 @@ export function ReservationPage() {
               </h2>
 
               <div className="flex gap-3 mb-6 overflow-x-auto pb-2 hide-scrollbar">
-                {DATE_OPTIONS.map((date) => (<button key={date} onClick={() => { setSelectedDate(date); setSelectedTable(null); }} className={`px-5 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${selectedDate === date ? 'bg-surface-900 text-white shadow-md' : 'bg-surface-50 text-surface-600 hover:bg-surface-100'}`}>
+                {INITIAL_DATE_OPTIONS.map((date) => (<button key={date} onClick={() => { setSelectedDate(date); setSelectedTable(null); }} className={`px-5 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${selectedDate === date ? 'bg-surface-900 text-white shadow-md' : 'bg-surface-50 text-surface-600 hover:bg-surface-100'}`}>
                       {date}
                     </button>))}
               </div>
@@ -196,7 +248,7 @@ export function ReservationPage() {
                 {TIME_SLOTS.map((slot, i) => {
                   let isSlotAvailable = slot.available;
                   
-                  if (selectedDate === 'Today') {
+                  if (selectedDate.startsWith('Today')) {
                     const now = new Date();
                     const currentHour = now.getHours();
                     const currentMinute = now.getMinutes();
