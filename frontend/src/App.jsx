@@ -12,6 +12,7 @@ import { AdminDashboard } from './pages/AdminDashboard'
 import MenuItemsPage from './pages/vendor/MenuItemsPage.jsx'
 import StudentOrderPage from './pages/student/StudentOrderPage.jsx'
 import ChatBotPage from './pages/student/ChatBotPage.jsx'
+import { TableCheckInPage } from './pages/TableCheckInPage'
 
 
 function App() {
@@ -34,6 +35,9 @@ function App() {
         <Route path="/chatbot" element={<ChatBotPage />} />
       <Route path="/vendor/menu-items" element={<MenuItemsPage />} />
       <Route path="/student/order" element={<StudentOrderPage initialTab="orders" />} />
+      <Route path="/checkin/:location/:tableId" element={<TableCheckInPage />} />
+      
+
 
 
       </Routes>
