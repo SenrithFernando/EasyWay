@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { CalendarClockIcon, UtensilsCrossedIcon, UserIcon, QrCodeIcon, ClockIcon, MapPinIcon, BellIcon, } from 'lucide-react';
+import { CalendarClockIcon, UtensilsCrossedIcon, UserIcon, QrCodeIcon, ClockIcon, MapPinIcon, BellIcon, UsersIcon, Trash2Icon } from 'lucide-react';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 
 const RECENT_ORDERS = [
@@ -27,15 +27,55 @@ export function StudentDashboard() {
 
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
+    const [reservations, setReservations] = useState([]);
+    const [isLoadingReservations, setIsLoadingReservations] = useState(true);
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
-            setUser(JSON.parse(storedUser));
+            const parsedUser = JSON.parse(storedUser);
+            setUser(parsedUser);
+            
+            const fetchMyReservations = async () => {
+                try {
+                    const userId = parsedUser.id || parsedUser._id;
+                    const response = await fetch(`/api/reservations/myreservations/${userId}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        // Filter out cancelled ones and reverse to show newest first
+                        setReservations(data.filter(r => r.status !== 'Cancelled').reverse());
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch user reservations", error);
+                } finally {
+                    setIsLoadingReservations(false);
+                }
+            };
+            fetchMyReservations();
         } else {
             navigate('/login');
         }
     }, [navigate]);
+
+    const handleDeleteReservation = async (e, id) => {
+        e.stopPropagation();
+        if (!window.confirm('Are you sure you want to cancel this reservation?')) return;
+        
+        try {
+            const response = await fetch(`/api/reservations/${id}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                setReservations(prev => prev.filter(r => r._id !== id));
+            } else {
+                const data = await response.json();
+                alert(data.message || 'Failed to delete reservation');
+            }
+        } catch (error) {
+            console.error('Error deleting reservation:', error);
+            alert('Error deleting reservation');
+        }
+    };
 
     return (<DashboardLayout role="student">
       <div className="mb-8">
@@ -71,40 +111,89 @@ export function StudentDashboard() {
         <div className="md:col-span-8 space-y-6">
           {/* Active Reservation */}
           <motion.div variants={itemVariants}>
-            <h2 className="text-lg font-bold text-surface-900 mb-4">
-              Upcoming Reservation
-            </h2>
-            <div className="bg-surface-0 rounded-2xl overflow-hidden shadow-card border border-surface-100 p-6 relative overflow-hidden border-brand-200">
-              <div className="absolute top-0 left-0 w-1 h-full bg-brand-500"></div>
-              <div className="flex flex-col sm:flex-row justify-between gap-6">
-                <div>
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border bg-success-100 text-success-700 border-success-200">Confirmed</span>
-                    <span className="text-sm font-medium text-surface-500">
-                      ID: RES-4429
-                    </span>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-bold text-surface-900">
+                My Reservations
+              </h2>
+              <Link to="/table" className="text-sm font-medium text-brand-600 hover:text-brand-700">
+                Book new
+              </Link>
+            </div>
+            
+            <div className="space-y-4">
+              {isLoadingReservations ? (
+                  <div className="bg-surface-0 rounded-2xl p-6 text-center shadow-card border border-surface-100 text-surface-500">
+                      Loading your reservations...
                   </div>
-                  <h3 className="text-xl font-bold text-surface-900 mb-2">
-                    Study Area Main - Resevation Area
-                  </h3>
-                  <div className="space-y-2 text-surface-600">
-                    <div className="flex items-center gap-2">
-                      <ClockIcon size={16} className="text-brand-500"/>
-                      <span>Today, 1:00 PM - 1:45 PM</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <MapPinIcon size={16} className="text-brand-500"/>
-                      <span>Table 12 (Window Seat)</span>
-                    </div>
+              ) : reservations.length === 0 ? (
+                  <div className="bg-surface-0 rounded-2xl p-8 text-center shadow-card border border-surface-100">
+                      <div className="w-16 h-16 bg-brand-50 text-brand-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <CalendarClockIcon size={32} />
+                      </div>
+                      <h3 className="text-lg font-bold text-surface-900 mb-2">No upcoming reservations</h3>
+                      <p className="text-surface-500 mb-6 text-sm">You haven't booked any tables yet.</p>
+                      <Link to="/table" className="inline-flex py-2 px-5 bg-brand-500 hover:bg-brand-600 text-white font-medium rounded-xl transition-colors">
+                          Reserve a Table
+                      </Link>
                   </div>
-                </div>
-                <div className="flex flex-col items-center justify-center bg-surface-50 p-4 rounded-xl border border-surface-200 min-w-[140px]">
-                  <QrCodeIcon size={64} className="text-surface-800 mb-2"/>
-                  <span className="text-xs font-medium text-surface-500 text-center">
-                    Scan at entrance
-                  </span>
-                </div>
-              </div>
+              ) : (
+                  reservations.map((res, idx) => (
+                      <div key={res._id || idx} className="bg-surface-0 rounded-2xl overflow-hidden shadow-card border border-surface-100 p-6 relative overflow-hidden border-brand-200">
+                        <div className={`absolute top-0 left-0 w-1 h-full ${res.status === 'Checked-In' ? 'bg-success-500' : 'bg-brand-500'}`}></div>
+                        <div className="flex flex-col sm:flex-row justify-between gap-6">
+                          <div>
+                            <div className="flex items-center gap-2 mb-4">
+                              <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border ${res.status === 'Checked-In' ? 'bg-success-100 text-success-700 border-success-200' : 'bg-brand-100 text-brand-700 border-brand-200'}`}>
+                                  {res.status}
+                              </span>
+                              <span className="text-sm font-medium text-surface-500">
+                                PIN: {res.reservationCode || 'N/A'}
+                              </span>
+                            </div>
+                            <h3 className="text-xl font-bold text-surface-900 mb-2">
+                              {res.location}
+                            </h3>
+                            <div className="space-y-2 text-surface-600">
+                              <div className="flex items-center gap-2">
+                                <ClockIcon size={16} className="text-brand-500"/>
+                                <span className="text-sm font-medium">{res.date}, {res.time}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <UsersIcon size={16} className="text-brand-500"/>
+                                <span className="text-sm font-medium">Table {res.tableId} • {res.seats} Seats</span>
+                              </div>
+                            </div>
+                            
+                            {res.status !== 'Checked-In' && (
+                                <button 
+                                    onClick={(e) => handleDeleteReservation(e, res._id)}
+                                    className="mt-4 flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors border border-red-100"
+                                >
+                                    <Trash2Icon size={14} /> Cancel Reservation
+                                </button>
+                            )}
+                          </div>
+                          <div className="flex flex-col items-center justify-center bg-surface-50 p-4 rounded-xl border border-surface-200 min-w-[140px] cursor-pointer group hover:bg-surface-100 transition-colors"
+                            onClick={() => {
+                                // Extract the id string if formatted differently, or pass safely to checkin
+                                const rawLoc = Object.entries({
+                                    'main-dining': 'Main Dining Area',
+                                    'study-area': 'Study Area Main',
+                                    'anohana': 'Anohana Canteen',
+                                    'birdnest-dining': 'Bird Nest Canteen Dining Area'
+                                }).find(([id, name]) => name === res.location)?.[0] || 'main-dining';
+                                navigate(`/checkin/${rawLoc}/${res.tableId}`);
+                            }}>
+                            <QrCodeIcon size={64} className="text-surface-800 mb-2 group-hover:scale-105 transition-transform"/>
+                            <span className="text-xs font-medium text-brand-600 text-center uppercase tracking-wider block">
+                                {res.reservationCode}
+                            </span>
+                            <span className="text-[10px] text-surface-500 mt-1 block">Click to Check In</span>
+                          </div>
+                        </div>
+                      </div>
+                  ))
+              )}
             </div>
           </motion.div>
 

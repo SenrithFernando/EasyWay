@@ -43,7 +43,13 @@ export function LoginPage() {
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
 
-            navigate('/');
+            if (data.user?.role === 'vendor') {
+                navigate('/vendor-dashboard');
+            } else if (data.user?.role === 'admin'){
+                navigate('/admin-dashboard');
+            }else {
+                navigate('/');
+            }
 
         } catch (error) {
             setErrorMsg("Network error. Please try again later.");
@@ -60,11 +66,11 @@ export function LoginPage() {
             label: 'Vendor',
             icon: StoreIcon,
         },
-        // {
-        //     id: 'admin',
-        //     label: 'Admin',
-        //     icon: ShieldCheckIcon,
-        // },
+        {
+            id: 'admin',
+            label: 'Admin',
+            icon: ShieldCheckIcon,
+        },
     ];
     return (<div className="min-h-screen flex items-center justify-center bg-surface-50 p-4 relative overflow-hidden">
       {/* Background decorative elements */}
