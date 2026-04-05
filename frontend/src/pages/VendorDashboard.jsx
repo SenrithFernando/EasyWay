@@ -728,7 +728,7 @@ export function VendorDashboard() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-6"
           >
-            {/* Vendor Profile Header */}
+            {vendor ? (
             <div className="bg-white rounded-xl shadow-lg p-8">
               <div className="flex justify-between items-start mb-6">
                 <div>
@@ -882,7 +882,14 @@ export function VendorDashboard() {
         </div>
       </div>
 
-    </div> {/* card */}
+    </div>
+            ) : (
+              <div className="bg-white rounded-xl shadow-lg p-16 text-center text-gray-500">
+                <StoreIcon size={64} className="mx-auto text-gray-300 mb-6" />
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">No Vendor Profile</h2>
+                <p className="text-lg">Please add a vendor profile to start managing your canteen.</p>
+              </div>
+            )}
   </motion.div>
 )} {/* end vendor tab */}
 
