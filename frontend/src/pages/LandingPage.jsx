@@ -22,6 +22,19 @@ const VENDORS = [
 ];
 
 export function LandingPage() {
+  const [user, setUser] = React.useState(null);
+
+  React.useEffect(() => {
+    const storedUserStr = localStorage.getItem('user');
+    if (storedUserStr) {
+      setUser(JSON.parse(storedUserStr));
+    }
+  }, []);
+
+  const isVendor = user?.role === 'vendor';
+  const browseMenuPath = isVendor ? '/vendor/menu-items' : '/menu';
+  const browseMenuLabel = isVendor ? 'Add Menu' : 'Browse Menu';
+
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
@@ -73,9 +86,9 @@ export function LandingPage() {
                   <ArrowRightIcon className="ml-2 group-hover:translate-x-1 transition-transform" size={18}/>
                 </button>
               </Link>
-              <Link to="/menu">
+              <Link to={browseMenuPath}>
                 <button className="w-full sm:w-auto inline-flex items-center justify-center font-medium rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-surface-0 text-surface-800 border-2 border-surface-200 hover:border-brand-500 hover:text-brand-600 focus:ring-surface-200 px-8 py-3.5 text-lg">
-                  Browse Menu
+                  {browseMenuLabel}
                 </button>
               </Link>
             </div>
