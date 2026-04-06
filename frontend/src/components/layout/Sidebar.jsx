@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { HomeIcon, CalendarIcon, SettingsIcon, LogOutIcon, XIcon, UserIcon, GlobeIcon } from 'lucide-react';
+import { HomeIcon, CalendarIcon, SettingsIcon, LogOutIcon, XIcon, UserIcon, GlobeIcon, MessageSquareIcon } from 'lucide-react';
 
 export function Sidebar({ role, onClose }) {
   const location = useLocation();
@@ -21,6 +21,10 @@ export function Sidebar({ role, onClose }) {
     { name: 'Dashboard', path: `/${role}`, icon: HomeIcon },
     { name: 'Reservations', path: '/table', icon: CalendarIcon },
     { name: 'Profile', path: '/profile', icon: UserIcon },
+    // Student-only menu item
+    ...(role === 'student'
+      ? [{ name: 'Feedback', path: '/student/feedback/history', icon: MessageSquareIcon }]
+      : []),
     { name: 'Settings', path: '/settings', icon: SettingsIcon },
   ];
 

@@ -16,14 +16,21 @@ const createDemoFeedback = asyncHandler(async (req, res) => {
 });
 
 const createFeedback = asyncHandler(async (req, res) => {
+  console.log('🔍 Creating feedback with data:', JSON.stringify(req.body, null, 2));
+  console.log('🔍 User from request:', req.user);
+  
+  const userId = req.user.id || req.user._id;
+  console.log('🔍 Extracted userId:', userId);
+  
   const feedback = await feedbackService.createFeedback({
-    studentId: req.user._id,
+    studentId: userId,
     orderId: req.body.orderId,
     vendorId: req.body.vendorId || req.body.canteenId,
     rating: req.body.rating,
     comment: req.body.comment,
   });
 
+  console.log('✅ Feedback created successfully:', feedback.feedbackId);
   return res.status(201).json({
     success: true,
     message: 'Feedback submitted successfully.',
@@ -53,7 +60,8 @@ const getFeedbackByVendor = asyncHandler(async (req, res) => {
 });
 
 const getMyFeedback = asyncHandler(async (req, res) => {
-  const feedback = await feedbackService.getFeedbackForStudent(req.user._id);
+  const userId = req.user.id || req.user._id;
+  const feedback = await feedbackService.getFeedbackForStudent(userId);
 
   return res.status(200).json({
     success: true,
@@ -74,9 +82,10 @@ const getVendorFeedbackStats = asyncHandler(async (req, res) => {
 });
 
 const updateFeedback = asyncHandler(async (req, res) => {
+  const userId = req.user.id || req.user._id;
   const feedback = await feedbackService.updateFeedback({
     feedbackId: req.params.feedbackId,
-    studentId: req.user._id,
+    studentId: userId,
     payload: req.body,
   });
 
@@ -88,9 +97,10 @@ const updateFeedback = asyncHandler(async (req, res) => {
 });
 
 const deleteFeedback = asyncHandler(async (req, res) => {
+  const userId = req.user.id || req.user._id;
   await feedbackService.deleteFeedback({
     feedbackId: req.params.feedbackId,
-    studentId: req.user._id,
+    studentId: userId,
   });
 
   return res.status(200).json({

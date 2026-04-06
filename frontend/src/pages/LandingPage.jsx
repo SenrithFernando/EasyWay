@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRightIcon, UtensilsIcon, CalendarCheckIcon, HeartIcon, StarIcon, ChevronRightIcon, } from 'lucide-react';
-import { Navbar } from '../components/layout/Navbar';
+import { Navbar } from '../Components/layout/Navbar';
 
 const FEATURED_MEALS = [
     { id: 1, name: 'Jollof Rice & Chicken', vendor: "Mama's Kitchen", price: '₦1,500', rating: 4.8, emoji: '🍛', color: 'from-orange-400 to-red-500' },
@@ -76,6 +76,11 @@ export function LandingPage() {
               <Link to="/menu">
                 <button className="w-full sm:w-auto inline-flex items-center justify-center font-medium rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-surface-0 text-surface-800 border-2 border-surface-200 hover:border-brand-500 hover:text-brand-600 focus:ring-surface-200 px-8 py-3.5 text-lg">
                   Browse Menu
+                </button>
+              </Link>
+              <Link to="/feedback">
+                <button className="w-full sm:w-auto inline-flex items-center justify-center font-medium rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-brand-50 text-brand-600 border-2 border-brand-100 hover:bg-brand-100 hover:border-brand-200 focus:ring-brand-100 px-8 py-3.5 text-lg shadow-sm">
+                  Give Feedback
                 </button>
               </Link>
             </div>
@@ -217,6 +222,7 @@ export function LandingPage() {
           </div>
         </div>
       </section>
+
 
       {/* Footer */}
       <footer className="bg-surface-900 text-surface-400 py-12 border-t border-surface-800">

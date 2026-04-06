@@ -134,13 +134,12 @@ export function BlogFeedbackPage() {
                 Easy Food Feedback
               </Badge>
               <div>
-                <h1 className="max-w-3xl text-4xl font-bold tracking-tight text-surface-900 sm:text-5xl">
-                  Modern feedback management for student food orders.
+                <h1 className="max-w-3xl text-4xl font-bold tracking-tight text-surface-900 sm:text-5xl lg:text-6xl">
+                  Modern <span className="text-brand-500">feedback management</span> for student food orders.
                 </h1>
-                <p className="mt-4 max-w-2xl text-lg leading-8 text-surface-600">
-                  Collect ratings, comments, and sentiment in one clean workflow. This page
-                  gives you the submit form, public reviews, and direct links to the history,
-                  dashboard, and ranking screens.
+                <p className="mt-6 max-w-2xl text-lg leading-8 text-surface-600">
+                  Collect ratings, comments, and sentiment in one clean workflow. Optimized for 
+                  transparency and speed between students and canteens.
                 </p>
               </div>
 

@@ -23,6 +23,7 @@ const canStillManage = (createdAt) => {
 
 export function StudentFeedbackHistory() {
   const [feedback, setFeedback] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
   const [editingFeedbackId, setEditingFeedbackId] = useState('');
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState({ type: '', text: '' });
@@ -31,6 +32,17 @@ export function StudentFeedbackHistory() {
     () => feedback.find((item) => item._id === editingFeedbackId),
     [editingFeedbackId, feedback]
   );
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        setCurrentUser(JSON.parse(storedUser));
+      } catch (_error) {
+        setCurrentUser(null);
+      }
+    }
+  }, []);
 
   const loadFeedback = async () => {
     setLoading(true);
@@ -73,6 +85,11 @@ export function StudentFeedbackHistory() {
         <p className="text-surface-500">
           Review, edit, or delete your recent feedback within the allowed time window.
         </p>
+        {currentUser ? (
+          <p className="text-sm text-surface-500">
+            Showing feedback for <span className="font-semibold text-surface-900">{currentUser.fullName || currentUser.email}</span>.
+          </p>
+        ) : null}
       </div>
 
       {message.text ? (
@@ -179,7 +196,12 @@ export function StudentFeedbackHistory() {
           })
         ) : (
           <Card className="border border-dashed border-surface-200 text-center text-surface-500">
-            You have not submitted any feedback yet.
+            <div className="space-y-3">
+              <p>No feedback has been submitted yet by your current student account.</p>
+              <p className="text-sm text-surface-400">
+                If you added feedback while logged in with a different student account, please sign in with that account to view it here.
+              </p>
+            </div>
           </Card>
         )}
       </div>

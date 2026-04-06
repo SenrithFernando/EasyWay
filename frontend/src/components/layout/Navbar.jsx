@@ -31,7 +31,8 @@ export function Navbar() {
         { name: 'Home', path: '/' },
         { name: 'Menu', path: '/menu' },
         { name: 'Reserve', path: '/table' },
-        { name: 'Blog & Feedback', path: '/blog' },
+        { name: 'Blog & News', path: '/blog' },
+        { name: 'Reviews & Feedback', path: '/feedback' },
     ];
     const isActive = (path) => {
         if (path === '/' && location.pathname !== '/')

@@ -22,6 +22,11 @@ const orderSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Student name is required'],
     },
+    studentId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: [true, 'Student ID is required'],
+    },
     orderItems: [orderItemSchema],
     totalAmount: {
       type: Number,

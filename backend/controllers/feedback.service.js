@@ -114,9 +114,9 @@ const buildFeedbackId = () => {
 
 const normalizeOrderStatus = (status) => String(status || '').trim().toLowerCase();
 
-const isOrderCompleted = (order) => {
-  const completedStatuses = new Set(['completed', 'delivered', 'fulfilled']);
-  return completedStatuses.has(normalizeOrderStatus(order.status));
+const isOrderValidForFeedback = (order) => {
+  const validStatuses = new Set(['pending', 'completed', 'delivered', 'fulfilled', 'preparing']);
+  return validStatuses.has(normalizeOrderStatus(order.status));
 };
 
 const ensureStudentAccount = async (studentId) => {
@@ -164,12 +164,13 @@ const ensureOrderForFeedback = async ({ orderId, studentId, vendorId }) => {
     throw new HttpError(403, 'You can only submit feedback for your own orders.');
   }
 
-  if (String(order.vendorId) !== String(vendorId)) {
+  // Only check vendorId match if vendorId is provided (for vendor-specific feedback)
+  if (vendorId && String(order.vendorId) !== String(vendorId)) {
     throw new HttpError(400, 'Order is not linked to the provided vendor.');
   }
 
-  if (!isOrderCompleted(order)) {
-    throw new HttpError(400, 'Feedback is only allowed for completed orders.');
+  if (!isOrderValidForFeedback(order)) {
+    throw new HttpError(400, 'Feedback is only allowed for active orders (Pending, Preparing, Completed, or Delivered).');
   }
 
   return order;
@@ -219,7 +220,7 @@ const ensureFeedbackStillEditable = (feedback) => {
 
 const getOrCreateDemoStudent = async () => {
   const student = await getUsersCollection().findOne(
-    { role: 'student' },
+    { email: 'it23192546@my.sliit.lk' }, // Use Dumini's email specifically
     { projection: { _id: 1, role: 1 } }
   );
   if (student) {
@@ -227,10 +228,10 @@ const getOrCreateDemoStudent = async () => {
   }
   const newStudent = {
     _id: new mongoose.Types.ObjectId(),
-    firstName: 'Demo',
-    lastName: 'Student',
-    name: 'Demo Student',
-    email: 'demo.student@easyfood.test',
+    firstName: 'Dumini',
+    lastName: 'Jayarathne',
+    name: 'Dumini Jayarathne',
+    email: 'it23192546@my.sliit.lk',
     role: 'student',
     isActive: true,
     createdAt: new Date(),
@@ -258,11 +259,28 @@ const createDemoOrder = async (studentId, vendorId) => {
 };
 
 const createFeedback = async ({ studentId, orderId, vendorId, rating, comment }) => {
+  console.log('🔍 Feedback Service - Creating feedback with:', {
+    studentId,
+    orderId,
+    vendorId,
+    rating,
+    comment: comment?.substring(0, 50)
+  });
+  
   await ensureStudentAccount(studentId);
-  await ensureVendorExists(vendorId);
+  console.log('✅ Student account validated');
+  
+  // Only validate vendor if vendorId is provided (for vendor-specific feedback)
+  if (vendorId) {
+    await ensureVendorExists(vendorId);
+    console.log('✅ Vendor validated');
+  }
+  
   await ensureOrderForFeedback({ orderId, studentId, vendorId });
+  console.log('✅ Order validated for feedback');
 
   const existingFeedback = await Feedback.findOne({ orderId, studentId }).select('_id');
+  console.log('🔍 Existing feedback check:', existingFeedback ? 'Found existing feedback' : 'No existing feedback');
 
   if (existingFeedback) {
     throw new HttpError(409, 'Feedback for this order already exists.');
@@ -272,12 +290,13 @@ const createFeedback = async ({ studentId, orderId, vendorId, rating, comment })
     feedbackId: buildFeedbackId(),
     studentId,
     orderId,
-    vendorId,
+    vendorId: vendorId || null,
     rating,
     comment,
     sentiment: await analyzeSentiment({ comment, rating }),
   });
 
+  console.log('✅ Feedback created with ID:', feedback.feedbackId);
   return attachFeedbackRelations(await Feedback.findById(feedback._id).lean());
 };
 

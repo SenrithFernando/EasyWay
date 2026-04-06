@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getAllMenuItems } from '../../api/menuItemsApi.js';
-import { createOrder, getAllOrders, cancelOrder } from '../../api/ordersApi.js';
-import '../../styles/StudentOrderPage.css';
+import { Link } from 'react-router-dom';
+import { getAllMenuItems } from '../api/menuItemsApi.js';
+import { createOrder, getAllOrders, cancelOrder } from '../api/ordersApi.js';
+import '../styles/StudentOrderPage.css';
 
 const CATEGORIES = ['all', 'rice', 'snack', 'beverage', 'dessert', 'other'];
 const CATEGORY_EMOJIS = {
@@ -357,12 +358,20 @@ export default function StudentOrderPage() {
             <span>📦 {confirmedOrder.orderType}</span>
           </div>
           <p className="conf-status">Status: <strong>⏳ Pending</strong></p>
-          <button
-            className="btn-continue"
-            onClick={() => setConfirmedOrder(null)}
-          >
-            Continue Ordering
-          </button>
+          <div className="so-confirmation-actions">
+            <button
+              className="btn-continue"
+              onClick={() => setConfirmedOrder(null)}
+            >
+              Continue Ordering
+            </button>
+            <Link
+              to={`/feedback?orderId=${confirmedOrder._id}`}
+              className="btn-give-feedback"
+            >
+              Share Your Experience
+            </Link>
+          </div>
         </div>
       )}
 

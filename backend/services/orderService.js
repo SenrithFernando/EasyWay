@@ -1,10 +1,27 @@
 import Order from '../models/orderModel.js';
+import User from '../models/UserModel.js';
 
 /**
  * Create a new order.
  */
 export const createOrder = async (data) => {
+  console.log('🔍 Creating order with data:', JSON.stringify(data, null, 2));
+  
+  // Find the user by studentId string
+  const user = await User.findOne({ studentId: data.studentId });
+  console.log('🔍 User lookup result for studentId:', data.studentId, '=>', user ? user._id : 'NOT FOUND');
+  
+  if (!user) {
+    const error = new Error('Student not found');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  // Set studentId to the user's ObjectId
+  data.studentId = user._id;
+
   const order = await Order.create(data);
+  console.log('✅ Order created successfully:', order._id);
   return order;
 };
 

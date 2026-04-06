@@ -4,8 +4,8 @@ import {
   createMenuItem,
   updateMenuItem,
   deleteMenuItem,
-} from '../../api/menuItemsApi.js';
-import '../../styles/MenuItemsPage.css';
+} from '../api/menuItemsApi.js';
+import '../styles/MenuItemsPage.css';
 
 const CATEGORIES = ['all', 'rice', 'snack', 'beverage', 'dessert', 'other'];
 const CATEGORY_EMOJIS = {

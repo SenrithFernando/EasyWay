@@ -779,6 +779,35 @@
   box-shadow: 0 8px 30px color-mix(in srgb, var(--color-brand-500) 50%, transparent);
 }
 
+.so-confirmation-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn-give-feedback {
+  display: inline-block;
+  padding: 12px 32px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f59e0b, #f97316);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.4);
+  letter-spacing: 0.2px;
+}
+.btn-give-feedback:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(249, 115, 22, 0.6);
+}
+
+
+
 /* ---------- my orders ---------- */
 .my-orders-section {
   padding: 0 48px 48px;

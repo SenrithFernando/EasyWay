@@ -11,6 +11,7 @@ export const createMenuItem = async (data) => {
 /**
  * Get all menu items, optionally filtered by query params.
  * Supports: vendor, category, available
+ * Populates vendor details for each item
  */
 export const getAllMenuItems = async (queryParams = {}) => {
   const filter = {};
@@ -20,16 +21,17 @@ export const getAllMenuItems = async (queryParams = {}) => {
   if (queryParams.available !== undefined)
     filter.available = queryParams.available === 'true';
 
-  const menuItems = await MenuItem.find(filter);
+  const menuItems = await MenuItem.find(filter).populate('vendor', '_id name email');
   return menuItems;
 };
 
 /**
  * Get a single menu item by ID.
  * Throws a 404 error if not found.
+ * Populates vendor details
  */
 export const getMenuItemById = async (id) => {
-  const menuItem = await MenuItem.findById(id);
+  const menuItem = await MenuItem.findById(id).populate('vendor', '_id name email');
 
   if (!menuItem) {
     const error = new Error('Menu item not found');

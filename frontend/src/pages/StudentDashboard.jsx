@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CalendarClockIcon, UtensilsCrossedIcon, UserIcon, QrCodeIcon, ClockIcon, MapPinIcon, BellIcon, UsersIcon, Trash2Icon } from 'lucide-react';
-import { DashboardLayout } from '../components/layout/DashboardLayout';
+import { DashboardLayout } from '../Components/layout/DashboardLayout';
 
 const RECENT_ORDERS = [
     { id: 'ORD-8923', items: 'Jollof Rice & Chicken', total: 'Rs.1,500', status: 'Completed', date: 'Today, 12:30 PM' },

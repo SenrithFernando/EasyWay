@@ -32,7 +32,7 @@ const feedbackSchema = new Schema(
     vendorId: {
       type: Schema.Types.ObjectId,
       ref: 'Vendor',
-      required: true,
+      required: false,
       index: true,
     },
     rating: {
