@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { UtensilsIcon } from 'lucide-react';
+import { Navbar } from '../Components/layout/Navbar';
 import { getAllMenuItems } from '../api/menuItemsApi.js';
 import { createOrder, getAllOrders, cancelOrder } from '../api/ordersApi.js';
 import '../styles/StudentOrderPage.css';
@@ -13,9 +15,74 @@ const CATEGORY_EMOJIS = {
   other: '📦',
 };
 
-export default function StudentOrderPage() {
+const FALLBACK_MENU_ITEMS = [
+  {
+    _id: 'ui-fallback-1',
+    name: 'Veg Rice Bowl',
+    description: 'Healthy rice bowl with mixed vegetables.',
+    price: 450,
+    category: 'rice',
+    preparationTime: 15,
+    available: true,
+  },
+  {
+    _id: 'ui-fallback-2',
+    name: 'Chicken Kottu',
+    description: 'Classic spicy kottu with chicken.',
+    price: 650,
+    category: 'snack',
+    preparationTime: 20,
+    available: true,
+  },
+  {
+    _id: 'ui-fallback-3',
+    name: 'Fruit Smoothie',
+    description: 'Fresh seasonal fruit smoothie.',
+    price: 350,
+    category: 'beverage',
+    preparationTime: 8,
+    available: true,
+  },
+];
+
+const CANCELLATION_WINDOW_MS = 2 * 60 * 1000;
+const LOCAL_ORDERS_KEY = 'easyway_orders_cache';
+
+const loadLocalOrders = () => {
+  try {
+    const raw = localStorage.getItem(LOCAL_ORDERS_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+};
+
+const saveLocalOrders = (orders) => {
+  localStorage.setItem(LOCAL_ORDERS_KEY, JSON.stringify(orders));
+};
+
+const mergeOrdersById = (primary, secondary) => {
+  const map = new Map();
+  [...primary, ...secondary].forEach((order) => {
+    if (order && order._id) map.set(order._id, order);
+  });
+  return Array.from(map.values()).sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+};
+
+const getFallbackMenuByCategory = (category) => {
+  if (category === 'all') return FALLBACK_MENU_ITEMS;
+  return FALLBACK_MENU_ITEMS.filter((item) => item.category === category);
+};
+
+export default function StudentOrderPage({ initialTab = 'menu' }) {
+  const navigate = useNavigate();
+
   /* ---- tabs ---- */
-  const [activeTab, setActiveTab] = useState('menu'); // 'menu' | 'orders'
+  const [activeTab, setActiveTab] = useState(initialTab); // 'menu' | 'orders'
 
   /* ---- menu state ---- */
   const [menuItems, setMenuItems] = useState([]);
@@ -23,6 +90,7 @@ export default function StudentOrderPage() {
   const [menuError, setMenuError] = useState(null);
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [brokenImages, setBrokenImages] = useState({});
 
   /* ---- cart state ---- */
   const [cart, setCart] = useState([]);
@@ -47,6 +115,9 @@ export default function StudentOrderPage() {
   /* ---- my orders ---- */
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
+  const [currentTime, setCurrentTime] = useState(Date.now());
+  const [orderStatusFilter, setOrderStatusFilter] = useState('all');
+  const [orderSearchQuery, setOrderSearchQuery] = useState('');
 
   /* ---- toast ---- */
   const [toast, setToast] = useState(null);
@@ -54,6 +125,18 @@ export default function StudentOrderPage() {
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3000);
+  };
+
+  const resolveImageUrl = (imageUrl) => {
+    if (!imageUrl || !imageUrl.trim()) return null;
+
+    const trimmed = imageUrl.trim();
+    if (/^https?:\/\//i.test(trimmed)) return trimmed;
+
+    const backendOrigin = import.meta.env.VITE_API_ORIGIN || 'http://localhost:3000';
+    if (trimmed.startsWith('/')) return `${backendOrigin}${trimmed}`;
+
+    return `${backendOrigin}/${trimmed}`;
   };
 
   /* ================================================================
@@ -66,9 +149,16 @@ export default function StudentOrderPage() {
       const filters = { available: true };
       if (activeCategory !== 'all') filters.category = activeCategory;
       const data = await getAllMenuItems(filters);
-      setMenuItems(data);
+
+      if (Array.isArray(data) && data.length > 0) {
+        setMenuItems(data);
+      } else {
+        setMenuItems(getFallbackMenuByCategory(activeCategory));
+        setMenuError('Live menu is empty right now. Showing sample items.');
+      }
     } catch (err) {
-      setMenuError(err.message);
+      setMenuItems(getFallbackMenuByCategory(activeCategory));
+      setMenuError('Could not load live menu. Showing sample items.');
     } finally {
       setMenuLoading(false);
     }
@@ -85,9 +175,14 @@ export default function StudentOrderPage() {
     try {
       setOrdersLoading(true);
       const data = await getAllOrders();
-      setOrders(data);
+      const cached = loadLocalOrders();
+      const merged = mergeOrdersById(data || [], cached);
+      setOrders(merged);
+      saveLocalOrders(merged);
     } catch (err) {
-      showToast(err.message, 'error');
+      const cached = loadLocalOrders();
+      setOrders(cached);
+      showToast(cached.length ? 'Showing saved order history' : err.message, 'error');
     } finally {
       setOrdersLoading(false);
     }
@@ -96,6 +191,14 @@ export default function StudentOrderPage() {
   useEffect(() => {
     if (activeTab === 'orders') fetchOrders();
   }, [activeTab, fetchOrders]);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   /* ================================================================
      SEARCH FILTER
@@ -271,10 +374,17 @@ export default function StudentOrderPage() {
 
       const order = await createOrder(payload);
       setConfirmedOrder(order);
+      setOrders((prev) => {
+        const next = mergeOrdersById([order], prev);
+        saveLocalOrders(next);
+        return next;
+      });
       clearCart();
       setShowCheckout(false);
       setCartOpen(false);
       showToast('Order placed successfully! 🎉');
+      setActiveTab('orders');
+      navigate('/student/order');
     } catch (err) {
       showToast(err.message, 'error');
     } finally {
@@ -286,14 +396,30 @@ export default function StudentOrderPage() {
      CANCEL ORDER
      ================================================================ */
   const handleCancelOrder = async (id) => {
+    const targetOrder = orders.find((order) => order._id === id);
+    if (targetOrder && !canCancelOrder(targetOrder)) {
+      showToast('You can cancel only within 2 minutes of placing an order', 'error');
+      return;
+    }
+
     try {
       const updated = await cancelOrder(id);
-      setOrders((prev) =>
-        prev.map((o) => (o._id === updated._id ? updated : o))
-      );
+      setOrders((prev) => {
+        const next = prev.map((o) => (o._id === updated._id ? updated : o));
+        saveLocalOrders(next);
+        return next;
+      });
       showToast('Order cancelled');
     } catch (err) {
-      showToast(err.message, 'error');
+      // If API cancel fails (e.g., local fallback order id), cancel locally.
+      setOrders((prev) => {
+        const next = prev.map((o) =>
+          o._id === id ? { ...o, status: 'Cancelled' } : o
+        );
+        saveLocalOrders(next);
+        return next;
+      });
+      showToast('Order cancelled locally', 'error');
     }
   };
 
@@ -306,11 +432,47 @@ export default function StudentOrderPage() {
     Cancelled: { emoji: '❌', cls: 'status-cancelled' },
   };
 
+  const getCancellationDeadline = (order) => {
+    if (order.cancellationDeadline) {
+      return new Date(order.cancellationDeadline).getTime();
+    }
+
+    return new Date(order.createdAt).getTime() + CANCELLATION_WINDOW_MS;
+  };
+
+  const canCancelOrder = (order) => {
+    if (order.status !== 'Pending') return false;
+    return currentTime <= getCancellationDeadline(order);
+  };
+
+  const getRemainingCancelSeconds = (order) => {
+    const remainingMs = getCancellationDeadline(order) - currentTime;
+    return Math.max(0, Math.ceil(remainingMs / 1000));
+  };
+
+  const filteredOrders = orders.filter((order) => {
+    const statusMatch =
+      orderStatusFilter === 'all' || order.status === orderStatusFilter;
+
+    const searchText = orderSearchQuery.trim().toLowerCase();
+    if (!searchText) return statusMatch;
+
+    const orderId = order._id?.slice(-8).toLowerCase() || '';
+    const orderItemsText = (order.orderItems || [])
+      .map((oi) => oi.name || '')
+      .join(' ')
+      .toLowerCase();
+
+    return statusMatch && (orderId.includes(searchText) || orderItemsText.includes(searchText));
+  });
+
   /* ================================================================
      RENDER
      ================================================================ */
   return (
     <div className="student-order-page">
+      <Navbar />
+
       {/* ===== HEADER ===== */}
       <header className="so-header">
         <div className="so-header-left">
@@ -332,6 +494,9 @@ export default function StudentOrderPage() {
               📋 My Orders
             </button>
           </div>
+          {activeTab === 'menu' && (
+            <Link to="/chatbot" className="btn-chatbot-nav">Chatbot</Link>
+          )}
           {activeTab === 'menu' && (
             <button
               className="cart-fab"
@@ -435,6 +600,27 @@ export default function StudentOrderPage() {
                 const inCart = cart.find((c) => c._id === item._id);
                 return (
                   <div key={item._id} className="so-menu-card">
+                    {resolveImageUrl(item.image) && !brokenImages[item._id] ? (
+                      <div className="so-item-image-wrap">
+                        <img
+                          className="so-item-image"
+                          src={resolveImageUrl(item.image)}
+                          alt={item.name}
+                          loading="lazy"
+                          onError={() =>
+                            setBrokenImages((prev) => ({
+                              ...prev,
+                              [item._id]: true,
+                            }))
+                          }
+                        />
+                      </div>
+                    ) : (
+                      <div className="so-item-image-fallback" aria-hidden="true">
+                        {CATEGORY_EMOJIS[item.category] || '🍽️'}
+                      </div>
+                    )}
+
                     <div className="so-card-top">
                       <h3 className="so-item-name">{item.name}</h3>
                       <span className={`so-badge so-badge-${item.category}`}>
@@ -502,6 +688,37 @@ export default function StudentOrderPage() {
         <div className="my-orders-section">
           <div className="my-orders-header">
             <h2>📋 My Orders</h2>
+            <div className="my-orders-tools">
+              <div className="my-orders-status-filters">
+                {['all', 'Pending', 'Completed', 'Cancelled'].map((status) => (
+                  <button
+                    key={status}
+                    className={`my-orders-filter-btn ${orderStatusFilter === status ? 'active' : ''}`}
+                    onClick={() => setOrderStatusFilter(status)}
+                  >
+                    {status === 'all' ? 'All' : status}
+                  </button>
+                ))}
+              </div>
+
+              <div className="my-orders-search">
+                <span className="my-orders-search-icon">🔍</span>
+                <input
+                  type="text"
+                  placeholder="Search by order ID or item"
+                  value={orderSearchQuery}
+                  onChange={(e) => setOrderSearchQuery(e.target.value)}
+                />
+                {orderSearchQuery && (
+                  <button
+                    className="my-orders-search-clear"
+                    onClick={() => setOrderSearchQuery('')}
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
 
           {ordersLoading && (
@@ -526,9 +743,17 @@ export default function StudentOrderPage() {
             </div>
           )}
 
-          {!ordersLoading && orders.length > 0 && (
+          {!ordersLoading && orders.length > 0 && filteredOrders.length === 0 && (
+            <div className="so-empty-state">
+              <div className="so-empty-icon">🔎</div>
+              <h3>No matching orders</h3>
+              <p>Try changing the status filter or search text</p>
+            </div>
+          )}
+
+          {!ordersLoading && filteredOrders.length > 0 && (
             <div className="orders-list">
-              {orders.map((order) => {
+              {filteredOrders.map((order) => {
                 const sc = statusConfig[order.status] || statusConfig.Pending;
                 return (
                   <div key={order._id} className="order-card">
@@ -572,8 +797,15 @@ export default function StudentOrderPage() {
                           {order.orderType === 'Delivery' ? '🚚' : '🏪'}{' '}
                           {order.orderType}
                         </span>
+                        {order.status === 'Pending' && (
+                          <span className="order-cancel-window-tag">
+                            {canCancelOrder(order)
+                              ? `Cancel in ${getRemainingCancelSeconds(order)}s`
+                              : 'Cancel window closed'}
+                          </span>
+                        )}
                       </div>
-                      {order.status === 'Pending' && (
+                      {canCancelOrder(order) && (
                         <button
                           className="btn-cancel-order"
                           onClick={() => handleCancelOrder(order._id)}
@@ -816,6 +1048,71 @@ export default function StudentOrderPage() {
           {toast.message}
         </div>
       )}
+
+      {/* ===== FOOTER ===== */}
+      <footer className="bg-surface-900 text-surface-400 py-12 border-t border-surface-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            <div className="col-span-1 md:col-span-2">
+              <Link to="/" className="flex items-center gap-2 mb-4">
+                <div className="bg-brand-500 p-1.5 rounded-lg text-white">
+                  <UtensilsIcon size={18} />
+                </div>
+                <span className="font-bold text-xl tracking-tight text-white">
+                  Easy<span className="text-brand-500">Food</span>
+                </span>
+              </Link>
+              <p className="max-w-xs mb-6">
+                Making university dining simpler, faster, and more enjoyable for
+                everyone.
+              </p>
+            </div>
+            <div>
+              <h4 className="text-white font-semibold mb-4">Quick Links</h4>
+              <ul className="space-y-2">
+                <li>
+                  <Link to="/menu" className="hover:text-brand-400 transition-colors">
+                    Menu
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/table" className="hover:text-brand-400 transition-colors">
+                    Reservations
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/" className="hover:text-brand-400 transition-colors">
+                    Home
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-white font-semibold mb-4">Legal</h4>
+              <ul className="space-y-2">
+                <li>
+                  <a href="#" className="hover:text-brand-400 transition-colors">
+                    Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-brand-400 transition-colors">
+                    Terms of Service
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-brand-400 transition-colors">
+                    Contact Us
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="pt-8 border-t border-surface-800 text-sm text-center md:text-left flex flex-col md:flex-row justify-between items-center">
+            <p>© 2026 EasyFood University System. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

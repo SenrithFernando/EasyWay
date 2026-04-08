@@ -12,12 +12,33 @@ export function LoginPage() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
     const navigate = useNavigate();
+
+    const validateForm = () => {
+        if (!isLogin && fullName.trim().length < 2) {
+            setErrorMsg("Full name must be at least 2 characters long.");
+            return false;
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setErrorMsg("Please enter a valid email address.");
+            return false;
+        }
+        if (password.length < 6) {
+            setErrorMsg("Password must be at least 6 characters long.");
+            return false;
+        }
+        if (!isLogin && password !== confirmPassword) {
+            setErrorMsg("Passwords do not match!");
+            return false;
+        }
+        return true;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrorMsg('');
 
-        if (!isLogin && password !== confirmPassword) {
-            setErrorMsg("Passwords do not match!");
+        if (!validateForm()) {
             return;
         }
 
@@ -45,7 +66,9 @@ export function LoginPage() {
 
             if (data.user?.role === 'vendor') {
                 navigate('/vendor-dashboard');
-            } else {
+            } else if (data.user?.role === 'admin'){
+                navigate('/admin-dashboard');
+            }else {
                 navigate('/');
             }
 
@@ -64,11 +87,11 @@ export function LoginPage() {
             label: 'Vendor',
             icon: StoreIcon,
         },
-        // {
-        //     id: 'admin',
-        //     label: 'Admin',
-        //     icon: ShieldCheckIcon,
-        // },
+        {
+            id: 'admin',
+            label: 'Admin',
+            icon: ShieldCheckIcon,
+        },
     ];
     return (<div className="min-h-screen flex items-center justify-center bg-surface-50 p-4 relative overflow-hidden">
       {/* Background decorative elements */}

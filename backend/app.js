@@ -6,6 +6,9 @@ import userRoutes from './routes/UserRoute.js';
 import reservationRoutes from './routes/ReservationRoute.js';
 import menuItemsRouter from './routes/menuItemsRoutes.js';
 import orderRouter from './routes/orderRoutes.js';
+import chatRouter from './routes/chatRoutes.js';
+import blogRoutes from "./routes/BlogRoute.js";
+import canteenRoutes from "./routes/CanteenRoute.js";
 
 const app = express();
 
@@ -21,7 +24,6 @@ app.use(
     credentials: true,
   })
 );
-
 app.use(express.json());
 
 // Routes
@@ -29,6 +31,9 @@ app.use('/api/users', userRoutes);
 app.use('/api/reservations', reservationRoutes);
 app.use('/api/menu-items', menuItemsRouter);
 app.use('/api/orders', orderRouter);
+app.use('/api/chat', chatRouter);
+app.use("/api/blogs", blogRoutes);
+app.use("/api/canteen", canteenRoutes);
 
 // Mount feedback API routes at /api
 app.use('/api', apiRoutes);

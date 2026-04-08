@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import {
   getAllMenuItems,
   createMenuItem,
   updateMenuItem,
   deleteMenuItem,
 } from '../api/menuItemsApi.js';
+import { Navbar } from '../Components/layout/Navbar';
 import '../styles/MenuItemsPage.css';
 
 const CATEGORIES = ['all', 'rice', 'snack', 'beverage', 'dessert', 'other'];
@@ -34,6 +36,7 @@ export default function MenuItemsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeCategory, setActiveCategory] = useState('all');
+  const [brokenImages, setBrokenImages] = useState({});
 
   // modal state
   const [showModal, setShowModal] = useState(false);
@@ -50,6 +53,20 @@ export default function MenuItemsPage() {
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3000);
+  };
+
+  const resolveImageUrl = (imageUrl) => {
+    if (!imageUrl || !imageUrl.trim()) return null;
+
+    const trimmed = imageUrl.trim();
+    if (/^https?:\/\//i.test(trimmed)) return trimmed;
+
+    const backendOrigin = import.meta.env.VITE_API_ORIGIN || 'http://localhost:3000';
+    if (trimmed.startsWith('/')) {
+      return `${backendOrigin}${trimmed}`;
+    }
+
+    return `${backendOrigin}/${trimmed}`;
   };
 
   /* ---- fetch ---- */
@@ -179,6 +196,8 @@ export default function MenuItemsPage() {
 
   return (
     <div className="menu-items-page">
+      <Navbar />
+
       {/* Header */}
       <header className="menu-header">
         <div>
@@ -254,6 +273,24 @@ export default function MenuItemsPage() {
               key={item._id}
               className={`item-card ${!item.available ? 'unavailable' : ''}`}
             >
+              {resolveImageUrl(item.image) && !brokenImages[item._id] ? (
+                <div className="item-image-wrap">
+                  <img
+                    className="item-image"
+                    src={resolveImageUrl(item.image)}
+                    alt={item.name}
+                    loading="lazy"
+                    onError={() =>
+                      setBrokenImages((prev) => ({ ...prev, [item._id]: true }))
+                    }
+                  />
+                </div>
+              ) : (
+                <div className="item-image-fallback" aria-hidden="true">
+                  {CATEGORY_EMOJIS[item.category] || '🍽️'}
+                </div>
+              )}
+
               <div className="item-card-top">
                 <h3 className="item-name">{item.name}</h3>
                 <span className={`badge badge-${item.category}`}>
@@ -320,6 +357,21 @@ export default function MenuItemsPage() {
           </button>
         </div>
       )}
+
+      <footer className="menu-footer">
+        <div className="menu-footer-inner">
+          <div className="menu-footer-brand">
+            <h3>EasyFood Vendor</h3>
+            <p>Manage your menu and keep your customers updated in real time.</p>
+          </div>
+          <div className="menu-footer-links">
+            <Link to="/">Home</Link>
+            <Link to="/menu">Browse Menu</Link>
+            <Link to="/vendor/menu-items">Add Menu</Link>
+            <Link to="/table">Reservations</Link>
+          </div>
+        </div>
+      </footer>
 
       {/* Add / Edit Modal */}
       {showModal && (

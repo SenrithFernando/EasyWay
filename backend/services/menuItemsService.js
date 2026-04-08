@@ -1,4 +1,50 @@
 import MenuItem from '../models/menuItemsModel.js';
+import mongoose from 'mongoose';
+
+const FALLBACK_MENU_ITEMS = [
+  {
+    _id: 'fallback-menu-1',
+    name: 'Veg Rice Bowl',
+    description: 'Healthy rice bowl with mixed vegetables.',
+    price: 450,
+    category: 'rice',
+    available: true,
+    preparationTime: 15,
+  },
+  {
+    _id: 'fallback-menu-2',
+    name: 'Chicken Kottu',
+    description: 'Classic spicy kottu with chicken.',
+    price: 650,
+    category: 'snack',
+    available: true,
+    preparationTime: 20,
+  },
+  {
+    _id: 'fallback-menu-3',
+    name: 'Fruit Smoothie',
+    description: 'Fresh seasonal fruit smoothie.',
+    price: 350,
+    category: 'beverage',
+    available: true,
+    preparationTime: 8,
+  },
+];
+
+const getFallbackMenuItems = (queryParams = {}) => {
+  return FALLBACK_MENU_ITEMS.filter((item) => {
+    if (queryParams.category && item.category !== queryParams.category) {
+      return false;
+    }
+
+    if (queryParams.available !== undefined) {
+      const requested = queryParams.available === 'true';
+      if (item.available !== requested) return false;
+    }
+
+    return true;
+  });
+};
 
 /**
  * Create a new menu item.
@@ -14,6 +60,10 @@ export const createMenuItem = async (data) => {
  * Populates vendor details for each item
  */
 export const getAllMenuItems = async (queryParams = {}) => {
+  if (mongoose.connection.readyState !== 1) {
+    return getFallbackMenuItems(queryParams);
+  }
+
   const filter = {};
 
   if (queryParams.vendor) filter.vendor = queryParams.vendor;
@@ -21,8 +71,15 @@ export const getAllMenuItems = async (queryParams = {}) => {
   if (queryParams.available !== undefined)
     filter.available = queryParams.available === 'true';
 
-  const menuItems = await MenuItem.find(filter).populate('vendor', '_id name email');
-  return menuItems;
+  try {
+    const menuItems = await MenuItem.find(filter).populate('vendor', '_id name email');
+    return menuItems;
+  } catch (error) {
+    if (error.message?.includes('buffering timed out')) {
+      return getFallbackMenuItems(queryParams);
+    }
+    throw error;
+  }
 };
 
 /**

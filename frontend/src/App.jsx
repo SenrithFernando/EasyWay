@@ -1,24 +1,30 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-// Feedback Pages
-import { BlogFeedbackPage } from './Pages/BlogFeedbackPage';
-import { StudentFeedbackHistory } from './Pages/StudentFeedbackHistory';
-import { CanteenFeedbackDashboard } from './Pages/CanteenFeedbackDashboard';
-import { CanteenRanking } from './Pages/CanteenRanking';
-import { CanteenFeedbackPage } from './Pages/CanteenFeedbackPage';
+// Core and Auth Pages
+import { LoginPage } from './pages/LoginPage';
+import { ReservationPage } from './pages/ReservationPage';
+import { StudentDashboard } from './pages/StudentDashboard';
+import { VendorDashboard } from './pages/VendorDashboard';
+import { ProfilePage } from './pages/ProfilePage';
+import { LandingPage } from './pages/LandingPage';
+import { AdminDashboard } from './pages/AdminDashboard';
+import { TableCheckInPage } from './pages/TableCheckInPage';
+import { BlogPage } from './pages/BlogPage';
+import { BlogDetailPage } from './pages/BlogDetailPage';
+import { CanteenPage } from './pages/CanteenPage';
 
-// Auth and Core Pages
-import { LoginPage } from './Pages/LoginPage';
-import { ReservationPage } from './Pages/ReservationPage';
-import { StudentDashboard } from './Pages/StudentDashboard';
-import { ProfilePage } from './Pages/ProfilePage';
-import { LandingPage } from './Pages/LandingPage';
-import { TableCheckInPage } from './Pages/TableCheckInPage';
+// Specialized Feature Pages
+import MenuItemsPage from './pages/MenuItemsPage.jsx';
+import StudentOrderPage from './pages/StudentOrderPage.jsx';
+import ChatBotPage from './pages/ChatBotPage.jsx';
 
-// Order and Menu Pages
-import MenuItemsPage from './Pages/MenuItemsPage.jsx';
-import StudentOrderPage from './Pages/StudentOrderPage.jsx';
+// Feedback Module Pages
+import { BlogFeedbackPage } from './pages/BlogFeedbackPage';
+import { StudentFeedbackHistory } from './pages/StudentFeedbackHistory';
+import { CanteenFeedbackDashboard } from './pages/CanteenFeedbackDashboard';
+import { CanteenRanking } from './pages/CanteenRanking';
+import { CanteenFeedbackPage } from './pages/CanteenFeedbackPage';
 
 function App() {
   return (
@@ -38,16 +44,24 @@ function App() {
 
         {/* Core App Routes */}
         <Route path="/table" element={<ReservationPage />} />
-        <Route path="/vendor" element={<Navigate to="/login" replace />} />
+        <Route path="/vendor" element={<VendorDashboard />} />
+        <Route path="/vendor-dashboard" element={<Navigate to="/vendor" replace />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/admin" element={<Navigate to="/login" replace />} />
         <Route path="/student" element={<StudentDashboard />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/blog/:id" element={<BlogDetailPage />} />
         <Route path="/checkin/:location/:tableId" element={<TableCheckInPage />} />
+        
+        {/* Additional Pages */}
+        <Route path="/canteen" element={<CanteenPage />} />
+        <Route path="/chatbot" element={<ChatBotPage />} />
 
         {/* Order and Menu Routes */}
         <Route path="/menu" element={<StudentOrderPage />} />
         <Route path="/vendor/menu-items" element={<MenuItemsPage />} />
-        <Route path="/student/order" element={<StudentOrderPage />} />
+        <Route path="/student/order" element={<StudentOrderPage initialTab="orders" />} />
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
