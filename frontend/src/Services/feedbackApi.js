@@ -77,7 +77,13 @@ export const feedbackApi = {
   getFeedbackModuleInfo: () => request('/feedback/meta/module-info'),
   getVendorFeedback: (vendorId) => request(`/feedback/vendors/${vendorId}`),
   getVendorStats: (vendorId) => request(`/feedback/vendors/${vendorId}/stats`),
-  getVendorDashboard: (vendorId, limit = 5) =>
-    request(`/feedback/vendors/${vendorId}/dashboard?limit=${limit}`),
+  getVendorDashboard: (vendorId, filters = {}) => {
+    const params = new URLSearchParams();
+    if (filters.limit) params.append('limit', filters.limit);
+    if (filters.startDate) params.append('startDate', filters.startDate);
+    if (filters.endDate) params.append('endDate', filters.endDate);
+    if (filters.orderType) params.append('orderType', filters.orderType);
+    return request(`/feedback/vendors/${vendorId}/dashboard?${params.toString()}`);
+  },
   getVendorRanking: () => request('/feedback/ranking/vendors'),
 };

@@ -10,7 +10,18 @@ const getReviewerName = (student) => {
     return 'Anonymous Student';
   }
 
-  return student.name || [student.firstName, student.lastName].filter(Boolean).join(' ') || 'Student';
+  const rawName =
+    student.fullName ||
+    student.name ||
+    [student.firstName, student.lastName].filter(Boolean).join(' ') ||
+    'Student';
+
+  // If we found a real name (not just 'Student'), return just the first name
+  if (rawName !== 'Student' && rawName.includes(' ')) {
+    return rawName.split(' ')[0];
+  }
+
+  return rawName;
 };
 
 const sentimentVariantMap = {

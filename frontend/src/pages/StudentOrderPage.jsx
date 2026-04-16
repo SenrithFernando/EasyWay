@@ -475,10 +475,26 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
 
       {/* ===== HEADER ===== */}
       <header className="so-header">
-        <div className="so-header-left">
-          <h1>🍽️ EasyWay</h1>
-          <p className="so-header-subtitle">Order your favourite food</p>
-        </div>
+        {activeTab === 'menu' && !confirmedOrder && (
+          <div className="search-bar">
+            <span className="search-icon">🔍</span>
+            <input
+              type="text"
+              placeholder="Search menu items..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            {searchQuery && (
+              <button
+                className="search-clear"
+                onClick={() => setSearchQuery('')}
+              >
+                ✕
+              </button>
+            )}
+          </div>
+        )}
+
         <div className="so-header-right">
           <div className="tab-switcher">
             <button
@@ -543,26 +559,7 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
       {/* ===== MENU TAB ===== */}
       {activeTab === 'menu' && !confirmedOrder && (
         <>
-          {/* Search */}
-          <div className="search-bar-wrapper">
-            <div className="search-bar">
-              <span className="search-icon">🔍</span>
-              <input
-                type="text"
-                placeholder="Search menu items..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              {searchQuery && (
-                <button
-                  className="search-clear"
-                  onClick={() => setSearchQuery('')}
-                >
-                  ✕
-                </button>
-              )}
-            </div>
-          </div>
+
 
           {/* Categories */}
           <div className="so-category-filters">
@@ -812,6 +809,15 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
                         >
                           ✕ Cancel
                         </button>
+                      )}
+                      {order.status === 'Completed' && (
+                        <Link
+                          to={`/feedback?orderId=${order._id}${order.vendorId ? `&vendorId=${order.vendorId}` : ''}`}
+                          className="btn-give-feedback"
+                          style={{ padding: '6px 12px', fontSize: '13px', marginLeft: 'auto' }}
+                        >
+                          ⭐ Rate Order
+                        </Link>
                       )}
                     </div>
                   </div>

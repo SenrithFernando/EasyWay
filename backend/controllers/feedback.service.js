@@ -23,15 +23,15 @@ const getUserModel = () =>
 const getOrderModel = () =>
   tryLoadModel('Order', ['../../models/Order', '../../models/order.model', '../order/order.model']);
 const getVendorModel = () =>
-  tryLoadModel('Vendor', [
+  tryLoadModel('CanteenVendor', [
+    '../../models/CanteenModel',
     '../../models/Vendor',
     '../../models/vendor.model',
-    '../vendor/vendor.model',
   ]);
 
 const getUsersCollection = () => mongoose.connection.collection('users');
 const getOrdersCollection = () => mongoose.connection.collection('orders');
-const getVendorsCollection = () => mongoose.connection.collection('vendors');
+const getVendorsCollection = () => mongoose.connection.collection('canteenvendors');
 
 const toObjectId = (value) => new mongoose.Types.ObjectId(String(value));
 
@@ -62,12 +62,12 @@ const attachFeedbackRelations = async (feedbackInput) => {
   const [students, orders, vendors] = await Promise.all([
     User
       ? User.find({ _id: { $in: studentIds.map(toObjectId) } })
-          .select('_id firstName lastName name email')
+          .select('_id firstName lastName name email fullName')
           .lean()
       : getUsersCollection()
           .find(
             { _id: { $in: studentIds.map(toObjectId) } },
-            { projection: { _id: 1, firstName: 1, lastName: 1, name: 1, email: 1 } }
+            { projection: { _id: 1, firstName: 1, lastName: 1, name: 1, email: 1, fullName: 1 } }
           )
           .toArray(),
     Order
@@ -124,11 +124,11 @@ const ensureStudentAccount = async (studentId) => {
   let student = null;
 
   if (User) {
-    student = await User.findById(studentId).select('_id role firstName lastName name');
+    student = await User.findById(studentId).select('_id role firstName lastName name fullName');
   } else {
     student = await getUsersCollection().findOne(
       { _id: new mongoose.Types.ObjectId(String(studentId)) },
-      { projection: { _id: 1, role: 1, firstName: 1, lastName: 1, name: 1 } }
+      { projection: { _id: 1, role: 1, firstName: 1, lastName: 1, name: 1, fullName: 1 } }
     );
   }
 
@@ -319,14 +319,14 @@ const getOrCreateDemoVendor = async (vendorId) => {
   return String(newVendor._id);
 };
 
-const createDemoFeedback = async ({ vendorId, rating, comment }) => {
+const createDemoFeedback = async ({ studentId, vendorId, rating, comment }) => {
   const resolvedVendorId = await getOrCreateDemoVendor(vendorId);
-  const studentId = await getOrCreateDemoStudent();
-  const orderId = await createDemoOrder(studentId, resolvedVendorId);
+  const finalStudentId = studentId ? studentId : await getOrCreateDemoStudent();
+  const orderId = await createDemoOrder(finalStudentId, resolvedVendorId);
 
   const feedback = await Feedback.create({
     feedbackId: buildFeedbackId(),
-    studentId: new mongoose.Types.ObjectId(String(studentId)),
+    studentId: new mongoose.Types.ObjectId(String(finalStudentId)),
     orderId,
     vendorId: new mongoose.Types.ObjectId(String(resolvedVendorId)),
     rating,
@@ -426,80 +426,128 @@ const deleteFeedback = async ({ feedbackId, studentId }) => {
   await feedback.deleteOne();
 };
 
-const getVendorDashboard = async (vendorId, limit = 5) => {
-  await ensureVendorExists(vendorId);
+const getVendorDashboard = async (
+  vendorId,
+  { limit = 5, startDate, endDate, orderType, groupBy = 'day' } = {}
+) => {
+  const isGlobal = !vendorId || vendorId === 'all';
 
-  const objectId = new mongoose.Types.ObjectId(String(vendorId));
+  if (!isGlobal) {
+    await ensureVendorExists(vendorId);
+  }
 
-  const [stats] = await Feedback.aggregate([
-    { $match: { vendorId: objectId } },
-    {
-      $facet: {
-        summary: [
-          {
-            $group: {
-              _id: '$vendorId',
-              averageRating: { $avg: '$rating' },
-              totalReviews: { $sum: 1 },
-            },
-          },
-        ],
-        sentimentBreakdown: [
-          {
-            $group: {
-              _id: '$sentiment',
-              count: { $sum: 1 },
-            },
-          },
-        ],
-        ratingDistribution: [
-          {
-            $group: {
-              _id: '$rating',
-              count: { $sum: 1 },
-            },
-          },
-          { $sort: { _id: 1 } },
-        ],
-        latestReviews: [
-          { $sort: { createdAt: -1 } },
-          { $limit: limit },
-          {
-            $lookup: {
-              from: 'users',
-              localField: 'studentId',
-              foreignField: '_id',
-              as: 'student',
-            },
-          },
-          {
-            $project: {
-              feedbackId: 1,
-              rating: 1,
-              comment: 1,
-              sentiment: 1,
-              createdAt: 1,
-              student: { $arrayElemAt: ['$student', 0] },
-            },
-          },
-        ],
+  const matchConditions = {};
+  if (!isGlobal) {
+    matchConditions.vendorId = new mongoose.Types.ObjectId(String(vendorId));
+  }
+
+  if (startDate || endDate) {
+    matchConditions.createdAt = {};
+    if (startDate) matchConditions.createdAt.$gte = new Date(startDate);
+    if (endDate) matchConditions.createdAt.$lte = new Date(endDate);
+  }
+
+  const pipeline = [{ $match: matchConditions }];
+
+  if (orderType && orderType !== 'all') {
+    pipeline.push({
+      $lookup: {
+        from: 'orders',
+        localField: 'orderId',
+        foreignField: '_id',
+        as: 'orderDoc',
       },
-    },
-  ]);
+    });
+    
+    // Convert 'pickup' to 'Pickup', 'dine-in' to 'Dine-In', or just regex it
+    pipeline.push({
+    });
+  }
 
-  const summary = stats.summary[0] || { averageRating: 0, totalReviews: 0 };
+  // Format trend based on groupBy
+  const trendFormat = groupBy === 'hour' ? '%Y-%m-%d %H:00' : '%Y-%m-%d';
+
+  pipeline.push({
+    $facet: {
+      summary: [
+        {
+          $group: {
+            _id: isGlobal ? null : '$vendorId',
+            averageRating: { $avg: '$rating' },
+            totalReviews: { $sum: 1 },
+          },
+        },
+      ],
+      sentimentBreakdown: [
+        {
+          $group: {
+            _id: '$sentiment',
+            count: { $sum: 1 },
+          },
+        },
+      ],
+      ratingDistribution: [
+        {
+          $group: {
+            _id: '$rating',
+            count: { $sum: 1 },
+          },
+        },
+        { $sort: { _id: 1 } },
+      ],
+      latestReviews: [
+        { $sort: { createdAt: -1 } },
+        { $limit: Number(limit) },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'studentId',
+            foreignField: '_id',
+            as: 'student',
+          },
+        },
+        {
+          $project: {
+            feedbackId: 1,
+            rating: 1,
+            comment: 1,
+            sentiment: 1,
+            createdAt: 1,
+            student: { $arrayElemAt: ['$student', 0] },
+          },
+        },
+      ],
+      trend: [
+        {
+          $group: {
+            _id: { $dateToString: { format: trendFormat, date: '$createdAt' } },
+            rating: { $avg: '$rating' },
+          },
+        },
+        { $sort: { _id: 1 } },
+        { $limit: 30 },
+      ],
+    },
+  });
+
+  const [stats] = await Feedback.aggregate(pipeline);
+
+  const statsResults = stats;
+  const summary = statsResults.summary[0] || { averageRating: 0, totalReviews: 0 };
   const sentimentCounts = {
     Positive: 0,
     Neutral: 0,
     Negative: 0,
   };
 
-  stats.sentimentBreakdown.forEach((item) => {
-    sentimentCounts[item._id] = item.count;
+  statsResults.sentimentBreakdown.forEach((item) => {
+    if (item._id) {
+      sentimentCounts[item._id] = item.count;
+    }
   });
 
   const ratingDistribution = [1, 2, 3, 4, 5].map((rating) => {
-    const match = stats.ratingDistribution.find((item) => item._id === rating);
+    const match = statsResults.ratingDistribution.find((item) => item._id === rating);
     return {
       rating,
       count: match ? match.count : 0,
@@ -513,7 +561,7 @@ const getVendorDashboard = async (vendorId, limit = 5) => {
     },
     sentimentBreakdown: sentimentCounts,
     ratingDistribution,
-    latestReviews: stats.latestReviews.map((review) => ({
+    latestReviews: statsResults.latestReviews.map((review) => ({
       feedbackId: review.feedbackId,
       rating: review.rating,
       comment: review.comment,
@@ -524,11 +572,18 @@ const getVendorDashboard = async (vendorId, limit = 5) => {
         ? {
             id: review.student._id,
             name:
+              review.student.fullName ||
               review.student.name ||
               [review.student.firstName, review.student.lastName].filter(Boolean).join(' '),
           }
         : null,
     })),
+    trend: statsResults.trend
+      ? statsResults.trend.map((t) => ({
+          date: t._id,
+          rating: Number(Number(t.rating).toFixed(1)),
+        }))
+      : [],
   };
 };
 
@@ -554,7 +609,7 @@ const getVendorRanking = async () => {
     },
     {
       $lookup: {
-        from: 'vendors',
+        from: 'canteenvendors',
         localField: '_id',
         foreignField: '_id',
         as: 'vendor',

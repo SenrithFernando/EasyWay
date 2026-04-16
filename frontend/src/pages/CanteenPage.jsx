@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ClockIcon, MapPinIcon, PhoneIcon, StarIcon, UtensilsIcon, CoffeeIcon, PizzaIcon, SandwichIcon, InfoIcon, TrendingUpIcon, UsersIcon, DollarSignIcon, CheckCircleIcon, AlertCircleIcon } from 'lucide-react';
 import { Navbar } from '../Components/layout/Navbar';
 
 export function CanteenPage() {
+  const navigate = useNavigate();
   const [vendors, setVendors] = useState([]);
   const [stats, setStats] = useState({ totalVendors: 0, categoryStats: [], averageRating: 0 });
   const [loading, setLoading] = useState(true);
@@ -160,16 +162,28 @@ export function CanteenPage() {
           ))}
         </div>
         
-        <button
-          onClick={() => {
-            setSelectedVendor(vendor);
-            setShowDetails(true);
-          }}
-          className="w-full bg-brand-500 hover:bg-brand-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
-        >
-          <InfoIcon size={16} />
-          View Details
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/vendors/${vendor._id}/feedback`);
+            }}
+            className="flex-1 bg-white border border-brand-200 hover:border-brand-500 text-brand-600 font-medium py-2 px-3 rounded-lg transition-colors duration-200 flex items-center justify-center gap-1.5 shadow-sm"
+          >
+            <StarIcon size={16} className="fill-brand-100" />
+            Reviews
+          </button>
+          <button
+            onClick={() => {
+              setSelectedVendor(vendor);
+              setShowDetails(true);
+            }}
+            className="flex-[1.2] bg-brand-500 hover:bg-brand-600 text-white font-medium py-2 px-3 rounded-lg transition-colors duration-200 flex items-center justify-center gap-1.5 shadow-sm"
+          >
+            <InfoIcon size={16} />
+            View Details
+          </button>
+        </div>
       </div>
     </motion.div>
   );
@@ -507,10 +521,13 @@ export function CanteenPage() {
 
                 <div className="mt-6 flex gap-4">
                   <button
-                    onClick={() => handleRating(selectedVendor._id, 5)}
+                    onClick={() => {
+                      setShowDetails(false);
+                      navigate(`/feedback?vendorId=${selectedVendor._id}`);
+                    }}
                     className="flex-1 bg-brand-500 hover:bg-brand-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200"
                   >
-                    Rate Vendor
+                    Submit Feedback
                   </button>
                   <button
                     onClick={() => setShowDetails(false)}

@@ -41,6 +41,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
+  margin-left: auto;
 }
 
 .btn-chatbot-nav {
@@ -129,7 +130,9 @@
 }
 .search-bar {
   position: relative;
+  flex: 1;
   max-width: 480px;
+  min-width: 320px;
 }
 .search-bar input {
   width: 100%;

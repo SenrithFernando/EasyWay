@@ -44,7 +44,7 @@ const connectDB = async () => {
       return;
     }
 
-    configureDns();
+    // configureDns();
 
     const rawUri = process.env.MONGO_STRING.includes('<PASSWORD>')
       ? process.env.MONGO_STRING.replace('<PASSWORD>', process.env.DATABASE_PASSWORD || '')

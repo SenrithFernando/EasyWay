@@ -2,7 +2,9 @@ import * as feedbackService from './feedback.service.js';
 import asyncHandler from '../middleware/asyncHandler.js';
 
 const createDemoFeedback = asyncHandler(async (req, res) => {
+  const userId = req.user?.id || req.user?._id;
   const feedback = await feedbackService.createDemoFeedback({
+    studentId: userId,
     vendorId: req.body.vendorId || req.body.canteenId || null,
     rating: req.body.rating,
     comment: req.body.comment,
@@ -110,9 +112,17 @@ const deleteFeedback = asyncHandler(async (req, res) => {
 });
 
 const getVendorDashboard = asyncHandler(async (req, res) => {
+  const { limit, startDate, endDate, orderType, groupBy } = req.query;
+
   const dashboard = await feedbackService.getVendorDashboard(
     req.params.vendorId,
-    parseInt(req.query.limit) || 5
+    {
+      limit: parseInt(limit) || 5,
+      startDate,
+      endDate,
+      orderType,
+      groupBy: groupBy || 'day'
+    }
   );
 
   return res.status(200).json({

@@ -8,10 +8,14 @@ import {
 } from '../middleware/feedback.validation.js';
 
 const validateRouteObjectId = (paramName) => (req, res, next) => {
-  if (!isValidObjectId(req.params[paramName])) {
+  const value = req.params[paramName];
+  if (value && value.toLowerCase() === 'all') {
+    return next();
+  }
+  if (!isValidObjectId(value)) {
     return res.status(400).json({
       success: false,
-      message: `${paramName} must be a valid MongoDB ObjectId.`,
+      message: `${paramName} must be a valid MongoDB ObjectId or 'all'.`,
     });
   }
 

@@ -52,7 +52,7 @@ const QUICK_LINKS = [
     title: 'Canteen Ranking',
     description: 'Compare canteens by average rating, review volume, and sentiment score.',
     icon: MedalIcon,
-    path: '/admin/canteens/ranking',
+    path: '/admin/vendors/ranking',
   },
 ];
 
@@ -78,16 +78,31 @@ export function BlogFeedbackPage() {
   }, [canSubmitRealFeedback]);
 
   const quickLinks = useMemo(
-    () =>
-      QUICK_LINKS.map((item) => ({
-        ...item,
-        path:
-          item.path === '/vendor/canteens/:canteenId/feedback-dashboard'
-            ? vendorId
-              ? `/vendor/canteens/${vendorId}/feedback-dashboard`
-              : '/vendor'
-            : item.path,
-      })),
+    () => {
+      const userStr = localStorage.getItem('user');
+      let userRole = 'student';
+      try {
+        const user = userStr ? JSON.parse(userStr) : null;
+        if (user && user.role) userRole = user.role;
+      } catch (e) {}
+
+      return QUICK_LINKS.map((item) => {
+        const isRestricted = userRole === 'student' && (item.title === 'Manager Dashboard' || item.title === 'Canteen Ranking');
+
+        if (item.title === 'Manager Dashboard') {
+          return {
+            ...item,
+            disabled: isRestricted,
+            path: userRole === 'admin'
+              ? '/admin/feedback-dashboard'
+              : vendorId
+                ? `/vendor/canteens/${vendorId}/feedback-dashboard`
+                : '/vendor',
+          };
+        }
+        return { ...item, disabled: isRestricted };
+      });
+    },
     [vendorId]
   );
 
@@ -185,12 +200,23 @@ export function BlogFeedbackPage() {
                           <p className="mt-1 text-sm leading-6 text-surface-500">{item.description}</p>
                         </div>
                       </div>
-                      <Link
-                        to={item.path}
-                        className="mt-1 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-surface-200 text-surface-600 transition hover:border-brand-300 hover:text-brand-600"
-                      >
-                        <ArrowRightIcon size={16} />
-                      </Link>
+                      {item.disabled ? (
+                        <button
+                          type="button"
+                          disabled
+                          title="These options are only visible to admin and vendors"
+                          className="mt-1 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-surface-200 bg-surface-100 text-surface-300 cursor-not-allowed"
+                        >
+                          <ArrowRightIcon size={16} />
+                        </button>
+                      ) : (
+                        <Link
+                          to={item.path}
+                          className="mt-1 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-surface-200 text-surface-600 transition hover:border-brand-300 hover:text-brand-600"
+                        >
+                          <ArrowRightIcon size={16} />
+                        </Link>
+                      )}
                     </div>
                   </Card>
                 ))}
