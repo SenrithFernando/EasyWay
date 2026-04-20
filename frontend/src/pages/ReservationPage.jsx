@@ -50,6 +50,12 @@ const TIME_SLOTS = [
     { time: '6:00 PM', available: true },
     { time: '6:30 PM', available: true },
     { time: '7:00 PM', available: true },
+     { time: '7:30 PM', available: true },
+    { time: '8:00 PM', available: true },
+    { time: '8:30 PM', available: true },
+    { time: '9:00 PM', available: true },
+    { time: '7:34 PM', available: true },
+    { time: '7:53 PM', available: true },
 ];
 const LOCATIONS = [
   {
@@ -140,7 +146,7 @@ export function ReservationPage() {
                                 reservationTime.setHours(hours, minutes, 0, 0);
                                 
                                 const diffMins = (now - reservationTime) / (1000 * 60);
-                                if (diffMins >= 2) {
+                                if (diffMins >= 1) {
                                     shouldDelete = true;
                                 }
                             }
