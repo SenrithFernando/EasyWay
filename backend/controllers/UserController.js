@@ -76,6 +76,16 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log(`Login attempt for email: ${email}`);
+
+    // Check if MongoDB is connected
+    if (User.db.readyState !== 1) {
+      console.error("❌ Login failed: Database not connected");
+      return res.status(503).json({
+        message: "Service temporarily unavailable",
+        error: "Database connection is not active. Please check server logs.",
+      });
+    }
 
     if (!email || !password) {
       return res.status(400).json({
@@ -85,6 +95,7 @@ export const loginUser = async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) {
+      console.warn(`User not found: ${email}`);
       return res.status(404).json({
         message: "User not found",
       });
@@ -92,12 +103,14 @@ export const loginUser = async (req, res) => {
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
+      console.warn(`Invalid credentials for: ${email}`);
       return res.status(401).json({
         message: "Invalid credentials",
       });
     }
 
     const token = generateToken(user);
+    console.log(`✅ Login successful for: ${email}`);
 
     res.status(200).json({
       message: "Login successful",
@@ -115,6 +128,7 @@ export const loginUser = async (req, res) => {
       },
     });
   } catch (error) {
+    console.error("❌ Login Error:", error.message);
     res.status(500).json({
       message: "Login failed",
       error: error.message,

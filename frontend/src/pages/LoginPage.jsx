@@ -54,7 +54,15 @@ export function LoginPage() {
                 body: JSON.stringify(payload)
             });
 
-            const data = await response.json();
+            // Handle potential non-JSON errors (e.g. proxy crashes, server booting)
+            const contentType = response.headers.get("content-type");
+            let data;
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                data = await response.json();
+            } else {
+                const text = await response.text();
+                throw new Error(text || "Server returned a non-JSON response");
+            }
 
             if (!response.ok) {
                 setErrorMsg(data.message || 'Authentication failed');
@@ -66,14 +74,17 @@ export function LoginPage() {
 
             if (data.user?.role === 'vendor') {
                 navigate('/vendor-dashboard');
-            } else if (data.user?.role === 'admin'){
+            } else if (data.user?.role === 'admin') {
                 navigate('/admin-dashboard');
-            }else {
+            } else {
                 navigate('/');
             }
 
         } catch (error) {
-            setErrorMsg("Network error. Please try again later.");
+            console.error("Auth error:", error);
+            setErrorMsg(error.message.includes("Unexpected token") 
+                ? "Server error. Please try again later." 
+                : error.message || "Network error. Please try again later.");
         }
     };
     const roles = [

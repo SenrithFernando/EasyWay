@@ -44,7 +44,8 @@ const connectDB = async () => {
       return;
     }
 
-    configureDns();
+    // Disable manual DNS configuration as it can interfere with MongoDB Atlas SRV resolution
+    // configureDns();
 
     const rawUri = process.env.MONGO_STRING.includes('<PASSWORD>')
       ? process.env.MONGO_STRING.replace('<PASSWORD>', process.env.DATABASE_PASSWORD || '')
@@ -54,7 +55,7 @@ const connectDB = async () => {
 
     console.log('Attempting to connect to MongoDB...');
     if (process.env.DATABASE_PASSWORD) {
-      console.log('Connection string:', db.replace(process.env.DATABASE_PASSWORD, '****'));
+      console.log('Connection string format verified (password hidden)');
     }
 
     await mongoose.connect(db, {
@@ -63,7 +64,11 @@ const connectDB = async () => {
     });
     console.log('✅ MongoDB connection successful');
   } catch (error) {
-    console.error('⚠️ MongoDB connection error. Continuing without DB:', error.message);
+    console.error('❌ MongoDB connection error:', error.message);
+    if (error.message.includes('IP isn\'t whitelisted')) {
+      console.error('👉 TIP: Please double-check your MongoDB Atlas IP Access List (Whitelisting).');
+    }
+    console.warn('⚠️ Server will continue in "Reduced Functionality Mode" (No Database).');
   }
 };
 
