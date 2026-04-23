@@ -39,8 +39,15 @@ export function CanteenFeedbackPage() {
     }
   }, [vendorId]);
 
+  const userStr = localStorage.getItem('user');
+  let userRole = 'student';
+  try {
+    const user = userStr ? JSON.parse(userStr) : null;
+    if (user && user.role) userRole = user.role;
+  } catch (e) {}
+
   return (
-    <DashboardLayout role="student">
+    <DashboardLayout role={userRole}>
       <Card className="mb-8 border-none bg-gradient-to-r from-surface-900 via-surface-800 to-brand-700 text-white shadow-elevated">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>

@@ -89,7 +89,38 @@ export function BlogFeedbackPage() {
       return QUICK_LINKS.map((item) => {
         const isRestricted = userRole === 'student' && (item.title === 'Manager Dashboard' || item.title === 'Canteen Ranking');
 
+        if (item.title === 'Student History') {
+          if (userRole === 'vendor') {
+            return {
+              ...item,
+              title: 'Student Reviews',
+              description: 'View the latest feedback and ratings submitted by students for your canteen.',
+              path: '/vendor/reviews',
+              disabled: false,
+            };
+          }
+          if (userRole === 'admin') {
+            return {
+              ...item,
+              title: 'Canteen Feedbacks',
+              description: 'Review details and student feedback submissions across all registered canteens.',
+              path: '/admin/canteen-feedbacks',
+              disabled: false,
+            };
+          }
+          return { ...item, disabled: isRestricted };
+        }
+
         if (item.title === 'Manager Dashboard') {
+          if (userRole === 'vendor') {
+            return {
+              ...item,
+              title: 'Canteen Analytics',
+              description: 'View sentiment analysis, rating trends, and overall metrics exclusively for your canteen.',
+              path: '/vendor/analytics',
+              disabled: false,
+            };
+          }
           return {
             ...item,
             disabled: isRestricted,

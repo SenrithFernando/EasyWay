@@ -26,6 +26,9 @@ import { CanteenFeedbackDashboard } from './pages/CanteenFeedbackDashboard';
 import { CanteenRanking } from './pages/CanteenRanking';
 import { CanteenFeedbackPage } from './pages/CanteenFeedbackPage';
 import { AdminFeedbackDashboard } from './pages/AdminFeedbackDashboard';
+import { VendorReviewsPage } from './pages/VendorReviewsPage';
+import { VendorAnalyticsPage } from './pages/VendorAnalyticsPage';
+import { AdminCanteenFeedbacksPage } from './pages/AdminCanteenFeedbacksPage';
 
 function App() {
   return (
@@ -40,7 +43,10 @@ function App() {
         <Route path="/student/feedback/history" element={<StudentFeedbackHistory />} />
         <Route path="/vendors/:vendorId/feedback" element={<CanteenFeedbackPage />} />
         <Route path="/vendor/canteens/:vendorId/feedback-dashboard" element={<CanteenFeedbackDashboard />} />
+        <Route path="/vendor/reviews" element={<VendorReviewsPage />} />
+        <Route path="/vendor/analytics" element={<VendorAnalyticsPage />} />
         <Route path="/admin/feedback-dashboard" element={<AdminFeedbackDashboard />} />
+        <Route path="/admin/canteen-feedbacks" element={<AdminCanteenFeedbacksPage />} />
         <Route path="/admin/vendors/ranking" element={<CanteenRanking />} />
 
         {/* Core App Routes */}

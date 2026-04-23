@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import {
   Bar,
   BarChart,
@@ -95,8 +96,16 @@ export function CanteenFeedbackDashboard() {
     <DashboardLayout role="vendor">
       <div className="space-y-8">
         <section className="relative overflow-hidden rounded-[2rem] bg-[radial-gradient(circle_at_top_left,_rgba(255,196,107,0.35),_transparent_24%),radial-gradient(circle_at_bottom_right,_rgba(248,113,113,0.25),_transparent_20%),linear-gradient(135deg,_#1c1917_0%,_#292524_35%,_#7c2d12_100%)] px-6 py-8 text-white shadow-[0_28px_80px_rgba(120,53,15,0.28)] sm:px-8 lg:px-10">
-          <div className="absolute -right-12 top-8 h-36 w-36 rounded-full border border-white/10 bg-white/5 blur-sm" />
-          <div className="absolute bottom-0 left-1/2 h-28 w-28 -translate-x-1/2 rounded-full bg-orange-300/10 blur-2xl" />
+          <motion.div 
+            animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute -right-12 top-8 h-36 w-36 rounded-full border border-white/10 bg-white/5 blur-sm" 
+          />
+          <motion.div 
+            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute bottom-0 left-1/2 h-28 w-28 -translate-x-1/2 rounded-full bg-orange-300/10 blur-2xl" 
+          />
           <div className="relative grid gap-8 xl:grid-cols-[1.15fr_0.85fr]">
             <div>
               <Badge variant="warm" className="border-none bg-white/10 text-white">
@@ -112,7 +121,11 @@ export function CanteenFeedbackDashboard() {
 
               {dashboard ? (
                 <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:max-w-2xl">
-                  <div className="rounded-[1.75rem] border border-white/10 bg-white/10 p-5 backdrop-blur">
+                  <motion.div 
+                    whileHover={{ scale: 1.02, y: -4 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    className="rounded-[1.75rem] border border-white/10 bg-white/10 p-5 backdrop-blur cursor-pointer hover:bg-white/15 hover:border-white/20 transition-colors"
+                  >
                     <div className="flex items-center justify-between">
                       <p className="text-xs uppercase tracking-[0.28em] text-white/60">Average Rating</p>
                       <StarIcon size={18} className="fill-amber-300 text-amber-300" />
@@ -121,9 +134,13 @@ export function CanteenFeedbackDashboard() {
                     <div className="mt-4">
                       <RatingStars value={Math.round(dashboard.summary.averageRating)} />
                     </div>
-                  </div>
+                  </motion.div>
 
-                  <div className="rounded-[1.75rem] border border-white/10 bg-white/10 p-5 backdrop-blur">
+                  <motion.div 
+                    whileHover={{ scale: 1.02, y: -4 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    className="rounded-[1.75rem] border border-white/10 bg-white/10 p-5 backdrop-blur cursor-pointer hover:bg-white/15 hover:border-white/20 transition-colors"
+                  >
                     <div className="flex items-center justify-between">
                       <p className="text-xs uppercase tracking-[0.28em] text-white/60">House Mood</p>
                       <FlameIcon size={18} className="text-orange-300" />
@@ -132,7 +149,7 @@ export function CanteenFeedbackDashboard() {
                     <p className="mt-3 text-sm text-white/70">
                       Most visible emotional trend in current reviews
                     </p>
-                  </div>
+                  </motion.div>
                 </div>
               ) : null}
             </div>
@@ -163,16 +180,18 @@ export function CanteenFeedbackDashboard() {
                     detail: 'Instant operator signal',
                   },
                 ].map((item) => (
-                  <div
+                  <motion.div
                     key={item.label}
-                    className="rounded-[1.75rem] border border-white/10 bg-white/10 p-5 backdrop-blur"
+                    whileHover={{ scale: 1.02, x: -4 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    className="rounded-[1.75rem] border border-white/10 bg-white/10 p-5 backdrop-blur cursor-pointer hover:bg-white/15 hover:border-white/20 transition-colors"
                   >
                     <p className="text-xs uppercase tracking-[0.28em] text-white/60">
                       {item.label}
                     </p>
                     <p className="mt-4 text-3xl font-bold">{item.value}</p>
                     <p className="mt-3 text-sm text-white/70">{item.detail}</p>
-                  </div>
+                  </motion.div>
                 ))}
             </div>
           </div>
