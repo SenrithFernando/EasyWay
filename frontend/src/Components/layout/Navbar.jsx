@@ -43,7 +43,6 @@ export function Navbar() {
     { name: 'Blog & News', path: '/blog' },
     { name: 'Reviews & Feedback', path: '/feedback' },
     { name: 'Canteen', path: '/canteen' },
-    ...(user?.role === 'vendor' ? [{ name: 'Vendor Dashboard', path: '/vendor' }] : []),
   ];
   const isActive = (path) => {
     if (path === '/' && location.pathname !== '/')
