@@ -7,7 +7,7 @@ import {
   FEEDBACK_COMMENT_MIN_LENGTH,
   FEEDBACK_SENTIMENT,
 } from '../models/feedback.constants.js';
-import loadModel from './loadModel.js';
+import loadModel from '../models/loadModel.js';
 import Feedback from '../models/feedback.js';
 
 const tryLoadModel = (modelName, candidatePaths) => {
