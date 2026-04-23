@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import HttpError from '../middleware/httpError.js';
-import { analyzeSentiment } from './sentiment.js';
+import { analyzeSentiment } from '../controllers/sentiment.js';
 import {
   FEEDBACK_EDIT_WINDOW_MINUTES,
   FEEDBACK_COMMENT_MAX_LENGTH,
