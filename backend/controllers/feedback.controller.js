@@ -1,4 +1,4 @@
-import * as feedbackService from './feedback.service.js';
+import * as feedbackService from '../services/feedback.service.js';
 import asyncHandler from '../middleware/asyncHandler.js';
 
 const createDemoFeedback = asyncHandler(async (req, res) => {
