@@ -308,3 +308,20 @@ export const getAllUsers = async (req, res) => {
     });
   }
 };
+
+// Get all vendors
+export const getAllVendors = async (req, res) => {
+  try {
+    const vendors = await User.find({ role: 'vendor' }).select('-password');
+    res.status(200).json({
+      success: true,
+      data: vendors,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch vendors",
+      error: error.message,
+    });
+  }
+};

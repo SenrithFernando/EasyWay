@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CalendarIcon, UsersIcon, CheckCircleIcon, QrCodeIcon, } from 'lucide-react';
-import { DashboardLayout } from '../components/layout/DashboardLayout';
+import { Navbar } from '../Components/layout/Navbar';
 
 const generateDateOptions = () => {
     const today = new Date();
@@ -140,7 +140,7 @@ export function ReservationPage() {
                                 reservationTime.setHours(hours, minutes, 0, 0);
                                 
                                 const diffMins = (now - reservationTime) / (1000 * 60);
-                                if (diffMins >= 10) {
+                                if (diffMins >= 2) {
                                     shouldDelete = true;
                                 }
                             }
@@ -219,7 +219,10 @@ export function ReservationPage() {
             setIsSubmitting(false);
         }
     };
-    return (<DashboardLayout role="student">
+    return (
+        <div className="min-h-screen bg-surface-50 font-sans">
+            <Navbar />
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="mb-8">
         <h1 className="text-2xl md:text-3xl font-bold text-surface-900">
           Reserve a Table
@@ -509,12 +512,13 @@ export function ReservationPage() {
                 <button className="w-full inline-flex items-center justify-center font-medium rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-brand-500 to-brand-400 text-white hover:from-brand-600 hover:to-brand-500 focus:ring-brand-500 shadow-soft px-5 py-2.5 text-base" onClick={() => setStep(1)}>
                   Book Another Table
                 </button>
-                <button className="w-full inline-flex items-center justify-center font-medium rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-surface-0 text-surface-800 border-2 border-surface-200 hover:border-brand-500 hover:text-brand-600 focus:ring-surface-200 px-5 py-2.5 text-base" onClick={() => (window.location.hash = '#/menu')}>
+                <button className="w-full inline-flex items-center justify-center font-medium rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-surface-0 text-surface-800 border-2 border-surface-200 hover:border-brand-500 hover:text-brand-600 focus:ring-surface-200 px-5 py-2.5 text-base" onClick={() => navigate('/menu')}>
                   Pre-order Food
                 </button>
               </div>
             </div>
           </div>
         </motion.div>)}
-    </DashboardLayout>);
+            </main>
+        </div>);
 }

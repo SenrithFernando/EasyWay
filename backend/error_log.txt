@@ -1,0 +1,542 @@
+
+
+[2026-03-29T12:35:48.655Z] Cannot read properties of null (reading '_id')
+TypeError: Cannot read properties of null (reading '_id')
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:73
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/utils/asyncHandler.js:2:19
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:32:46)
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireAuth (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:30:10)
+
+
+[2026-03-29T12:35:53.128Z] Cannot read properties of null (reading '_id')
+TypeError: Cannot read properties of null (reading '_id')
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:73
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/utils/asyncHandler.js:2:19
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:32:46)
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireAuth (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:30:10)
+
+
+[2026-03-29T12:35:53.271Z] Cannot read properties of null (reading '_id')
+TypeError: Cannot read properties of null (reading '_id')
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:73
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/utils/asyncHandler.js:2:19
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:32:46)
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireAuth (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:30:10)
+
+
+[2026-03-29T12:36:08.265Z] Cannot read properties of null (reading '_id')
+TypeError: Cannot read properties of null (reading '_id')
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:73
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/utils/asyncHandler.js:2:19
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:32:46)
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireAuth (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:30:10)
+
+
+[2026-03-29T12:36:28.277Z] Cannot read properties of null (reading '_id')
+TypeError: Cannot read properties of null (reading '_id')
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:73
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/utils/asyncHandler.js:2:19
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:32:46)
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireAuth (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:30:10)
+
+
+[2026-03-29T12:36:38.276Z] Cannot read properties of null (reading '_id')
+TypeError: Cannot read properties of null (reading '_id')
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:73
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/utils/asyncHandler.js:2:19
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:32:46)
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireAuth (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:30:10)
+
+
+[2026-03-29T12:36:52.723Z] Cannot read properties of null (reading '_id')
+TypeError: Cannot read properties of null (reading '_id')
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:20:25
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/utils/asyncHandler.js:2:19
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at validateCreateFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/middleware/feedback.validation.js:97:10)
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:32:46)
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+
+
+[2026-03-29T12:36:53.426Z] Cannot read properties of null (reading '_id')
+TypeError: Cannot read properties of null (reading '_id')
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:73
+    at file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/utils/asyncHandler.js:2:19
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:32:46)
+    at Layer.handleRequest (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\router\lib\route.js:157:13)
+    at requireAuth (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/routes/index.js:30:10)
+
+
+[2026-03-29T12:36:58.326Z] connect ETIMEDOUT 159.41.207.18:27017
+MongoServerSelectionError: connect ETIMEDOUT 159.41.207.18:27017
+    at Topology.selectServer (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\sdam\topology.js:347:38)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:567:9)
+    at process.processTimers (node:internal/timers:541:7)
+    at async tryOperation (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\operations\execute_operation.js:150:18)
+    at async executeOperation (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\operations\execute_operation.js:80:16)
+    at async FindCursor._initialize (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:620:27)
+    at async FindCursor.fetchBatch (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:654:13)
+    at async FindCursor.next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:326:17)
+
+
+[2026-03-29T12:36:58.333Z] connect ETIMEDOUT 159.41.207.18:27017
+MongoServerSelectionError: connect ETIMEDOUT 159.41.207.18:27017
+    at Topology.selectServer (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\sdam\topology.js:347:38)
+    at async tryOperation (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\operations\execute_operation.js:150:18)
+    at async executeOperation (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\operations\execute_operation.js:80:16)
+    at async FindCursor._initialize (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:620:27)
+    at async FindCursor.fetchBatch (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:654:13)
+    at async FindCursor.next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:326:17)
+    at async Collection.findOne (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\collection.js:313:24)
+    at async ensureVendorExists (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/services/feedback.service.js:185:14)
+    at async Module.getVendorReviewSummary (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/services/feedback.service.js:346:3)
+
+
+[2026-04-04T10:50:53.345Z] Vendor not found.
+HttpError: Vendor not found.
+    at ensureVendorExists (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:192:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForVendor (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:332:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:45:20
+
+
+[2026-04-04T10:50:53.358Z] Vendor not found.
+HttpError: Vendor not found.
+    at ensureVendorExists (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:192:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getVendorReviewSummary (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:346:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:67:17
+
+
+[2026-04-04T10:50:53.550Z] Vendor not found.
+HttpError: Vendor not found.
+    at ensureVendorExists (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:192:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForVendor (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:332:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:45:20
+
+
+[2026-04-04T10:50:53.555Z] Vendor not found.
+HttpError: Vendor not found.
+    at ensureVendorExists (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:192:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getVendorReviewSummary (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:346:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:67:17
+
+
+[2026-04-04T10:52:22.841Z] Vendor not found.
+HttpError: Vendor not found.
+    at ensureVendorExists (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:192:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForVendor (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:332:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:45:20
+
+
+[2026-04-04T10:52:22.859Z] Vendor not found.
+HttpError: Vendor not found.
+    at ensureVendorExists (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:192:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getVendorReviewSummary (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:346:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:67:17
+
+
+[2026-04-04T10:52:23.044Z] Vendor not found.
+HttpError: Vendor not found.
+    at ensureVendorExists (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:192:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForVendor (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:332:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:45:20
+
+
+[2026-04-04T10:52:23.049Z] Vendor not found.
+HttpError: Vendor not found.
+    at ensureVendorExists (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:192:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getVendorReviewSummary (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:346:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:67:17
+
+
+[2026-04-04T12:19:27.798Z] Student account not found.
+HttpError: Student account not found.
+    at ensureStudentAccount (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:136:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:339:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:20
+
+
+[2026-04-04T12:19:27.866Z] Student account not found.
+HttpError: Student account not found.
+    at ensureStudentAccount (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:136:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:339:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:20
+
+
+[2026-04-04T12:21:43.028Z] Student account not found.
+HttpError: Student account not found.
+    at ensureStudentAccount (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:136:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:339:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:20
+
+
+[2026-04-04T12:21:43.128Z] Student account not found.
+HttpError: Student account not found.
+    at ensureStudentAccount (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:136:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:339:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:20
+
+
+[2026-04-04T12:23:50.882Z] Student account not found.
+HttpError: Student account not found.
+    at ensureStudentAccount (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:136:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:339:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:20
+
+
+[2026-04-04T12:23:50.977Z] Student account not found.
+HttpError: Student account not found.
+    at ensureStudentAccount (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:136:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:339:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:20
+
+
+[2026-04-04T12:23:52.221Z] Student account not found.
+HttpError: Student account not found.
+    at ensureStudentAccount (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:136:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:339:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:20
+
+
+[2026-04-04T12:23:52.330Z] Student account not found.
+HttpError: Student account not found.
+    at ensureStudentAccount (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:136:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:339:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:20
+
+
+[2026-04-04T12:24:41.609Z] Student account not found.
+HttpError: Student account not found.
+    at ensureStudentAccount (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:136:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:339:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:20
+
+
+[2026-04-04T12:24:41.837Z] Student account not found.
+HttpError: Student account not found.
+    at ensureStudentAccount (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:136:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:339:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:20
+
+
+[2026-04-04T12:24:42.841Z] Student account not found.
+HttpError: Student account not found.
+    at ensureStudentAccount (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:136:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:339:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:20
+
+
+[2026-04-04T12:24:42.954Z] Student account not found.
+HttpError: Student account not found.
+    at ensureStudentAccount (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:136:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:339:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:20
+
+
+[2026-04-04T12:24:43.844Z] Student account not found.
+HttpError: Student account not found.
+    at ensureStudentAccount (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:136:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:339:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:20
+
+
+[2026-04-04T12:24:43.952Z] Student account not found.
+HttpError: Student account not found.
+    at ensureStudentAccount (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:136:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:339:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:20
+
+
+[2026-04-04T12:25:04.280Z] Student account not found.
+HttpError: Student account not found.
+    at ensureStudentAccount (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:136:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:339:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:20
+
+
+[2026-04-04T12:25:04.393Z] Student account not found.
+HttpError: Student account not found.
+    at ensureStudentAccount (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:136:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:339:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:20
+
+
+[2026-04-04T12:26:25.800Z] Student account not found.
+HttpError: Student account not found.
+    at ensureStudentAccount (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:136:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:339:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:20
+
+
+[2026-04-04T12:26:25.887Z] Student account not found.
+HttpError: Student account not found.
+    at ensureStudentAccount (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:136:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForStudent (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:339:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:56:20
+
+
+[2026-04-04T13:08:18.931Z] You can only submit feedback for your own orders.
+HttpError: You can only submit feedback for your own orders.
+    at ensureOrderForFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:164:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.createFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:269:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:20:20
+
+
+[2026-04-04T13:11:36.851Z] Vendor not found.
+HttpError: Vendor not found.
+    at ensureVendorExists (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:193:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getVendorReviewSummary (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:352:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:69:17
+
+
+[2026-04-04T13:11:36.867Z] Vendor not found.
+HttpError: Vendor not found.
+    at ensureVendorExists (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:193:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForVendor (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:338:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:46:20
+
+
+[2026-04-04T13:11:36.966Z] Vendor not found.
+HttpError: Vendor not found.
+    at ensureVendorExists (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:193:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getVendorReviewSummary (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:352:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:69:17
+
+
+[2026-04-04T13:11:36.979Z] Vendor not found.
+HttpError: Vendor not found.
+    at ensureVendorExists (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:193:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.getFeedbackForVendor (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:338:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:46:20
+
+
+[2026-04-04T13:11:46.644Z] Vendor not found.
+HttpError: Vendor not found.
+    at ensureVendorExists (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:193:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.createFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:266:5)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:20:20
+
+
+[2026-04-04T13:13:47.555Z] You can only submit feedback for your own orders.
+HttpError: You can only submit feedback for your own orders.
+    at ensureOrderForFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:164:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.createFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:269:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:20:20
+
+
+[2026-04-04T13:16:26.058Z] You can only submit feedback for your own orders.
+HttpError: You can only submit feedback for your own orders.
+    at ensureOrderForFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:164:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.createFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:269:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:20:20
+
+
+[2026-04-04T13:23:40.615Z] You can only submit feedback for your own orders.
+HttpError: You can only submit feedback for your own orders.
+    at ensureOrderForFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:164:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.createFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:269:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:20:20
+
+
+[2026-04-04T13:25:40.423Z] You can only submit feedback for your own orders.
+HttpError: You can only submit feedback for your own orders.
+    at ensureOrderForFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:164:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.createFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:269:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:20:20
+
+
+[2026-04-04T13:28:16.326Z] You can only submit feedback for your own orders.
+HttpError: You can only submit feedback for your own orders.
+    at ensureOrderForFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:164:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.createFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:269:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:20:20
+
+
+[2026-04-04T14:52:37.943Z] Order is not linked to the provided vendor.
+HttpError: Order is not linked to the provided vendor.
+    at ensureOrderForFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:169:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.createFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:279:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:25:20
+
+
+[2026-04-04T14:53:06.069Z] Order is not linked to the provided vendor.
+HttpError: Order is not linked to the provided vendor.
+    at ensureOrderForFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:169:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.createFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:279:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:25:20
+
+
+[2026-04-04T14:53:07.901Z] Order is not linked to the provided vendor.
+HttpError: Order is not linked to the provided vendor.
+    at ensureOrderForFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:169:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.createFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:279:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:25:20
+
+
+[2026-04-04T14:58:44.767Z] Order validation failed: studentId: Student ID is required
+ValidationError: Order validation failed: studentId: Student ID is required
+    at model.validate (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongoose\lib\document.js:2864:36)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async model.$__save (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongoose\lib\model.js:390:7)
+    at async model.save (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongoose\lib\model.js:664:5)
+    at async Module.cancelOrder (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/services/orderService.js:118:3)
+    at async cancelOrder (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/orderController.js:89:19)
+
+
+[2026-04-04T15:41:38.543Z] read ECONNRESET
+MongoServerSelectionError: read ECONNRESET
+    at Topology.selectServer (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\sdam\topology.js:347:38)
+    at async tryOperation (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\operations\execute_operation.js:150:18)
+    at async executeOperation (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\operations\execute_operation.js:80:16)
+    at async FindCursor._initialize (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:620:27)
+    at async FindCursor.fetchBatch (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:654:13)
+    at async FindCursor.next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:326:17)
+    at async [Symbol.asyncIterator] (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:254:34)
+    at async FindCursor.toArray (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:406:26)
+    at async model.Query._find (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongoose\lib\query.js:2434:14)
+
+
+[2026-04-04T15:41:39.127Z] read ECONNRESET
+MongoServerSelectionError: read ECONNRESET
+    at Topology.selectServer (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\sdam\topology.js:347:38)
+    at async tryOperation (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\operations\execute_operation.js:150:18)
+    at async executeOperation (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\operations\execute_operation.js:80:16)
+    at async FindCursor._initialize (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:620:27)
+    at async FindCursor.fetchBatch (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:654:13)
+    at async FindCursor.next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:326:17)
+    at async [Symbol.asyncIterator] (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:254:34)
+    at async FindCursor.toArray (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:406:26)
+    at async model.Query._find (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongoose\lib\query.js:2434:14)
+
+
+[2026-04-04T15:41:59.138Z] connect ETIMEDOUT 159.41.207.18:27017
+MongoServerSelectionError: connect ETIMEDOUT 159.41.207.18:27017
+    at Topology.selectServer (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\sdam\topology.js:347:38)
+    at async tryOperation (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\operations\execute_operation.js:150:18)
+    at async executeOperation (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\operations\execute_operation.js:80:16)
+    at async FindCursor._initialize (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:620:27)
+    at async FindCursor.fetchBatch (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:654:13)
+    at async FindCursor.next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:326:17)
+    at async [Symbol.asyncIterator] (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:254:34)
+    at async FindCursor.toArray (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:406:26)
+    at async model.Query._find (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongoose\lib\query.js:2434:14)
+
+
+[2026-04-04T15:42:09.176Z] connect ETIMEDOUT 159.41.207.18:27017
+MongoServerSelectionError: connect ETIMEDOUT 159.41.207.18:27017
+    at Topology.selectServer (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\sdam\topology.js:347:38)
+    at async tryOperation (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\operations\execute_operation.js:150:18)
+    at async executeOperation (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\operations\execute_operation.js:80:16)
+    at async FindCursor._initialize (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:620:27)
+    at async FindCursor.fetchBatch (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:654:13)
+    at async FindCursor.next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:326:17)
+    at async [Symbol.asyncIterator] (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:254:34)
+    at async FindCursor.toArray (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:406:26)
+    at async model.Query._find (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongoose\lib\query.js:2434:14)
+
+
+[2026-04-04T15:42:12.860Z] connect ETIMEDOUT 159.41.207.18:27017
+MongoServerSelectionError: connect ETIMEDOUT 159.41.207.18:27017
+    at Topology.selectServer (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\sdam\topology.js:347:38)
+    at async tryOperation (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\operations\execute_operation.js:150:18)
+    at async executeOperation (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\operations\execute_operation.js:80:16)
+    at async FindCursor._initialize (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\find_cursor.js:62:26)
+    at async FindCursor.cursorInit (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:620:27)
+    at async FindCursor.fetchBatch (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:654:13)
+    at async FindCursor.next (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:326:17)
+    at async [Symbol.asyncIterator] (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:254:34)
+    at async FindCursor.toArray (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongodb\lib\cursor\abstract_cursor.js:406:26)
+    at async model.Query._find (C:\Users\Dumini\Desktop\SLIIT\Year 3\ITPM\Feedback Management\EasyWay\backend\node_modules\mongoose\lib\query.js:2434:14)
+
+
+[2026-04-05T09:12:42.053Z] You can only submit feedback for your own orders.
+HttpError: You can only submit feedback for your own orders.
+    at ensureOrderForFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:164:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.createFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:279:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:25:20
+
+
+[2026-04-05T09:18:52.416Z] Order is not linked to the provided vendor.
+HttpError: Order is not linked to the provided vendor.
+    at ensureOrderForFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:169:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Module.createFeedback (file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.service.js:279:3)
+    at async file:///C:/Users/Dumini/Desktop/SLIIT/Year%203/ITPM/Feedback%20Management/EasyWay/backend/controllers/feedback.controller.js:25:20

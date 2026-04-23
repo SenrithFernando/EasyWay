@@ -1,49 +1,158 @@
 @import "tailwindcss";
 
-@theme {
-  --color-surface-0: 
-  --color-surface-50: var(--color-slate-50);
-  --color-surface-100: var(--color-slate-100);
-  --color-surface-200: var(--color-slate-200);
-  --color-surface-300: var(--color-slate-300);
-  --color-surface-400: var(--color-slate-400);
-  --color-surface-500: var(--color-slate-500);
-  --color-surface-600: var(--color-slate-600);
-  --color-surface-700: var(--color-slate-700);
-  --color-surface-800: var(--color-slate-800);
-  --color-surface-900: var(--color-slate-900);
-
-  --color-brand-50: var(--color-orange-50);
-  --color-brand-100: var(--color-orange-100);
-  --color-brand-200: var(--color-orange-200);
-  --color-brand-300: var(--color-orange-300);
-  --color-brand-400: var(--color-orange-400);
-  --color-brand-500: var(--color-orange-500);
-  --color-brand-600: var(--color-orange-600);
-  --color-brand-700: var(--color-orange-700);
-  --color-brand-800: var(--color-orange-800);
-  --color-brand-900: var(--color-orange-900);
-
-  --color-success-50: var(--color-green-50);
-  --color-success-100: var(--color-green-100);
-  --color-success-200: var(--color-green-200);
-  --color-success-300: var(--color-green-300);
-  --color-success-400: var(--color-green-400);
-  --color-success-500: var(--color-green-500);
-  --color-success-600: var(--color-green-600);
-  --color-success-700: var(--color-green-700);
-  --color-success-800: var(--color-green-800);
-  --color-success-900: var(--color-green-900);
-
-  --color-warm-50: var(--color-amber-50);
-  --color-warm-100: var(--color-amber-100);
-  --color-warm-200: var(--color-amber-200);
-  --color-warm-300: var(--color-amber-300);
-  --color-warm-400: var(--color-amber-400);
-  --color-warm-500: var(--color-amber-500);
-  --color-warm-600: var(--color-amber-600);
-  --color-warm-700: var(--color-amber-700);
-  --color-warm-800: var(--color-amber-800);
-  --color-warm-900: var(--color-amber-900);
+:root {
+  --text: #6b6375;
+  --text-h: #08060d;
+  --bg: #ffffff;
+  --border: #e5e4e7;
+  --code-bg: #f4f3ec;
+  --accent: #aa3bff;
+  --accent-bg: rgba(170, 59, 255, 0.1);
+  --accent-border: rgba(170, 59, 255, 0.5);
+  --social-bg: rgba(244, 243, 236, 0.5);
+  --shadow:
+    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  
+  /* Heading and Font tokens */
+  --heading: 'Inter', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
 }
 
+@theme {
+  /* Surface Colors (Slate/Gray based) */
+  --color-surface-0: #ffffff;
+  --color-surface-50: #f8fafc;
+  --color-surface-100: #f1f5f9;
+  --color-surface-200: #e2e8f0;
+  --color-surface-300: #cbd5e1;
+  --color-surface-400: #94a3b8;
+  --color-surface-500: #64748b;
+  --color-surface-600: #475569;
+  --color-surface-700: #334155;
+  --color-surface-800: #1e293b;
+  --color-surface-900: #0f172a;
+
+  /* Brand Colors (Orange/Amber based) */
+  --color-brand-50: #fff7ed;
+  --color-brand-100: #ffedd5;
+  --color-brand-200: #fed7aa;
+  --color-brand-300: #fdba74;
+  --color-brand-400: #fb923c;
+  --color-brand-500: #f97316;
+  --color-brand-600: #ea580c;
+  --color-brand-700: #c2410c;
+  --color-brand-800: #9a3412;
+  --color-brand-900: #7c2d12;
+
+  /* Success Colors (Green based) */
+  --color-success-50: #f0fdf4;
+  --color-success-100: #dcfce7;
+  --color-success-200: #bbf7d0;
+  --color-success-300: #86efac;
+  --color-success-400: #4ade80;
+  --color-success-500: #22c55e;
+  --color-success-600: #16a34a;
+  --color-success-700: #15803d;
+  --color-success-800: #166534;
+  --color-success-900: #14532d;
+
+  /* Warm Colors (Amber/Yellow based) */
+  --color-warm-50: #fffbeb;
+  --color-warm-100: #fef3c7;
+  --color-warm-200: #fde68a;
+  --color-warm-300: #fcd34d;
+  --color-warm-400: #fbbf24;
+  --color-warm-500: #f59e0b;
+  --color-warm-600: #d97706;
+  --color-warm-700: #b45309;
+  --color-warm-800: #92400e;
+  --color-warm-900: #78350f;
+
+  /* Shadows */
+  --shadow-elevated: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-glow-orange: 0 0 20px rgba(249, 115, 22, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #9ca3af;
+    --text-h: #f3f4f6;
+    --bg: #0f172a;
+    --border: #1e293b;
+    --code-bg: #1e293b;
+    --accent: #c084fc;
+    --accent-bg: rgba(192, 132, 252, 0.15);
+    --accent-border: rgba(192, 132, 252, 0.5);
+    --social-bg: rgba(30, 41, 59, 0.5);
+    --shadow:
+      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+  }
+
+  body {
+    background-color: #0f172a;
+    color: #f3f4f6;
+  }
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--heading);
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+h1,
+h2 {
+  font-family: var(--heading);
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 3.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  margin: 2rem 0;
+  @media (max-width: 1024px) {
+    font-size: 2.25rem;
+    margin: 1.25rem 0;
+  }
+}
+
+h2 {
+  font-size: 1.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  margin: 0 0 0.5rem;
+  @media (max-width: 1024px) {
+    font-size: 1.25rem;
+  }
+}
+
+p {
+  margin: 0;
+}
+
+code,
+.counter {
+  font-family: var(--mono);
+  display: inline-flex;
+  border-radius: 4px;
+  color: var(--text-h);
+}
+
+code {
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  padding: 0.25rem 0.5rem;
+  background: var(--code-bg);
+}

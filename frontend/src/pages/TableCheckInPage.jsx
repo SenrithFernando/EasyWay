@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { MailIcon, KeyIcon, CheckCircleIcon, MapPinIcon, UsersIcon, ClockIcon } from 'lucide-react';
-import { DashboardLayout } from '../components/layout/DashboardLayout';
+import { DashboardLayout } from '../Components/layout/DashboardLayout';
 
 export function TableCheckInPage() {
     const { location, tableId } = useParams();
