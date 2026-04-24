@@ -59,7 +59,8 @@ export default function MenuItemsPage() {
     if (!imageUrl || !imageUrl.trim()) return null;
 
     const trimmed = imageUrl.trim();
-    if (/^https?:\/\//i.test(trimmed)) return trimmed;
+    // Full URL or base64 data URI — use as-is
+    if (/^https?:\/\//i.test(trimmed) || trimmed.startsWith('data:')) return trimmed;
 
     const backendOrigin = import.meta.env.VITE_API_ORIGIN || 'http://localhost:3000';
     if (trimmed.startsWith('/')) {
@@ -67,6 +68,16 @@ export default function MenuItemsPage() {
     }
 
     return `${backendOrigin}/${trimmed}`;
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      setForm((prev) => ({ ...prev, image: String(reader.result || '') }));
+    };
+    reader.readAsDataURL(file);
   };
 
   /* ---- fetch ---- */
@@ -454,12 +465,31 @@ export default function MenuItemsPage() {
                   <input
                     id="image"
                     name="image"
-                    value={form.image}
+                    value={form.image.startsWith('data:') ? '' : form.image}
                     onChange={handleChange}
-                    placeholder="https://..."
+                    placeholder="https://example.com/image.jpg"
                   />
                 </div>
               </div>
+
+              <div className="form-group">
+                <label>Or Upload Image</label>
+                <input type="file" accept="image/*" onChange={handleImageUpload} />
+              </div>
+
+              {form.image && (
+                <div className="form-group">
+                  <label>Preview</label>
+                  <div style={{ borderRadius: 8, overflow: 'hidden', maxHeight: 160, background: '#1e293b' }}>
+                    <img
+                      src={resolveImageUrl(form.image) || form.image}
+                      alt="Preview"
+                      style={{ width: '100%', maxHeight: 160, objectFit: 'cover' }}
+                      onError={(e) => { e.target.style.display = 'none'; }}
+                    />
+                  </div>
+                </div>
+              )}
 
               <div className="form-toggle">
                 <span>Available</span>
