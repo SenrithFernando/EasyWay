@@ -3,7 +3,7 @@ export const vendorMiddleware = (req, res, next) => {
     console.log("🟠 Vendor Middleware Check:");
     console.log("  - User:", req.user);
     console.log("  - User role:", req.user?.role);
-    
+
     if (!req.user || req.user.role !== "vendor") {
       console.log("❌ Access denied - user role is not 'vendor'");
       return res.status(403).json({

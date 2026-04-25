@@ -14,7 +14,7 @@ const generateToken = (user) => {
     process.env.JWT_SECRET || "mysecretkey",
     {
       expiresIn: "7d",
-    }
+    },
   );
 };
 
@@ -83,7 +83,7 @@ export const loginUser = async (req, res) => {
     if (mongoose.connection.readyState !== 1) {
       // Fallback mode for testing without database
       console.warn("⚠️  Database not connected. Allowing test credentials.");
-      
+
       // Allow test accounts without database
       if (email === "vendor@test.com" && password === "vendor123") {
         const token = jwt.sign(
@@ -93,7 +93,7 @@ export const loginUser = async (req, res) => {
             email: email,
           },
           process.env.JWT_SECRET || "mysecretkey",
-          { expiresIn: "7d" }
+          { expiresIn: "7d" },
         );
         console.log("✅ Vendor test account login successful");
         return res.status(200).json({
@@ -114,7 +114,7 @@ export const loginUser = async (req, res) => {
             email: email,
           },
           process.env.JWT_SECRET || "mysecretkey",
-          { expiresIn: "7d" }
+          { expiresIn: "7d" },
         );
         console.log("✅ Student test account login successful");
         return res.status(200).json({
@@ -128,10 +128,11 @@ export const loginUser = async (req, res) => {
           },
         });
       }
-      
+
       return res.status(503).json({
         message: "Service temporarily unavailable",
-        error: "Database not connected. Use test: vendor@test.com/vendor123 or student@test.com/student123",
+        error:
+          "Database not connected. Use test: vendor@test.com/vendor123 or student@test.com/student123",
       });
     }
 
@@ -218,7 +219,7 @@ export const updateProfile = async (req, res) => {
         studentId,
         department,
       },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     ).select("-password");
 
     if (!updatedUser) {
@@ -265,7 +266,7 @@ export const updateUserRole = async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(
       id,
       { role },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     ).select("-password");
 
     if (!updatedUser) {
@@ -337,7 +338,7 @@ export const updatePenaltyStatus = async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(
       id,
       { penaltyStatus },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     ).select("-password");
 
     if (!updatedUser) {
@@ -374,7 +375,7 @@ export const getAllUsers = async (req, res) => {
 // Get all vendors
 export const getAllVendors = async (req, res) => {
   try {
-    const vendors = await User.find({ role: 'vendor' }).select('-password');
+    const vendors = await User.find({ role: "vendor" }).select("-password");
     res.status(200).json({
       success: true,
       data: vendors,

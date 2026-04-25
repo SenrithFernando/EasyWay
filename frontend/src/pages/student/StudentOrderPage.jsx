@@ -176,7 +176,7 @@ export default function StudentOrderPage({ initialTab = "menu" }) {
   const fetchOrders = useCallback(async () => {
     try {
       const data = await getAllOrders();
-      
+
       // Always trust fresh server data - don't merge with cached
       setOrders(data || []);
       saveLocalOrders(data || []);
@@ -198,8 +198,6 @@ export default function StudentOrderPage({ initialTab = "menu" }) {
       return () => clearInterval(intervalId);
     }
   }, [activeTab, fetchOrders]);
-
-
 
   /* ================================================================
      SEARCH FILTER

@@ -1,33 +1,48 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { HomeIcon, CalendarIcon, SettingsIcon, LogOutIcon, XIcon, UserIcon, GlobeIcon, UtensilsIcon, ShoppingCartIcon } from 'lucide-react';
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import {
+  HomeIcon,
+  CalendarIcon,
+  SettingsIcon,
+  LogOutIcon,
+  XIcon,
+  UserIcon,
+  GlobeIcon,
+  UtensilsIcon,
+  ShoppingCartIcon,
+} from "lucide-react";
 
 export function Sidebar({ role, onClose }) {
   const location = useLocation();
 
-  const userString = localStorage.getItem('user');
+  const userString = localStorage.getItem("user");
   const user = userString ? JSON.parse(userString) : null;
-  const fullName = user?.fullName || 'User';
-  const displayRole = user?.role || role || 'student';
+  const fullName = user?.fullName || "User";
+  const displayRole = user?.role || role || "student";
   const initial = fullName.charAt(0).toUpperCase();
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
   };
 
   const baseLinks = [
-    { name: 'Main Page', path: '/', icon: GlobeIcon },
-    { name: 'Dashboard', path: `/${role}`, icon: HomeIcon },
-    { name: 'Profile', path: '/profile', icon: UserIcon },
+    { name: "Main Page", path: "/", icon: GlobeIcon },
+    { name: "Dashboard", path: `/${role}`, icon: HomeIcon },
+    { name: "Profile", path: "/profile", icon: UserIcon },
   ];
 
   const vendorLinks = [
-    { name: 'Menu Items', path: '/vendor/menu-items', icon: UtensilsIcon },
-    { name: 'Orders to Fulfill', path: '/vendor/orders', icon: ShoppingCartIcon },
+    { name: "Menu Items", path: "/vendor/menu-items", icon: UtensilsIcon },
+    {
+      name: "Orders to Fulfill",
+      path: "/vendor/orders",
+      icon: ShoppingCartIcon,
+    },
   ];
 
-  const navLinks = role === 'vendor' ? [...baseLinks, ...vendorLinks] : baseLinks;
+  const navLinks =
+    role === "vendor" ? [...baseLinks, ...vendorLinks] : baseLinks;
 
   const isActive = (path) => location.pathname === path;
 
@@ -59,8 +74,8 @@ export function Sidebar({ role, onClose }) {
               to={link.path}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                 isActive(link.path)
-                  ? 'bg-orange-50 text-orange-600'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  ? "bg-orange-50 text-orange-600"
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
               }`}
             >
               <Icon size={20} />
@@ -80,7 +95,9 @@ export function Sidebar({ role, onClose }) {
               <p className="text-sm font-medium text-surface-900 truncate">
                 {fullName}
               </p>
-              <p className="text-xs text-surface-500 truncate capitalize">{displayRole}</p>
+              <p className="text-xs text-surface-500 truncate capitalize">
+                {displayRole}
+              </p>
             </div>
           </div>
         </Link>

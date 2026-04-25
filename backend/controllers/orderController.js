@@ -58,9 +58,9 @@ export const updateOrder = async (req, res, next) => {
     console.log("  - Order ID:", req.params.id);
     console.log("  - User role:", req.user?.role);
     console.log("  - New data:", req.body);
-    
+
     const order = await orderService.updateOrder(req.params.id, req.body);
-    
+
     console.log("✅ Order updated successfully, new status:", order.status);
 
     res.status(200).json({
