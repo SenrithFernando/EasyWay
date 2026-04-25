@@ -169,6 +169,33 @@ export const getOrderById = async (id) => {
  * Update an order by ID (e.g. change status).
  */
 export const updateOrder = async (id, data) => {
+  console.log("📝 orderService.updateOrder called:");
+  console.log("  - Order ID:", id);
+  console.log("  - Data:", data);
+  
+  // Fallback mode for when database is not connected
+  if (mongoose.connection.readyState !== 1) {
+    console.log("⚠️  Using fallback mode (no database)");
+    // Load orders from cache/fallback
+    const orders = getFallbackOrders();
+    console.log("  - Available fallback orders:", orders.map(o => o._id));
+    
+    const orderIndex = orders.findIndex((o) => o._id === id);
+    console.log("  - Order found at index:", orderIndex);
+    
+    if (orderIndex === -1) {
+      const error = new Error("Order not found");
+      error.statusCode = 404;
+      throw error;
+    }
+    
+    // Update the order in fallback data
+    const updatedOrder = { ...orders[orderIndex], ...data };
+    console.log("  - Updated order status to:", updatedOrder.status);
+    return updatedOrder;
+  }
+
+  console.log("💾 Using database mode");
   const order = await Order.findByIdAndUpdate(id, data, {
     new: true,
     runValidators: true,

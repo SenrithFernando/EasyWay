@@ -38,11 +38,13 @@ export function Navbar() {
 
     const navLinks = [
         { name: 'Home', path: '/' },
-        { name: 'Menu', path: '/menu' },
         { name: 'Reserve', path: '/table' },
         { name: 'Blog & News', path: '/blog' },
         { name: 'Canteen', path: '/canteen' },
-        ...(user?.role === 'vendor' ? [{ name: 'Vendor Dashboard', path: '/vendor' }] : []),
+        ...(user?.role === 'vendor' ? [
+            { name: 'Vendor Dashboard', path: '/vendor' },
+            { name: 'Order Management', path: '/vendor/orders' }
+        ] : []),
     ];
     const isActive = (path) => {
         if (path === '/' && location.pathname !== '/')

@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 import User from "../models/UserModel.js";
 
 // Generate JWT
@@ -79,11 +80,58 @@ export const loginUser = async (req, res) => {
     console.log(`Login attempt for email: ${email}`);
 
     // Check if MongoDB is connected
-    if (User.db.readyState !== 1) {
-      console.error("❌ Login failed: Database not connected");
+    if (mongoose.connection.readyState !== 1) {
+      // Fallback mode for testing without database
+      console.warn("⚠️  Database not connected. Allowing test credentials.");
+      
+      // Allow test accounts without database
+      if (email === "vendor@test.com" && password === "vendor123") {
+        const token = jwt.sign(
+          {
+            id: "test-vendor-id",
+            role: "vendor",
+            email: email,
+          },
+          process.env.JWT_SECRET || "mysecretkey",
+          { expiresIn: "7d" }
+        );
+        console.log("✅ Vendor test account login successful");
+        return res.status(200).json({
+          message: "Login successful (test mode)",
+          token,
+          user: {
+            id: "test-vendor-id",
+            fullName: "Test Vendor",
+            email: email,
+            role: "vendor",
+          },
+        });
+      } else if (email === "student@test.com" && password === "student123") {
+        const token = jwt.sign(
+          {
+            id: "test-student-id",
+            role: "student",
+            email: email,
+          },
+          process.env.JWT_SECRET || "mysecretkey",
+          { expiresIn: "7d" }
+        );
+        console.log("✅ Student test account login successful");
+        return res.status(200).json({
+          message: "Login successful (test mode)",
+          token,
+          user: {
+            id: "test-student-id",
+            fullName: "Test Student",
+            email: email,
+            role: "student",
+          },
+        });
+      }
+      
       return res.status(503).json({
         message: "Service temporarily unavailable",
-        error: "Database connection is not active. Please check server logs.",
+        error: "Database not connected. Use test: vendor@test.com/vendor123 or student@test.com/student123",
       });
     }
 

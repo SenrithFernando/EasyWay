@@ -116,7 +116,7 @@ export default function StudentOrderPage({ initialTab = "menu" }) {
   /* ---- my orders ---- */
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
-  const [currentTime, setCurrentTime] = useState(Date.now());
+
   const [orderStatusFilter, setOrderStatusFilter] = useState("all");
   const [orderSearchQuery, setOrderSearchQuery] = useState("");
 
@@ -175,21 +175,18 @@ export default function StudentOrderPage({ initialTab = "menu" }) {
      ================================================================ */
   const fetchOrders = useCallback(async () => {
     try {
-      setOrdersLoading(true);
       const data = await getAllOrders();
-      const cached = loadLocalOrders();
-      const merged = mergeOrdersById(data || [], cached);
-      setOrders(merged);
-      saveLocalOrders(merged);
+      
+      // Always trust fresh server data - don't merge with cached
+      setOrders(data || []);
+      saveLocalOrders(data || []);
     } catch (err) {
       const cached = loadLocalOrders();
-      setOrders(cached);
       showToast(
         cached.length ? "Showing saved order history" : err.message,
         "error",
       );
-    } finally {
-      setOrdersLoading(false);
+      setOrders(cached);
     }
   }, []);
 
@@ -202,13 +199,7 @@ export default function StudentOrderPage({ initialTab = "menu" }) {
     }
   }, [activeTab, fetchOrders]);
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentTime(Date.now());
-    }, 1000);
 
-    return () => clearInterval(intervalId);
-  }, []);
 
   /* ================================================================
      SEARCH FILTER
@@ -481,11 +472,11 @@ export default function StudentOrderPage({ initialTab = "menu" }) {
 
   const canCancelOrder = (order) => {
     if (order.status !== "pending" && order.status !== "Pending") return false;
-    return currentTime <= getCancellationDeadline(order);
+    return Date.now() <= getCancellationDeadline(order);
   };
 
   const getRemainingCancelSeconds = (order) => {
-    const remainingMs = getCancellationDeadline(order) - currentTime;
+    const remainingMs = getCancellationDeadline(order) - Date.now();
     return Math.max(0, Math.ceil(remainingMs / 1000));
   };
 

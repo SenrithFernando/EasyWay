@@ -1,5 +1,5 @@
 import React from "react";
-import "../../styles/OrderTracker.css";
+import "../styles/OrderTracker.css";
 
 const ORDER_STAGES = [
   { value: "pending", label: "Pending", icon: "⏳" },

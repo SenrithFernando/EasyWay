@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { HomeIcon, CalendarIcon, SettingsIcon, LogOutIcon, XIcon, UserIcon, GlobeIcon } from 'lucide-react';
+import { HomeIcon, CalendarIcon, SettingsIcon, LogOutIcon, XIcon, UserIcon, GlobeIcon, UtensilsIcon, ShoppingCartIcon } from 'lucide-react';
 
 export function Sidebar({ role, onClose }) {
   const location = useLocation();
@@ -16,13 +16,18 @@ export function Sidebar({ role, onClose }) {
     localStorage.removeItem('user');
   };
 
-  const navLinks = [
+  const baseLinks = [
     { name: 'Main Page', path: '/', icon: GlobeIcon },
     { name: 'Dashboard', path: `/${role}`, icon: HomeIcon },
-    // { name: 'Reservations', path: '/table', icon: CalendarIcon },
     { name: 'Profile', path: '/profile', icon: UserIcon },
-    // { name: 'Settings', path: '/settings', icon: SettingsIcon },
   ];
+
+  const vendorLinks = [
+    { name: 'Menu Items', path: '/vendor/menu-items', icon: UtensilsIcon },
+    { name: 'Orders to Fulfill', path: '/vendor/orders', icon: ShoppingCartIcon },
+  ];
+
+  const navLinks = role === 'vendor' ? [...baseLinks, ...vendorLinks] : baseLinks;
 
   const isActive = (path) => location.pathname === path;
 
