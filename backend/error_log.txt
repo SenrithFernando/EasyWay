@@ -12,3 +12,38 @@ Error: Cancellation deadline has passed
     at Module.cancelOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/services/orderService.js:241:19)
     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
     at async cancelOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/controllers/orderController.js:89:19)
+
+
+[2026-04-25T22:22:39.599Z] Please only order items from one canteen at a time
+Error: Please only order items from one canteen at a time
+    at Module.createOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/services/orderService.js:143:21)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async createOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/controllers/orderController.js:8:19)
+
+
+[2026-04-25T22:22:44.376Z] Please only order items from one canteen at a time
+Error: Please only order items from one canteen at a time
+    at Module.createOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/services/orderService.js:143:21)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async createOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/controllers/orderController.js:8:19)
+
+
+[2026-04-25T22:22:48.281Z] Please only order items from one canteen at a time
+Error: Please only order items from one canteen at a time
+    at Module.createOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/services/orderService.js:143:21)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async createOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/controllers/orderController.js:8:19)
+
+
+[2026-04-25T22:22:52.309Z] Please only order items from one canteen at a time
+Error: Please only order items from one canteen at a time
+    at Module.createOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/services/orderService.js:143:21)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async createOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/controllers/orderController.js:8:19)
+
+
+[2026-04-25T22:22:56.258Z] Please only order items from one canteen at a time
+Error: Please only order items from one canteen at a time
+    at Module.createOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/services/orderService.js:143:21)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async createOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/controllers/orderController.js:8:19)

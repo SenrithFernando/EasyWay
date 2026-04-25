@@ -101,7 +101,7 @@ export function LandingPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link to="/login">
+              <Link to="/table">
                 <button className="w-full sm:w-auto group inline-flex items-center justify-center font-medium rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-brand-500 to-brand-400 text-white hover:from-brand-600 hover:to-brand-500 focus:ring-brand-500 shadow-soft px-8 py-3.5 text-lg">
                   Reserve a Table
                   <ArrowRightIcon className="ml-2 group-hover:translate-x-1 transition-transform" size={18}/>
