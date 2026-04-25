@@ -1,19 +1,26 @@
 import express from 'express';
 import * as orderController from '../controllers/orderController.js';
+import { authMiddleware } from '../middleware/authMiddleware.js';
+import { vendorMiddleware } from '../middleware/vendorMiddleware.js';
 
 const router = express.Router();
 
-router
-  .route('/')
-  .get(orderController.getAllOrders)
-  .post(orderController.createOrder);
+// GET all orders (vendors see their orders, students see theirs)
+router.get('/', authMiddleware, orderController.getAllOrders);
 
-router
-  .route('/:id')
-  .get(orderController.getOrderById)
-  .patch(orderController.updateOrder)
-  .delete(orderController.deleteOrder);
+// Create an order
+router.post('/', authMiddleware, orderController.createOrder);
 
-router.patch('/:id/cancel', orderController.cancelOrder);
+// Get single order
+router.get('/:id', authMiddleware, orderController.getOrderById);
+
+// Update order (vendors can update status)
+router.patch('/:id', authMiddleware, vendorMiddleware, orderController.updateOrder);
+
+// Delete order (vendors only)
+router.delete('/:id', authMiddleware, vendorMiddleware, orderController.deleteOrder);
+
+// Cancel order (students)
+router.patch('/:id/cancel', authMiddleware, orderController.cancelOrder);
 
 export default router;

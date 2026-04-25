@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UtensilsIcon } from 'lucide-react';
 import { Navbar } from '../../components/layout/Navbar';
+import { OrderTracker } from '../../components/OrderTracker.jsx';
 import { getAllMenuItems } from '../../api/menuItemsApi.js';
 import { createOrder, getAllOrders, cancelOrder } from '../../api/ordersApi.js';
 import '../../styles/StudentOrderPage.css';
@@ -189,7 +190,12 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
   }, []);
 
   useEffect(() => {
-    if (activeTab === 'orders') fetchOrders();
+    if (activeTab === 'orders') {
+      fetchOrders();
+      // Auto-refresh orders every 5 seconds when viewing orders tab
+      const intervalId = setInterval(fetchOrders, 5000);
+      return () => clearInterval(intervalId);
+    }
   }, [activeTab, fetchOrders]);
 
   useEffect(() => {
@@ -427,9 +433,16 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
      STATUS HELPERS
      ================================================================ */
   const statusConfig = {
-    Pending: { emoji: '⏳', cls: 'status-pending' },
-    Completed: { emoji: '✅', cls: 'status-completed' },
-    Cancelled: { emoji: '❌', cls: 'status-cancelled' },
+    pending: { emoji: '⏳', cls: 'status-pending', label: 'Pending' },
+    preparing: { emoji: '📋', cls: 'status-preparing', label: 'Preparing' },
+    cooking: { emoji: '👨‍🍳', cls: 'status-cooking', label: 'Cooking' },
+    ready_for_pickup: { emoji: '✅', cls: 'status-ready', label: 'Ready for Pickup' },
+    completed: { emoji: '🎉', cls: 'status-completed', label: 'Completed' },
+    cancelled: { emoji: '❌', cls: 'status-cancelled', label: 'Cancelled' },
+    // Legacy support
+    Pending: { emoji: '⏳', cls: 'status-pending', label: 'Pending' },
+    Completed: { emoji: '🎉', cls: 'status-completed', label: 'Completed' },
+    Cancelled: { emoji: '❌', cls: 'status-cancelled', label: 'Cancelled' },
   };
 
   const getCancellationDeadline = (order) => {
@@ -441,7 +454,7 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
   };
 
   const canCancelOrder = (order) => {
-    if (order.status !== 'Pending') return false;
+    if (order.status !== 'pending' && order.status !== 'Pending') return false;
     return currentTime <= getCancellationDeadline(order);
   };
 
@@ -682,15 +695,18 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
             <h2>📋 My Orders</h2>
             <div className="my-orders-tools">
               <div className="my-orders-status-filters">
-                {['all', 'Pending', 'Completed', 'Cancelled'].map((status) => (
-                  <button
-                    key={status}
-                    className={`my-orders-filter-btn ${orderStatusFilter === status ? 'active' : ''}`}
-                    onClick={() => setOrderStatusFilter(status)}
-                  >
-                    {status === 'all' ? 'All' : status}
-                  </button>
-                ))}
+                {['all', 'pending', 'preparing', 'cooking', 'ready_for_pickup', 'completed', 'cancelled'].map((status) => {
+                  const statusLabel = status === 'all' ? 'All' : statusConfig[status]?.label || status;
+                  return (
+                    <button
+                      key={status}
+                      className={`my-orders-filter-btn ${orderStatusFilter === status ? 'active' : ''}`}
+                      onClick={() => setOrderStatusFilter(status)}
+                    >
+                      {statusLabel}
+                    </button>
+                  );
+                })}
               </div>
 
               <div className="my-orders-search">
@@ -755,7 +771,7 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
                           #{order._id?.slice(-8).toUpperCase()}
                         </span>
                         <span className={`order-status ${sc.cls}`}>
-                          {sc.emoji} {order.status}
+                          {sc.emoji} {sc.label || order.status}
                         </span>
                       </div>
                       <span className="order-date">
@@ -768,6 +784,9 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
                         })}
                       </span>
                     </div>
+
+                    {/* Order Tracking Timeline */}
+                    <OrderTracker status={order.status} />
 
                     <div className="order-items-list">
                       {order.orderItems?.map((oi, idx) => (
@@ -789,7 +808,7 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
                           {order.orderType === 'Delivery' ? '🚚' : '🏪'}{' '}
                           {order.orderType}
                         </span>
-                        {order.status === 'Pending' && (
+                        {(order.status === 'Pending' || order.status === 'pending') && (
                           <span className="order-cancel-window-tag">
                             {canCancelOrder(order)
                               ? `Cancel in ${getRemainingCancelSeconds(order)}s`

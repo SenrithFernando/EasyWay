@@ -9,7 +9,7 @@ const FALLBACK_ORDERS = [
     _id: 'fallback-order-1',
     studentName: 'Student Demo',
     orderType: 'Pickup',
-    status: 'Pending',
+    status: 'pending',
     totalAmount: 800,
     createdAt: new Date(Date.now() - 60 * 1000).toISOString(),
     cancellationDeadline: new Date(Date.now() + 60 * 1000).toISOString(),
@@ -32,7 +32,7 @@ const FALLBACK_ORDERS = [
     _id: 'fallback-order-2',
     studentName: 'Student Demo',
     orderType: 'Delivery',
-    status: 'Completed',
+    status: 'completed',
     totalAmount: 650,
     createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
     orderItems: [
@@ -88,7 +88,7 @@ const buildFallbackCreatedOrder = (data) => {
     orderType: data.orderType,
     deliveryAddress: data.deliveryAddress || '',
     phone: data.phone,
-    status: 'Pending',
+    status: 'pending',
     cancellationDeadline: new Date(now.getTime() + CANCELLATION_WINDOW_MS),
     createdAt: now,
     updatedAt: now,
@@ -123,9 +123,9 @@ export const createOrder = async (data) => {
 
 /**
  * Get all orders, optionally filtered by query params.
- * Supports: status, studentName, orderType
+ * Vendors see all orders, students/others see all orders (will be filtered on frontend)
  */
-export const getAllOrders = async (queryParams = {}) => {
+export const getAllOrders = async (queryParams = {}, user = {}) => {
   if (mongoose.connection.readyState !== 1) {
     return getFallbackOrders(queryParams);
   }
@@ -209,7 +209,7 @@ export const cancelOrder = async (id) => {
     throw error;
   }
 
-  if (order.status !== 'Pending') {
+  if (order.status !== 'pending') {
     const error = new Error('Only pending orders can be cancelled');
     error.statusCode = 400;
     throw error;
@@ -225,7 +225,7 @@ export const cancelOrder = async (id) => {
     throw error;
   }
 
-  order.status = 'Cancelled';
+  order.status = 'cancelled';
   await order.save();
 
   return order;

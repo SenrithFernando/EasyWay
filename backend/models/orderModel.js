@@ -46,10 +46,14 @@ const orderSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: {
-        values: ['Pending', 'Completed', 'Cancelled'],
-        message: 'Status must be Pending, Completed, or Cancelled',
+        values: ['pending', 'preparing', 'cooking', 'ready_for_pickup', 'completed', 'cancelled'],
+        message: 'Status must be pending, preparing, cooking, ready_for_pickup, completed, or cancelled',
       },
-      default: 'Pending',
+      default: 'pending',
+    },
+    vendorId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
     },
     cancellationDeadline: {
       type: Date,
