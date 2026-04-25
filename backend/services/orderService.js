@@ -189,9 +189,10 @@ export const getAllOrders = async (queryParams = {}, userContext = null) => {
 
   // Role-based filtering
   if (userContext) {
-    if (userContext.role === 'Student') {
+    const role = userContext.role?.toLowerCase();
+    if (role === 'student') {
       filter.studentId = userContext._id;
-    } else if (userContext.role === 'Vendor') {
+    } else if (role === 'vendor') {
       filter.vendor = userContext._id;
     }
     // Admin can see everything, no filter added

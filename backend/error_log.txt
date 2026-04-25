@@ -1,0 +1,14 @@
+
+
+[2026-04-25T16:55:35.457Z] Only pending orders can be cancelled
+Error: Only pending orders can be cancelled
+    at Module.cancelOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/services/orderService.js:231:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async cancelOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/controllers/orderController.js:89:19)
+
+
+[2026-04-25T16:55:45.883Z] Cancellation deadline has passed
+Error: Cancellation deadline has passed
+    at Module.cancelOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/services/orderService.js:241:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async cancelOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/controllers/orderController.js:89:19)

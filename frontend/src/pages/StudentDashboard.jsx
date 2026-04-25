@@ -4,11 +4,8 @@ import { motion } from 'framer-motion';
 import { CalendarClockIcon, UtensilsCrossedIcon, UserIcon, QrCodeIcon, ClockIcon, MapPinIcon, BellIcon, UsersIcon, Trash2Icon } from 'lucide-react';
 import { DashboardLayout } from '../Components/layout/DashboardLayout';
 
-const RECENT_ORDERS = [
-    { id: 'ORD-8923', items: 'Jollof Rice & Chicken', total: 'Rs.1,500', status: 'Completed', date: 'Today, 12:30 PM' },
-    { id: 'ORD-8910', items: 'Fresh Fruit Smoothie', total: 'Rs.800', status: 'Completed', date: 'Yesterday, 2:15 PM' },
-    { id: 'ORD-8854', items: 'Beef Burger & Fries', total: 'Rs.2,500', status: 'Completed', date: 'Oct 15, 1:00 PM' },
-];
+// Removed static RECENT_ORDERS to use dynamic data from API
+
 const NOTIFICATIONS = [
     { id: 1, title: 'Reservation Confirmed', message: "Table 12 at Mama's Kitchen is reserved for 1:00 PM.", time: '10 min ago', unread: true },
     { id: 2, title: 'Order Ready', message: 'Your smoothie is ready for pickup at Smoothie Bar.', time: '2 hours ago', unread: false },
@@ -28,7 +25,9 @@ export function StudentDashboard() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [reservations, setReservations] = useState([]);
+    const [orders, setOrders] = useState([]);
     const [isLoadingReservations, setIsLoadingReservations] = useState(true);
+    const [isLoadingOrders, setIsLoadingOrders] = useState(true);
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
@@ -36,22 +35,33 @@ export function StudentDashboard() {
             const parsedUser = JSON.parse(storedUser);
             setUser(parsedUser);
             
-            const fetchMyReservations = async () => {
+            const fetchDashboardData = async () => {
+                const userId = parsedUser.id || parsedUser._id;
+                const token = localStorage.getItem('token');
+                
+                // Fetch Reservations
                 try {
-                    const userId = parsedUser.id || parsedUser._id;
-                    const response = await fetch(`/api/reservations/myreservations/${userId}`);
-                    if (response.ok) {
-                        const data = await response.json();
-                        // Filter out cancelled ones and reverse to show newest first
+                    const resResponse = await fetch(`/api/reservations/myreservations/${userId}`);
+                    if (resResponse.ok) {
+                        const data = await resResponse.json();
                         setReservations(data.filter(r => r.status !== 'Cancelled').reverse());
                     }
-                } catch (error) {
-                    console.error("Failed to fetch user reservations", error);
-                } finally {
-                    setIsLoadingReservations(false);
-                }
+                } catch (error) { console.error("Res error:", error); } 
+                finally { setIsLoadingReservations(false); }
+
+                // Fetch Orders
+                try {
+                    const orderResponse = await fetch(`/api/orders`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (orderResponse.ok) {
+                        const data = await orderResponse.json();
+                        setOrders(data.slice(0, 3)); // Show top 3 recent
+                    }
+                } catch (error) { console.error("Order error:", error); } 
+                finally { setIsLoadingOrders(false); }
             };
-            fetchMyReservations();
+            fetchDashboardData();
         } else {
             navigate('/login');
         }
@@ -203,30 +213,47 @@ export function StudentDashboard() {
               <h2 className="text-lg font-bold text-surface-900">
                 Recent Orders
               </h2>
-              <Link to="#" className="text-sm font-medium text-brand-600 hover:text-brand-700">
+              <Link to="/student/order" className="text-sm font-medium text-brand-600 hover:text-brand-700">
                 View all
               </Link>
             </div>
             <div className="bg-surface-0 rounded-2xl shadow-card border border-surface-100 overflow-hidden">
               <div className="divide-y divide-surface-100">
-                {RECENT_ORDERS.map((order, i) => (<div key={i} className="p-4 hover:bg-surface-50 transition-colors flex items-center justify-between">
-                    <div>
-                      <p className="font-semibold text-surface-900">
-                        {order.items}
-                      </p>
-                      <div className="flex items-center gap-3 mt-1 text-sm text-surface-500">
-                        <span>{order.id}</span>
-                        <span>•</span>
-                        <span>{order.date}</span>
+                {isLoadingOrders ? (
+                  <div className="p-8 text-center text-surface-400 text-sm">Loading history...</div>
+                ) : orders.length === 0 ? (
+                  <div className="p-12 text-center">
+                    <p className="text-surface-500 text-sm">No orders found.</p>
+                    <Link to="/menu" className="text-brand-600 text-xs font-bold mt-2 inline-block">Order Now</Link>
+                  </div>
+                ) : (
+                  orders.map((order, i) => (
+                    <div key={order._id || i} className="p-4 hover:bg-surface-50 transition-colors flex items-center justify-between">
+                      <div>
+                        <p className="font-semibold text-surface-900">
+                          {order.orderItems?.[0]?.name} {order.orderItems?.length > 1 ? `+ ${order.orderItems.length - 1} more` : ''}
+                        </p>
+                        <div className="flex items-center gap-3 mt-1 text-sm text-surface-500">
+                          <span className="font-mono text-[10px]">#{order._id?.slice(-8).toUpperCase()}</span>
+                          <span>•</span>
+                          <span>{new Date(order.createdAt).toLocaleDateString()}</span>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-surface-900 mb-1">
+                          Rs. {order.totalAmount}
+                        </p>
+                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-tight border ${
+                          order.status === 'Completed' ? 'bg-success-100 text-success-700 border-success-200' : 
+                          order.status === 'Cancelled' ? 'bg-red-100 text-red-700 border-red-200' :
+                          'bg-amber-100 text-amber-700 border-amber-200'
+                        }`}>
+                          {order.status}
+                        </span>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="font-bold text-surface-900 mb-1">
-                        {order.total}
-                      </p>
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border bg-success-100 text-success-700 border-success-200">{order.status}</span>
-                    </div>
-                  </div>))}
+                  ))
+                )}
               </div>
             </div>
           </motion.div>

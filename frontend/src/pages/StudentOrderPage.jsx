@@ -79,6 +79,7 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
   const [confirmedOrder, setConfirmedOrder] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [orders, setOrders] = useState([]);
+  const [orderStatusFilter, setOrderStatusFilter] = useState('All');
   const [ordersLoading, setOrdersLoading] = useState(false);
   const [currentTime, setCurrentTime] = useState(Date.now());
   const [toast, setToast] = useState(null);
@@ -343,13 +344,24 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
         {/* My Orders Tab */}
         {activeTab === 'orders' && (
           <div className="my-orders-section">
-            <div className="p-6 border-b border-surface-100 flex justify-between items-center bg-white">
-              <h2 className="font-bold text-lg">Active & Recent Orders</h2>
-              <div className="flex gap-2">
-                {['Pending', 'Completed', 'Cancelled'].map(s => (
-                  <span key={s} className={`order-status status-${s.toLowerCase()} px-3 py-1 cursor-pointer opacity-50 hover:opacity-100 transition-opacity`}>
+            <div className="p-6 border-b border-surface-100 flex flex-col md:flex-row justify-between items-start md:items-center bg-white gap-4">
+              <div>
+                <h2 className="font-bold text-lg">Order History</h2>
+                <p className="text-xs text-surface-400">Track and manage your campus dining requests.</p>
+              </div>
+              <div className="flex bg-surface-50 p-1 rounded-xl border border-surface-100 flex-wrap">
+                {['All', 'Pending', 'Preparing', 'Ready', 'Completed', 'Cancelled'].map(s => (
+                  <button 
+                    key={s} 
+                    onClick={() => setOrderStatusFilter(s)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                      orderStatusFilter === s 
+                        ? 'bg-white text-brand-600 shadow-sm border border-surface-100' 
+                        : 'text-surface-400 hover:text-surface-600'
+                    }`}
+                  >
                     {s}
-                  </span>
+                  </button>
                 ))}
               </div>
             </div>
@@ -366,7 +378,9 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
                   <button className="text-brand-600 font-medium mt-2" onClick={() => setActiveTab('menu')}>Go to Menu</button>
                 </div>
               ) : (
-                orders.map(order => (
+                orders
+                  .filter(o => orderStatusFilter === 'All' || o.status === orderStatusFilter)
+                  .map(order => (
                   <div key={order._id} className="order-card">
                     <div className="flex justify-between items-start mb-4">
                       <div>

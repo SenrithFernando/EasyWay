@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { LoginPage } from './pages/LoginPage';
 import { ReservationPage } from './pages/ReservationPage';
 import { StudentDashboard } from './pages/StudentDashboard';
-import { VendorDashboard } from './pages/VendorDashboard';
+import VendorDashboard from './pages/VendorDashboard';
 import { ProfilePage } from './pages/ProfilePage';
 import { LandingPage } from './pages/LandingPage';
 import { AdminDashboard } from './pages/AdminDashboard';

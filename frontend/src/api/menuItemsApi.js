@@ -1,5 +1,13 @@
 const API_BASE = '/api/menu-items';
 
+const getHeaders = () => {
+  const token = localStorage.getItem('token');
+  return {
+    'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+  };
+};
+
 export const getAllMenuItems = async (filters = {}) => {
   const params = new URLSearchParams();
   if (filters.category) params.append('category', filters.category);
@@ -22,7 +30,7 @@ export const getAllMenuItems = async (filters = {}) => {
 export const createMenuItem = async (data) => {
   const res = await fetch(API_BASE, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getHeaders(),
     body: JSON.stringify(data),
   });
   if (!res.ok) {
@@ -36,7 +44,7 @@ export const createMenuItem = async (data) => {
 export const updateMenuItem = async (id, data) => {
   const res = await fetch(`${API_BASE}/${id}`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getHeaders(),
     body: JSON.stringify(data),
   });
   if (!res.ok) {
@@ -50,6 +58,7 @@ export const updateMenuItem = async (id, data) => {
 export const deleteMenuItem = async (id) => {
   const res = await fetch(`${API_BASE}/${id}`, {
     method: 'DELETE',
+    headers: getHeaders(),
   });
   if (!res.ok && res.status !== 204) {
     const err = await res.json().catch(() => ({}));
