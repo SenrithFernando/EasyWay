@@ -20,9 +20,13 @@ export const getAllMenuItems = async (filters = {}) => {
 };
 
 export const createMenuItem = async (data) => {
+  const token = localStorage.getItem('token');
   const res = await fetch(API_BASE, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
     body: JSON.stringify(data),
   });
   if (!res.ok) {
@@ -34,9 +38,13 @@ export const createMenuItem = async (data) => {
 };
 
 export const updateMenuItem = async (id, data) => {
+  const token = localStorage.getItem('token');
   const res = await fetch(`${API_BASE}/${id}`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
     body: JSON.stringify(data),
   });
   if (!res.ok) {
@@ -48,8 +56,12 @@ export const updateMenuItem = async (id, data) => {
 };
 
 export const deleteMenuItem = async (id) => {
+  const token = localStorage.getItem('token');
   const res = await fetch(`${API_BASE}/${id}`, {
     method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
   });
   if (!res.ok && res.status !== 204) {
     const err = await res.json().catch(() => ({}));
