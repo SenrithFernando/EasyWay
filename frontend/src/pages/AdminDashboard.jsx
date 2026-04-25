@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { PlusIcon, StoreIcon, EditIcon, TrashIcon, UserIcon, SearchIcon, CheckCircleIcon, AlertCircleIcon, PauseCircleIcon } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { PlusIcon, StoreIcon, EditIcon, TrashIcon, UserIcon, SearchIcon, CheckCircleIcon, AlertCircleIcon, PauseCircleIcon, ShieldCheck, ShieldOff, Users } from 'lucide-react';
 import { Navbar } from '../Components/layout/Navbar';
 
 export function AdminDashboard() {
+  const [activeTab, setActiveTab] = useState('canteens');
   const [canteens, setCanteens] = useState([]);
   const [vendors, setVendors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingCanteen, setEditingCanteen] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [vendorSearch, setVendorSearch] = useState('');
+  const [vendorToast, setVendorToast] = useState(null);
   const [formErrors, setFormErrors] = useState({});
   const [formData, setFormData] = useState({
     name: '',
@@ -48,7 +51,7 @@ export function AdminDashboard() {
     try {
       const token = localStorage.getItem('token');
       // Use isActive=all to fetch both active and inactive canteens for the admin
-      const response = await fetch('http://localhost:3000/api/canteen?isActive=all', {
+      const response = await fetch('/api/canteen?isActive=all', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -67,7 +70,7 @@ export function AdminDashboard() {
   const fetchVendors = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/users/vendors', {
+      const response = await fetch('/api/users/vendors', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -155,8 +158,8 @@ export function AdminDashboard() {
     try {
       const token = localStorage.getItem('token');
       const url = editingCanteen 
-        ? `http://localhost:3000/api/canteen/${editingCanteen._id}`
-        : 'http://localhost:3000/api/canteen';
+        ? `/api/canteen/${editingCanteen._id}`
+        : '/api/canteen';
       
       const response = await fetch(url, {
         method: editingCanteen ? 'PUT' : 'POST',
@@ -217,7 +220,7 @@ export function AdminDashboard() {
     if (window.confirm('Are you sure you want to delete this canteen?')) {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:3000/api/canteen/${id}`, {
+        const response = await fetch(`/api/canteen/${id}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -235,9 +238,34 @@ export function AdminDashboard() {
     }
   };
 
+  const handleVendorStatus = async (vendorId, newStatus) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`/api/users/vendors/${vendorId}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setVendors(prev => prev.map(v => v._id === vendorId ? { ...v, status: newStatus } : v));
+        setVendorToast({ msg: data.message, type: 'success' });
+        setTimeout(() => setVendorToast(null), 3000);
+      }
+    } catch (err) {
+      setVendorToast({ msg: 'Failed to update vendor status', type: 'error' });
+      setTimeout(() => setVendorToast(null), 3000);
+    }
+  };
+
   const filteredCanteens = canteens.filter(canteen =>
     canteen.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     canteen.location.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const filteredVendors = vendors.filter(v =>
+    v.fullName?.toLowerCase().includes(vendorSearch.toLowerCase()) ||
+    v.email?.toLowerCase().includes(vendorSearch.toLowerCase())
   );
 
   if (loading) {
@@ -257,19 +285,58 @@ export function AdminDashboard() {
       
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-            <p className="text-gray-600 mt-1">Manage canteens and vendor assignments</p>
+            <p className="text-gray-600 mt-1">Manage canteens and vendors</p>
           </div>
+          {activeTab === 'canteens' && (
+            <button
+              onClick={() => setShowAddForm(true)}
+              className="flex items-center gap-2 px-6 py-3 bg-brand-500 text-white rounded-xl font-medium hover:bg-brand-600 transition-colors"
+            >
+              <PlusIcon size={20} />
+              Add New Canteen
+            </button>
+          )}
+        </div>
+
+        {/* Tabs */}
+        <div className="flex gap-2 mb-8 border-b border-gray-200">
           <button
-            onClick={() => setShowAddForm(true)}
-            className="flex items-center gap-2 px-6 py-3 bg-brand-500 text-white rounded-xl font-medium hover:bg-brand-600 transition-colors"
+            onClick={() => setActiveTab('canteens')}
+            className={`flex items-center gap-2 px-6 py-3 font-semibold text-sm border-b-2 transition-all ${
+              activeTab === 'canteens' ? 'border-brand-500 text-brand-600' : 'border-transparent text-gray-500 hover:text-gray-700'
+            }`}
           >
-            <PlusIcon size={20} />
-            Add New Canteen
+            <StoreIcon size={16} /> Canteen Management
+          </button>
+          <button
+            onClick={() => setActiveTab('vendors')}
+            className={`flex items-center gap-2 px-6 py-3 font-semibold text-sm border-b-2 transition-all ${
+              activeTab === 'vendors' ? 'border-brand-500 text-brand-600' : 'border-transparent text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            <Users size={16} /> Vendor Management
+            <span className={`ml-1 px-2 py-0.5 rounded-full text-xs font-bold ${
+              vendors.filter(v => v.status === 'inactive').length > 0 ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-500'
+            }`}>
+              {vendors.filter(v => v.status === 'inactive').length} pending
+            </span>
           </button>
         </div>
+
+        {/* Toast */}
+        <AnimatePresence>
+          {vendorToast && (
+            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+              className={`fixed top-6 right-6 z-50 px-6 py-3 rounded-2xl shadow-xl text-white font-bold ${
+                vendorToast.type === 'success' ? 'bg-green-500' : 'bg-red-500'
+              }`}>
+              {vendorToast.msg}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Search Bar */}
         <div className="mb-8">
@@ -594,6 +661,88 @@ export function AdminDashboard() {
             </div>
           )}
         </div>
+
+        {/* ── VENDOR MANAGEMENT TAB ── */}
+        {activeTab === 'vendors' && (
+          <div className="space-y-6">
+            {/* Search */}
+            <div className="relative max-w-md">
+              <SearchIcon size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search vendors by name or email..."
+                value={vendorSearch}
+                onChange={e => setVendorSearch(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500"
+              />
+            </div>
+
+            {/* Stats Row */}
+            <div className="grid grid-cols-3 gap-4">
+              {[
+                { label: 'Total Vendors', value: vendors.length, color: 'bg-blue-50 text-blue-700' },
+                { label: 'Active', value: vendors.filter(v => v.status === 'active').length, color: 'bg-green-50 text-green-700' },
+                { label: 'Pending Activation', value: vendors.filter(v => v.status === 'inactive').length, color: 'bg-red-50 text-red-700' },
+              ].map(s => (
+                <div key={s.label} className={`rounded-2xl p-5 ${s.color}`}>
+                  <div className="text-3xl font-black">{s.value}</div>
+                  <div className="text-sm font-semibold mt-1">{s.label}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Vendor Table */}
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+              <div className="px-8 py-5 border-b border-gray-100 flex items-center justify-between">
+                <h2 className="text-lg font-black text-gray-900">All Vendor Accounts ({filteredVendors.length})</h2>
+              </div>
+              {filteredVendors.length === 0 ? (
+                <div className="text-center py-16 text-gray-400">
+                  <Users size={48} className="mx-auto mb-3 opacity-30" />
+                  <p>No vendors found.</p>
+                </div>
+              ) : (
+                <div className="divide-y divide-gray-50">
+                  {filteredVendors.map(vendor => (
+                    <div key={vendor._id} className="flex items-center justify-between px-8 py-5 hover:bg-gray-50 transition-colors">
+                      <div className="flex items-center gap-4">
+                        <div className="w-11 h-11 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white font-black text-lg">
+                          {vendor.fullName?.charAt(0) || 'V'}
+                        </div>
+                        <div>
+                          <p className="font-bold text-gray-900">{vendor.fullName}</p>
+                          <p className="text-sm text-gray-500">{vendor.email}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                          vendor.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'
+                        }`}>
+                          {vendor.status === 'active' ? 'Active' : 'Inactive'}
+                        </span>
+                        {vendor.status === 'inactive' ? (
+                          <button
+                            onClick={() => handleVendorStatus(vendor._id, 'active')}
+                            className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white text-sm font-bold rounded-xl hover:bg-green-600 transition-colors"
+                          >
+                            <ShieldCheck size={15} /> Activate
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => handleVendorStatus(vendor._id, 'inactive')}
+                            className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 text-sm font-bold rounded-xl hover:bg-red-100 hover:text-red-600 transition-colors"
+                          >
+                            <ShieldOff size={15} /> Deactivate
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

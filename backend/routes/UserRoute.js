@@ -12,6 +12,7 @@ import {
   updatePenaltyStatus,
   getAllUsers,
   getAllVendors,
+  updateVendorStatus,
 } from "../controllers/UserController.js";
 
 import { authMiddleware } from "../middleware/authMiddleware.js";
@@ -37,5 +38,8 @@ router.get("/all", getAllUsers);
 
 // Get all vendors
 router.get("/vendors", authMiddleware, getAllVendors);
+
+// Admin: activate or deactivate a vendor account
+router.patch("/vendors/:id/status", authMiddleware, adminMiddleware, updateVendorStatus);
 
 export default router;

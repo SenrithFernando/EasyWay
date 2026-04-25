@@ -37,7 +37,7 @@ export function CanteenPage() {
         params.append('category', selectedCategory);
       }
 
-      const response = await fetch(`http://localhost:3000/api/canteen?${params}`);
+      const response = await fetch(`/api/canteen?${params}`);
       const data = await response.json();
 
       if (data.success) {
@@ -52,7 +52,7 @@ export function CanteenPage() {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/canteen/stats');
+      const response = await fetch('/api/canteen/stats');
       const data = await response.json();
 
       if (data.success) {
@@ -71,7 +71,7 @@ export function CanteenPage() {
         return;
       }
 
-      const response = await fetch(`http://localhost:3000/api/canteen/${vendorId}/rating`, {
+      const response = await fetch(`/api/canteen/${vendorId}/rating`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

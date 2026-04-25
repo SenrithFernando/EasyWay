@@ -21,7 +21,7 @@ export function BlogDetailPage() {
 
   const fetchBlogDetail = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/blogs/${id}`);
+      const response = await fetch(`/api/blogs/${id}`);
       const data = await response.json();
       
       if (data.success) {
@@ -36,7 +36,7 @@ export function BlogDetailPage() {
 
   const fetchComments = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/blogs/${id}/comments`);
+      const response = await fetch(`/api/blogs/${id}/comments`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -68,7 +68,7 @@ export function BlogDetailPage() {
   const handleLike = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3000/api/blogs/${id}/like`, {
+      const response = await fetch(`/api/blogs/${id}/like`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -93,7 +93,7 @@ export function BlogDetailPage() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3000/api/blogs/${id}/comment`, {
+      const response = await fetch(`/api/blogs/${id}/comment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

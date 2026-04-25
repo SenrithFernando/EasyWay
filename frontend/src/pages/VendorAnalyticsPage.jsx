@@ -15,7 +15,7 @@ export function VendorAnalyticsPage() {
         if (!userStr) throw new Error("Not logged in");
         const user = JSON.parse(userStr);
 
-        const response = await fetch(`http://localhost:3000/api/canteen?owner=${user.id}`, {
+        const response = await fetch(`/api/canteen?owner=${user.id}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await response.json();

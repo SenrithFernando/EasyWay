@@ -37,7 +37,7 @@ export function BlogPage() {
         params.append('search', searchTerm);
       }
 
-      const response = await fetch(`http://localhost:3000/api/blogs?${params}`);
+      const response = await fetch(`/api/blogs?${params}`);
       const data = await response.json();
 
       if (data.success) {
@@ -53,7 +53,7 @@ export function BlogPage() {
 
   const fetchFeaturedBlogs = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/blogs/featured?limit=3');
+      const response = await fetch('/api/blogs/featured?limit=3');
       const data = await response.json();
 
       if (data.success) {
@@ -72,7 +72,7 @@ export function BlogPage() {
         return;
       }
 
-      const response = await fetch(`http://localhost:3000/api/blogs/${blogId}/like`, {
+      const response = await fetch(`/api/blogs/${blogId}/like`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

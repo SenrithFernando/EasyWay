@@ -48,6 +48,13 @@ export const registerUser = async (req, res) => {
       status: finalRole === "vendor" ? "inactive" : "active",
     });
 
+    if (newUser.status === "inactive") {
+      return res.status(201).json({
+        message: "Registration successful. Your vendor account is pending administrator activation.",
+        pendingActivation: true
+      });
+    }
+
     const token = generateToken(newUser);
 
     res.status(201).json({
@@ -330,5 +337,36 @@ export const getAllVendors = async (req, res) => {
       message: "Failed to fetch vendors",
       error: error.message,
     });
+  }
+};
+
+// Activate or deactivate a vendor account (admin only)
+export const updateVendorStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body; // 'active' or 'inactive'
+
+    const validStatuses = ['active', 'inactive'];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ success: false, message: 'Invalid status. Use active or inactive.' });
+    }
+
+    const vendor = await User.findOneAndUpdate(
+      { _id: id, role: 'vendor' },
+      { status },
+      { new: true }
+    ).select('-password');
+
+    if (!vendor) {
+      return res.status(404).json({ success: false, message: 'Vendor not found.' });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Vendor account ${status === 'active' ? 'activated' : 'deactivated'} successfully.`,
+      data: vendor,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to update vendor status.', error: error.message });
   }
 };

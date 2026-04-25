@@ -11,6 +11,7 @@ export function LoginPage() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
+    const [successMsg, setSuccessMsg] = useState('');
     const navigate = useNavigate();
 
     const validateForm = () => {
@@ -37,6 +38,7 @@ export function LoginPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrorMsg('');
+        setSuccessMsg('');
 
         if (!validateForm()) {
             return;
@@ -58,6 +60,16 @@ export function LoginPage() {
 
             if (!response.ok) {
                 setErrorMsg(data.message || 'Authentication failed');
+                return;
+            }
+
+            if (data.pendingActivation) {
+                setSuccessMsg(data.message);
+                setIsLogin(true); // Switch to login tab so they can login later
+                setFullName('');
+                setEmail('');
+                setPassword('');
+                setConfirmPassword('');
                 return;
             }
 
@@ -130,6 +142,11 @@ export function LoginPage() {
           {errorMsg && (
             <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm text-center">
               {errorMsg}
+            </div>
+          )}
+          {successMsg && (
+            <div className="mb-4 p-3 rounded-lg bg-green-50 border border-green-200 text-green-700 text-sm text-center font-medium">
+              {successMsg}
             </div>
           )}
 
