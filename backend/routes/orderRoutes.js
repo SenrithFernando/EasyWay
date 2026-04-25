@@ -1,7 +1,11 @@
 import express from 'express';
 import * as orderController from '../controllers/orderController.js';
+import { authMiddleware } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
+
+// Apply authentication to all order routes
+router.use(authMiddleware);
 
 router
   .route('/')

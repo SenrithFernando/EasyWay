@@ -28,10 +28,13 @@ const EMPTY_FORM = {
   available: true,
 };
 
-// Hardcoded vendor ID for now (will be replaced with auth context later)
-const VENDOR_ID = '6839e6f3ee5b0e8b74bfda91';
-
 export default function MenuItemsPage() {
+  const [vendorId] = useState(() => {
+    const storedUser = localStorage.getItem('user');
+    const user = storedUser ? JSON.parse(storedUser) : null;
+    return user?._id || user?.id || '6839e6f3ee5b0e8b74bfda91'; // Keep fallback for existing data
+  });
+  const VENDOR_ID = vendorId;
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

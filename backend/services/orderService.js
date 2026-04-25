@@ -1,5 +1,6 @@
 import Order from '../models/orderModel.js';
 import User from '../models/UserModel.js';
+import MenuItem from '../models/menuItemsModel.js';
 import mongoose from 'mongoose';
 
 const CANCELLATION_WINDOW_MS = 2 * 60 * 1000;
@@ -98,27 +99,60 @@ const buildFallbackCreatedOrder = (data) => {
 
 /**
  * Create a new order.
+ * reqUser is the authenticated student placing the order.
  */
-export const createOrder = async (data) => {
-  console.log('🔍 Creating order with data:', JSON.stringify(data, null, 2));
+export const createOrder = async (data, reqUser) => {
+  console.log('🔍 Creating order for user:', reqUser?.email);
   
-  // Find the user by studentId string if it's not already an ObjectId
-  if (data.studentId && typeof data.studentId === 'string' && data.studentId.length !== 24) {
-    const user = await User.findOne({ studentId: data.studentId });
-    console.log('🔍 User lookup result for studentId:', data.studentId, '=>', user ? user._id : 'NOT FOUND');
+  if (!reqUser) {
+    const error = new Error('Authentication required');
+    error.statusCode = 401;
+    throw error;
+  }
+
+  // Use the authenticated user's ID
+  data.studentId = reqUser._id;
+  data.studentName = reqUser.fullName || data.studentName;
+
+  const items = data.orderItems || [];
+  if (items.length === 0) {
+    const error = new Error('Order must contain at least one item');
+    error.statusCode = 400;
+    throw error;
+  }
+
+  // Resolve vendor from menu items
+  // Ensure all items are from the same vendor (simplification for v1)
+  const menuItemIds = items.map(item => item.menuItemId);
+  const foundMenuItems = await MenuItem.find({ _id: { $in: menuItemIds } });
+  
+  if (foundMenuItems.length === 0 && mongoose.connection.readyState === 1) {
+    const error = new Error('Menu items not found');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  // Use the first item's vendor if database is connected
+  let vendorId = data.vendorId; // Fallback if provided
+  if (foundMenuItems.length > 0) {
+    vendorId = foundMenuItems[0].vendor;
     
-    if (user) {
-      data.studentId = user._id;
-    } else {
-      const error = new Error('Student not found');
-      error.statusCode = 404;
+    // Check if items from multiple vendors are present
+    const distinctVendors = [...new Set(foundMenuItems.map(m => m.vendor.toString()))];
+    if (distinctVendors.length > 1) {
+      const error = new Error('Please only order items from one canteen at a time');
+      error.statusCode = 400;
       throw error;
     }
+  } else if (!vendorId) {
+    // If no DB and no vendorId provided, use a placeholder
+    vendorId = PLACEHOLDER_MENU_ITEM_ID;
   }
 
   const payload = {
     ...data,
-    orderItems: normalizeOrderItems(data.orderItems || []),
+    vendor: vendorId,
+    orderItems: normalizeOrderItems(items),
     cancellationDeadline:
       data.cancellationDeadline || new Date(Date.now() + CANCELLATION_WINDOW_MS),
   };
@@ -129,6 +163,10 @@ export const createOrder = async (data) => {
 
   try {
     const order = await Order.create(payload);
+    
+    // Increment student's noFoodOrders count
+    await User.findByIdAndUpdate(reqUser._id, { $inc: { noFoodOrders: 1 } });
+    
     console.log('✅ Order created successfully:', order._id);
     return order;
   } catch (error) {
@@ -140,15 +178,24 @@ export const createOrder = async (data) => {
 };
 
 /**
- * Get all orders, optionally filtered by query params.
- * Supports: status, studentName, orderType
+ * Get all orders, optionally filtered by query params and user role.
  */
-export const getAllOrders = async (queryParams = {}) => {
+export const getAllOrders = async (queryParams = {}, userContext = null) => {
   if (mongoose.connection.readyState !== 1) {
     return getFallbackOrders(queryParams);
   }
 
   const filter = {};
+
+  // Role-based filtering
+  if (userContext) {
+    if (userContext.role === 'Student') {
+      filter.studentId = userContext._id;
+    } else if (userContext.role === 'Vendor') {
+      filter.vendor = userContext._id;
+    }
+    // Admin can see everything, no filter added
+  }
 
   if (queryParams.status) filter.status = queryParams.status;
   if (queryParams.studentName)

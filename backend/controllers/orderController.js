@@ -5,7 +5,7 @@ import * as orderService from '../services/orderService.js';
  */
 export const createOrder = async (req, res, next) => {
   try {
-    const order = await orderService.createOrder(req.body);
+    const order = await orderService.createOrder(req.body, req.user);
 
     res.status(201).json({
       status: 'success',
@@ -21,7 +21,7 @@ export const createOrder = async (req, res, next) => {
  */
 export const getAllOrders = async (req, res, next) => {
   try {
-    const orders = await orderService.getAllOrders(req.query);
+    const orders = await orderService.getAllOrders(req.query, req.user);
 
     res.status(200).json({
       status: 'success',

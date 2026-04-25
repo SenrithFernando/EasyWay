@@ -1,9 +1,17 @@
 const API_BASE = '/api/orders';
 
+const getHeaders = () => {
+  const token = localStorage.getItem('token');
+  return {
+    'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+  };
+};
+
 export const createOrder = async (data) => {
   const res = await fetch(API_BASE, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getHeaders(),
     body: JSON.stringify(data),
   });
   if (!res.ok) {
@@ -23,7 +31,9 @@ export const getAllOrders = async (filters = {}) => {
   const query = params.toString();
   const url = query ? `${API_BASE}?${query}` : API_BASE;
 
-  const res = await fetch(url);
+  const res = await fetch(url, {
+    headers: getHeaders(),
+  });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.message || 'Failed to fetch orders');
@@ -33,7 +43,9 @@ export const getAllOrders = async (filters = {}) => {
 };
 
 export const getOrderById = async (id) => {
-  const res = await fetch(`${API_BASE}/${id}`);
+  const res = await fetch(`${API_BASE}/${id}`, {
+    headers: getHeaders(),
+  });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.message || 'Failed to fetch order');
@@ -42,9 +54,24 @@ export const getOrderById = async (id) => {
   return json.data.order;
 };
 
+export const updateOrderStatus = async (id, status) => {
+  const res = await fetch(`${API_BASE}/${id}`, {
+    method: 'PATCH',
+    headers: getHeaders(),
+    body: JSON.stringify({ status }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || 'Failed to update order status');
+  }
+  const json = await res.json();
+  return json.data.order;
+};
+
 export const cancelOrder = async (id) => {
   const res = await fetch(`${API_BASE}/${id}/cancel`, {
     method: 'PATCH',
+    headers: getHeaders(),
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));

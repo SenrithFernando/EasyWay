@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { PlusIcon, StoreIcon, UtensilsIcon, StarIcon, ClockIcon, DollarSignIcon, EditIcon, TrashIcon, FileTextIcon, PenToolIcon, SearchIcon, FilterIcon, CoffeeIcon, PizzaIcon, SandwichIcon, CheckCircleIcon, AlertCircleIcon, PauseCircleIcon, CalendarIcon, UserIcon } from 'lucide-react';
 import { Navbar } from '../Components/layout/Navbar';
+import { getAllOrders, updateOrderStatus } from '../api/ordersApi.js';
 
 export function VendorDashboard() {
   const [vendor, setVendor] = useState(null);
@@ -18,6 +19,8 @@ export function VendorDashboard() {
   const [user, setUser] = useState(null);
   const [formErrors, setFormErrors] = useState({});
   const [articleErrors, setArticleErrors] = useState({});
+  const [orders, setOrders] = useState([]);
+  const [ordersLoading, setOrdersLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     category: 'beverages',
@@ -71,7 +74,31 @@ export function VendorDashboard() {
     setUser(userData);
     fetchVendorProfile();
     fetchAllBlogs();
+    fetchOrders();
   }, []);
+
+  const fetchOrders = async () => {
+    try {
+      setOrdersLoading(true);
+      const data = await getAllOrders();
+      setOrders(data || []);
+    } catch (error) {
+      console.error('Error fetching vendor orders:', error);
+    } finally {
+      setOrdersLoading(false);
+    }
+  };
+
+  const handleUpdateOrderStatus = async (id, status) => {
+    try {
+      await updateOrderStatus(id, status);
+      fetchOrders();
+      alert(`Order status updated to ${status}`);
+    } catch (error) {
+      console.error('Error updating order status:', error);
+      alert('Failed to update status');
+    }
+  };
 
   const fetchAllBlogs = async () => {
     try {
@@ -547,6 +574,20 @@ export function VendorDashboard() {
             >
               <FileTextIcon size={18} className="inline mr-2" />
               Articles
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab('orders');
+                fetchOrders();
+              }}
+              className={`flex-1 px-4 py-2 rounded-md font-medium transition-colors ${
+                activeTab === 'orders'
+                  ? 'bg-white text-brand-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <ClockIcon size={18} className="inline mr-2" />
+              Orders
             </button>
           </div>
         </motion.div>
@@ -1252,6 +1293,164 @@ export function VendorDashboard() {
                       </div>
                     </motion.div>
                   ))}
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+
+        {/* Orders Tab */}
+        {activeTab === 'orders' && !showAddForm && !showArticleForm && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-6"
+          >
+            {/* Orders Summary Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                { 
+                  label: "Today's Orders", 
+                  value: orders.filter(o => {
+                    const orderDate = new Date(o.createdAt);
+                    const today = new Date();
+                    return orderDate.getDate() === today.getDate() && 
+                           orderDate.getMonth() === today.getMonth() && 
+                           orderDate.getFullYear() === today.getFullYear();
+                  }).length, 
+                  icon: Package, 
+                  color: 'bg-blue-50 text-blue-600' 
+                },
+                { 
+                  label: "Pending Orders", 
+                  value: orders.filter(o => o.status === 'Pending').length, 
+                  icon: ClockIcon, 
+                  color: 'bg-amber-50 text-amber-600' 
+                },
+                { 
+                  label: "Total Revenue", 
+                  value: `Rs. ${orders.filter(o => o.status === 'Completed').reduce((acc, o) => acc + (o.totalAmount || 0), 0).toLocaleString()}`, 
+                  icon: DollarSignIcon, 
+                  color: 'bg-success-50 text-success-600' 
+                }
+              ].map((stat, i) => (
+                <div key={i} className="bg-white rounded-2xl p-6 shadow-soft border border-gray-100 flex items-center gap-4">
+                  <div className={`p-3 rounded-xl ${stat.color}`}>
+                    <stat.icon size={24} />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500 font-medium">{stat.label}</p>
+                    <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-card border border-gray-100 overflow-hidden">
+              <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900">Manage Orders</h2>
+                  <p className="text-sm text-gray-500 mt-0.5">Real-time view of customer requests</p>
+                </div>
+                <button
+                  onClick={fetchOrders}
+                  className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50 transition-colors text-sm font-medium"
+                >
+                  <ClockIcon size={16} />
+                  Refresh
+                </button>
+              </div>
+
+              {ordersLoading ? (
+                <div className="flex flex-col items-center justify-center py-20 bg-gray-50/50">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500 mb-4"></div>
+                  <p className="text-gray-500 font-medium">Fetching orders...</p>
+                </div>
+              ) : orders.length === 0 ? (
+                <div className="text-center py-24">
+                  <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <UtensilsIcon size={32} className="text-gray-300" />
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-900">No Orders Yet</h3>
+                  <p className="text-gray-500 max-w-xs mx-auto mt-1">When customers place orders from your canteen, they will appear here.</p>
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-gray-50/50 text-gray-500 text-xs uppercase tracking-wider">
+                      <tr>
+                        <th className="px-6 py-4 text-left font-bold">Order Details</th>
+                        <th className="px-6 py-4 text-left font-bold">Customer</th>
+                        <th className="px-6 py-4 text-left font-bold">Total Amount</th>
+                        <th className="px-6 py-4 text-left font-bold">Status</th>
+                        <th className="px-6 py-4 text-center font-bold">Quick Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((order) => (
+                        <tr key={order._id} className="group hover:bg-surface-50 transition-colors">
+                          <td className="px-6 py-5">
+                            <div className="font-bold text-gray-900">#{order._id.slice(-6).toUpperCase()}</div>
+                            <div className="text-xs text-brand-600 font-medium mt-1 uppercase">{order.orderType || 'Pickup'}</div>
+                            <div className="text-[11px] text-gray-400 mt-0.5">{new Date(order.createdAt).toLocaleDateString()} at {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                          </td>
+                          <td className="px-6 py-5">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center font-bold text-sm">
+                                {order.studentName?.charAt(0).toUpperCase()}
+                              </div>
+                              <div>
+                                <div className="text-sm font-bold text-gray-900">{order.studentName}</div>
+                                <div className="text-xs text-gray-500">{order.phone}</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-5 font-bold text-gray-900 text-sm">
+                            Rs. {order.totalAmount?.toLocaleString()}
+                          </td>
+                          <td className="px-6 py-5">
+                            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-tight ${
+                              order.status === 'Completed' ? 'bg-success-100 text-success-700' :
+                              order.status === 'Cancelled' ? 'bg-red-100 text-red-700' :
+                              'bg-amber-100 text-amber-700 animate-pulse'
+                            }`}>
+                              {order.status === 'Pending' ? '⏱ ' : order.status === 'Completed' ? '✓ ' : '✕ '}
+                              {order.status}
+                            </span>
+                          </td>
+                          <td className="px-6 py-5">
+                            <div className="flex items-center justify-center gap-2">
+                              {order.status === 'Pending' ? (
+                                <>
+                                  <button
+                                    onClick={() => handleUpdateOrderStatus(order._id, 'Completed')}
+                                    className="p-2 text-success-600 hover:bg-success-50 rounded-xl transition-all hover:scale-110"
+                                    title="Mark as Completed"
+                                  >
+                                    <CheckCircleIcon size={20} />
+                                  </button>
+                                  <button
+                                    onClick={() => handleUpdateOrderStatus(order._id, 'Cancelled')}
+                                    className="p-2 text-red-600 hover:bg-red-50 rounded-xl transition-all hover:scale-110"
+                                    title="Cancel Order"
+                                  >
+                                    <TrashIcon size={20} />
+                                  </button>
+                                </>
+                              ) : (
+                                <button
+                                  className="p-2 text-gray-400 hover:bg-gray-50 rounded-xl transition-all cursor-not-allowed"
+                                  title="View Details"
+                                >
+                                  <ChevronRight size={20} />
+                                </button>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               )}
             </div>

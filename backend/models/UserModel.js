@@ -48,6 +48,11 @@ const userSchema = new mongoose.Schema(
       enum: ["none", "warning", "blocked"],
       default: "none",
     },
+    status: {
+      type: String,
+      enum: ["active", "inactive"],
+      default: "active",
+    },
   },
   {
     timestamps: true,

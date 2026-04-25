@@ -45,6 +45,7 @@ export const registerUser = async (req, res) => {
       email,
       password: hashedPassword,
       role: finalRole,
+      status: finalRole === "vendor" ? "inactive" : "active",
     });
 
     const token = generateToken(newUser);
@@ -94,6 +95,12 @@ export const loginUser = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({
         message: "Invalid credentials",
+      });
+    }
+
+    if (user.status === "inactive") {
+      return res.status(403).json({
+        message: "Your account is currently inactive. Please contact the administrator for activation.",
       });
     }
 
