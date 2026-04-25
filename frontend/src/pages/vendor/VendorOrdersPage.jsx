@@ -1,25 +1,25 @@
-import { useState, useEffect } from 'react';
-import { Navbar } from '../../components/layout/Navbar';
-import { getAllOrders, updateOrderStatus } from '../../api/ordersApi.js';
-import '../../styles/VendorOrdersPage.css';
+import { useState, useEffect } from "react";
+import { Navbar } from "../../components/layout/Navbar";
+import { getAllOrders, updateOrderStatus } from "../../api/ordersApi.js";
+import "../../styles/VendorOrdersPage.css";
 
 const ORDER_STATUSES = [
-  { value: 'pending', label: 'Pending', color: '#FF6B6B' },
-  { value: 'preparing', label: 'Preparing', color: '#FFA500' },
-  { value: 'cooking', label: 'Cooking', color: '#FF8C00' },
-  { value: 'ready_for_pickup', label: 'Ready for Pickup', color: '#4ECDC4' },
-  { value: 'completed', label: 'Completed', color: '#51CF66' },
-  { value: 'cancelled', label: 'Cancelled', color: '#909090' },
+  { value: "pending", label: "Pending", color: "#FF6B6B" },
+  { value: "preparing", label: "Preparing", color: "#FFA500" },
+  { value: "cooking", label: "Cooking", color: "#FF8C00" },
+  { value: "ready_for_pickup", label: "Ready for Pickup", color: "#4ECDC4" },
+  { value: "completed", label: "Completed", color: "#51CF66" },
+  { value: "cancelled", label: "Cancelled", color: "#909090" },
 ];
 
 export default function VendorOrdersPage() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterStatus, setFilterStatus] = useState("all");
   const [toast, setToast] = useState(null);
 
-  const showToast = (message, type = 'success') => {
+  const showToast = (message, type = "success") => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3000);
   };
@@ -29,14 +29,14 @@ export default function VendorOrdersPage() {
       setLoading(true);
       setError(null);
       const filters = {};
-      if (filterStatus !== 'all') {
+      if (filterStatus !== "all") {
         filters.status = filterStatus;
       }
       const data = await getAllOrders(filters);
       setOrders(data);
     } catch (err) {
       setError(err.message);
-      showToast(err.message, 'error');
+      showToast(err.message, "error");
     } finally {
       setLoading(false);
     }
@@ -50,17 +50,17 @@ export default function VendorOrdersPage() {
     try {
       const updated = await updateOrderStatus(orderId, newStatus);
       setOrders((prev) =>
-        prev.map((order) => (order._id === updated._id ? updated : order))
+        prev.map((order) => (order._id === updated._id ? updated : order)),
       );
-      showToast('Order status updated successfully');
+      showToast("Order status updated successfully");
     } catch (err) {
-      showToast(err.message, 'error');
+      showToast(err.message, "error");
     }
   };
 
   const getStatusColor = (status) => {
     const statusObj = ORDER_STATUSES.find((s) => s.value === status);
-    return statusObj?.color || '#999';
+    return statusObj?.color || "#999";
   };
 
   const getStatusLabel = (status) => {
@@ -70,12 +70,19 @@ export default function VendorOrdersPage() {
 
   const formatTime = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
   };
 
   return (
@@ -109,9 +116,7 @@ export default function VendorOrdersPage() {
 
         {/* Toast Notification */}
         {toast && (
-          <div className={`toast toast-${toast.type}`}>
-            {toast.message}
-          </div>
+          <div className={`toast toast-${toast.type}`}>{toast.message}</div>
         )}
 
         {/* Loading State */}
@@ -134,8 +139,12 @@ export default function VendorOrdersPage() {
                 {/* Order Header */}
                 <div className="order-header">
                   <div className="order-id-section">
-                    <span className="order-id">Order #{order._id.slice(-6).toUpperCase()}</span>
-                    <span className="order-date">{formatDate(order.createdAt)}</span>
+                    <span className="order-id">
+                      Order #{order._id.slice(-6).toUpperCase()}
+                    </span>
+                    <span className="order-date">
+                      {formatDate(order.createdAt)}
+                    </span>
                   </div>
                   <div
                     className="status-badge"
@@ -195,7 +204,9 @@ export default function VendorOrdersPage() {
                   <label>Update Status:</label>
                   <select
                     value={order.status}
-                    onChange={(e) => handleStatusUpdate(order._id, e.target.value)}
+                    onChange={(e) =>
+                      handleStatusUpdate(order._id, e.target.value)
+                    }
                     className="status-select"
                   >
                     {ORDER_STATUSES.map((status) => (

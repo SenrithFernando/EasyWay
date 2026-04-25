@@ -1,9 +1,9 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const orderItemSchema = new mongoose.Schema({
   menuItemId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'MenuItem',
+    ref: "MenuItem",
     required: true,
   },
   name: String,
@@ -20,48 +20,56 @@ const orderSchema = new mongoose.Schema(
   {
     studentName: {
       type: String,
-      required: [true, 'Student name is required'],
+      required: [true, "Student name is required"],
     },
     orderItems: [orderItemSchema],
     totalAmount: {
       type: Number,
-      required: [true, 'Total amount is required'],
+      required: [true, "Total amount is required"],
     },
     orderType: {
       type: String,
       enum: {
-        values: ['Pickup', 'Delivery'],
-        message: 'Order type must be either Pickup or Delivery',
+        values: ["Pickup", "Delivery"],
+        message: "Order type must be either Pickup or Delivery",
       },
-      required: [true, 'Order type is required'],
+      required: [true, "Order type is required"],
     },
     deliveryAddress: {
       type: String,
-      default: '',
+      default: "",
     },
     phone: {
       type: String,
-      required: [true, 'Phone number is required'],
+      required: [true, "Phone number is required"],
     },
     status: {
       type: String,
       enum: {
-        values: ['pending', 'preparing', 'cooking', 'ready_for_pickup', 'completed', 'cancelled'],
-        message: 'Status must be pending, preparing, cooking, ready_for_pickup, completed, or cancelled',
+        values: [
+          "pending",
+          "preparing",
+          "cooking",
+          "ready_for_pickup",
+          "completed",
+          "cancelled",
+        ],
+        message:
+          "Status must be pending, preparing, cooking, ready_for_pickup, completed, or cancelled",
       },
-      default: 'pending',
+      default: "pending",
     },
     vendorId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
     },
     cancellationDeadline: {
       type: Date,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-const Order = mongoose.model('Order', orderSchema);
+const Order = mongoose.model("Order", orderSchema);
 
 export default Order;

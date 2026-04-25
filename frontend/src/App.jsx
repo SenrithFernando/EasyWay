@@ -10,6 +10,7 @@ import { BlogDetailPage } from './pages/BlogDetailPage'
 import { CanteenPage } from './pages/CanteenPage'
 import { AdminDashboard } from './pages/AdminDashboard'
 import MenuItemsPage from './pages/vendor/MenuItemsPage.jsx'
+import VendorOrdersPage from './pages/vendor/VendorOrdersPage.jsx'
 import StudentOrderPage from './pages/student/StudentOrderPage.jsx'
 import ChatBotPage from './pages/student/ChatBotPage.jsx'
 import { TableCheckInPage } from './pages/TableCheckInPage'
@@ -34,14 +35,10 @@ function App() {
         <Route path="/canteen" element={<CanteenPage />} />
         <Route path="/menu" element={<StudentOrderPage />} />
         <Route path="/chatbot" element={<ChatBotPage />} />
-      <Route path="/vendor/menu-items" element={<MenuItemsPage />} />
-      <Route path="/student/order" element={<StudentOrderPage initialTab="orders" />} />
-
-
-      
-
-
-
+        <Route path="/vendor/menu-items" element={<MenuItemsPage />} />
+        <Route path="/vendor/orders" element={<VendorOrdersPage />} />
+        <Route path="/vendor/order-food" element={<StudentOrderPage />} />
+        <Route path="/student/order" element={<StudentOrderPage initialTab="orders" />} />
       </Routes>
     </>
   )

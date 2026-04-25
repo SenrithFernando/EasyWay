@@ -1,53 +1,53 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { UtensilsIcon } from 'lucide-react';
-import { Navbar } from '../../components/layout/Navbar';
-import { OrderTracker } from '../../components/OrderTracker.jsx';
-import { getAllMenuItems } from '../../api/menuItemsApi.js';
-import { createOrder, getAllOrders, cancelOrder } from '../../api/ordersApi.js';
-import '../../styles/StudentOrderPage.css';
+import { useState, useEffect, useCallback } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { UtensilsIcon } from "lucide-react";
+import { Navbar } from "../../components/layout/Navbar";
+import { OrderTracker } from "../../components/OrderTracker.jsx";
+import { getAllMenuItems } from "../../api/menuItemsApi.js";
+import { createOrder, getAllOrders, cancelOrder } from "../../api/ordersApi.js";
+import "../../styles/StudentOrderPage.css";
 
-const CATEGORIES = ['all', 'rice', 'snack', 'beverage', 'dessert', 'other'];
+const CATEGORIES = ["all", "rice", "snack", "beverage", "dessert", "other"];
 const CATEGORY_EMOJIS = {
-  rice: '🍚',
-  snack: '🍟',
-  beverage: '🥤',
-  dessert: '🍰',
-  other: '📦',
+  rice: "🍚",
+  snack: "🍟",
+  beverage: "🥤",
+  dessert: "🍰",
+  other: "📦",
 };
 
 const FALLBACK_MENU_ITEMS = [
   {
-    _id: 'ui-fallback-1',
-    name: 'Veg Rice Bowl',
-    description: 'Healthy rice bowl with mixed vegetables.',
+    _id: "ui-fallback-1",
+    name: "Veg Rice Bowl",
+    description: "Healthy rice bowl with mixed vegetables.",
     price: 450,
-    category: 'rice',
+    category: "rice",
     preparationTime: 15,
     available: true,
   },
   {
-    _id: 'ui-fallback-2',
-    name: 'Chicken Kottu',
-    description: 'Classic spicy kottu with chicken.',
+    _id: "ui-fallback-2",
+    name: "Chicken Kottu",
+    description: "Classic spicy kottu with chicken.",
     price: 650,
-    category: 'snack',
+    category: "snack",
     preparationTime: 20,
     available: true,
   },
   {
-    _id: 'ui-fallback-3',
-    name: 'Fruit Smoothie',
-    description: 'Fresh seasonal fruit smoothie.',
+    _id: "ui-fallback-3",
+    name: "Fruit Smoothie",
+    description: "Fresh seasonal fruit smoothie.",
     price: 350,
-    category: 'beverage',
+    category: "beverage",
     preparationTime: 8,
     available: true,
   },
 ];
 
 const CANCELLATION_WINDOW_MS = 2 * 60 * 1000;
-const LOCAL_ORDERS_KEY = 'easyway_orders_cache';
+const LOCAL_ORDERS_KEY = "easyway_orders_cache";
 
 const loadLocalOrders = () => {
   try {
@@ -70,16 +70,16 @@ const mergeOrdersById = (primary, secondary) => {
     if (order && order._id) map.set(order._id, order);
   });
   return Array.from(map.values()).sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
   );
 };
 
 const getFallbackMenuByCategory = (category) => {
-  if (category === 'all') return FALLBACK_MENU_ITEMS;
+  if (category === "all") return FALLBACK_MENU_ITEMS;
   return FALLBACK_MENU_ITEMS.filter((item) => item.category === category);
 };
 
-export default function StudentOrderPage({ initialTab = 'menu' }) {
+export default function StudentOrderPage({ initialTab = "menu" }) {
   const navigate = useNavigate();
 
   /* ---- tabs ---- */
@@ -89,8 +89,8 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
   const [menuItems, setMenuItems] = useState([]);
   const [menuLoading, setMenuLoading] = useState(true);
   const [menuError, setMenuError] = useState(null);
-  const [activeCategory, setActiveCategory] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [brokenImages, setBrokenImages] = useState({});
 
   /* ---- cart state ---- */
@@ -100,14 +100,14 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
   /* ---- checkout state ---- */
   const [showCheckout, setShowCheckout] = useState(false);
   const [checkoutForm, setCheckoutForm] = useState({
-    studentName: '',
-    studentId: '',
-    phone: '',
-    orderType: 'Pickup',
-    deliveryAddress: '',
+    studentName: "",
+    studentId: "",
+    phone: "",
+    orderType: "Pickup",
+    deliveryAddress: "",
   });
-  const [studentIdError, setStudentIdError] = useState('');
-  const [phoneError, setPhoneError] = useState('');
+  const [studentIdError, setStudentIdError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
   const [placing, setPlacing] = useState(false);
 
   /* ---- order confirmation ---- */
@@ -117,13 +117,13 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
   const [currentTime, setCurrentTime] = useState(Date.now());
-  const [orderStatusFilter, setOrderStatusFilter] = useState('all');
-  const [orderSearchQuery, setOrderSearchQuery] = useState('');
+  const [orderStatusFilter, setOrderStatusFilter] = useState("all");
+  const [orderSearchQuery, setOrderSearchQuery] = useState("");
 
   /* ---- toast ---- */
   const [toast, setToast] = useState(null);
 
-  const showToast = (message, type = 'success') => {
+  const showToast = (message, type = "success") => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3000);
   };
@@ -134,8 +134,9 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
     const trimmed = imageUrl.trim();
     if (/^https?:\/\//i.test(trimmed)) return trimmed;
 
-    const backendOrigin = import.meta.env.VITE_API_ORIGIN || 'http://localhost:3000';
-    if (trimmed.startsWith('/')) return `${backendOrigin}${trimmed}`;
+    const backendOrigin =
+      import.meta.env.VITE_API_ORIGIN || "http://localhost:3000";
+    if (trimmed.startsWith("/")) return `${backendOrigin}${trimmed}`;
 
     return `${backendOrigin}/${trimmed}`;
   };
@@ -148,18 +149,18 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
       setMenuLoading(true);
       setMenuError(null);
       const filters = { available: true };
-      if (activeCategory !== 'all') filters.category = activeCategory;
+      if (activeCategory !== "all") filters.category = activeCategory;
       const data = await getAllMenuItems(filters);
 
       if (Array.isArray(data) && data.length > 0) {
         setMenuItems(data);
       } else {
         setMenuItems(getFallbackMenuByCategory(activeCategory));
-        setMenuError('Live menu is empty right now. Showing sample items.');
+        setMenuError("Live menu is empty right now. Showing sample items.");
       }
     } catch (err) {
       setMenuItems(getFallbackMenuByCategory(activeCategory));
-      setMenuError('Could not load live menu. Showing sample items.');
+      setMenuError("Could not load live menu. Showing sample items.");
     } finally {
       setMenuLoading(false);
     }
@@ -183,14 +184,17 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
     } catch (err) {
       const cached = loadLocalOrders();
       setOrders(cached);
-      showToast(cached.length ? 'Showing saved order history' : err.message, 'error');
+      showToast(
+        cached.length ? "Showing saved order history" : err.message,
+        "error",
+      );
     } finally {
       setOrdersLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    if (activeTab === 'orders') {
+    if (activeTab === "orders") {
       fetchOrders();
       // Auto-refresh orders every 5 seconds when viewing orders tab
       const intervalId = setInterval(fetchOrders, 5000);
@@ -210,7 +214,7 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
      SEARCH FILTER
      ================================================================ */
   const filteredItems = menuItems.filter((item) =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   /* ================================================================
@@ -221,7 +225,7 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
       const existing = prev.find((c) => c._id === item._id);
       if (existing) {
         return prev.map((c) =>
-          c._id === item._id ? { ...c, quantity: c.quantity + 1 } : c
+          c._id === item._id ? { ...c, quantity: c.quantity + 1 } : c,
         );
       }
       return [...prev, { ...item, quantity: 1 }];
@@ -232,10 +236,8 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
   const updateQuantity = (id, delta) => {
     setCart((prev) =>
       prev
-        .map((c) =>
-          c._id === id ? { ...c, quantity: c.quantity + delta } : c
-        )
-        .filter((c) => c.quantity > 0)
+        .map((c) => (c._id === id ? { ...c, quantity: c.quantity + delta } : c))
+        .filter((c) => c.quantity > 0),
     );
   };
 
@@ -251,18 +253,17 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
   /* ================================================================
      CHECKOUT
      ================================================================ */
-  const STUDENT_ID_ERROR_MESSAGE = 'Student ID must start with 2 letters followed by 8 numbers';
+  const STUDENT_ID_ERROR_MESSAGE =
+    "Student ID must start with 2 letters followed by 8 numbers";
 
   const validateStudentId = (studentId) => {
-    if (!studentId) return '';
-    return /^[A-Za-z]{2}\d{8}$/.test(studentId)
-      ? ''
-      : STUDENT_ID_ERROR_MESSAGE;
+    if (!studentId) return "";
+    return /^[A-Za-z]{2}\d{8}$/.test(studentId) ? "" : STUDENT_ID_ERROR_MESSAGE;
   };
 
   const sanitizeStudentId = (value) => {
     const upperValue = value.toUpperCase();
-    let formatted = '';
+    let formatted = "";
 
     for (const ch of upperValue) {
       if (formatted.length < 2) {
@@ -278,7 +279,15 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
   };
 
   const handleStudentIdKeyDown = (e) => {
-    const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Home', 'End'];
+    const allowedKeys = [
+      "Backspace",
+      "Delete",
+      "ArrowLeft",
+      "ArrowRight",
+      "Tab",
+      "Home",
+      "End",
+    ];
 
     if (e.ctrlKey || e.metaKey || allowedKeys.includes(e.key)) return;
 
@@ -300,18 +309,25 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
   };
 
   const validatePhoneNumber = (phone) => {
-    if (!phone) return '';
-    return phone.length === 10
-      ? ''
-      : 'Phone number must be exactly 10 digits';
+    if (!phone) return "";
+    return phone.length === 10 ? "" : "Phone number must be exactly 10 digits";
   };
 
   const handlePhoneKeyDown = (e) => {
-    const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Home', 'End'];
+    const allowedKeys = [
+      "Backspace",
+      "Delete",
+      "ArrowLeft",
+      "ArrowRight",
+      "Tab",
+      "Home",
+      "End",
+    ];
 
     if (e.ctrlKey || e.metaKey || allowedKeys.includes(e.key)) return;
 
-    const hasSelection = e.currentTarget.selectionStart !== e.currentTarget.selectionEnd;
+    const hasSelection =
+      e.currentTarget.selectionStart !== e.currentTarget.selectionEnd;
     const isDigit = /^\d$/.test(e.key);
 
     if (!isDigit || (checkoutForm.phone.length >= 10 && !hasSelection)) {
@@ -322,36 +338,39 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
   const handleCheckoutChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === 'studentId') {
+    if (name === "studentId") {
       const sanitizedStudentId = sanitizeStudentId(value);
       setCheckoutForm((prev) => ({ ...prev, studentId: sanitizedStudentId }));
       setStudentIdError(validateStudentId(sanitizedStudentId));
       return;
     }
 
-    if (name === 'phone') {
-      const sanitizedPhone = value.replace(/\D/g, '').slice(0, 10);
+    if (name === "phone") {
+      const sanitizedPhone = value.replace(/\D/g, "").slice(0, 10);
       setCheckoutForm((prev) => ({ ...prev, phone: sanitizedPhone }));
       setPhoneError(validatePhoneNumber(sanitizedPhone));
       return;
     }
 
     setCheckoutForm((prev) => ({ ...prev, [name]: value }));
-
   };
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
 
     // Validate student ID before submitting
-    const studentIdValidationMessage = validateStudentId(checkoutForm.studentId.trim());
+    const studentIdValidationMessage = validateStudentId(
+      checkoutForm.studentId.trim(),
+    );
     if (studentIdValidationMessage) {
       setStudentIdError(studentIdValidationMessage);
       return;
     }
 
     // Validate phone number before submitting
-    const phoneValidationMessage = validatePhoneNumber(checkoutForm.phone.trim());
+    const phoneValidationMessage = validatePhoneNumber(
+      checkoutForm.phone.trim(),
+    );
     if (phoneValidationMessage) {
       setPhoneError(phoneValidationMessage);
       return;
@@ -365,9 +384,9 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
         phone: checkoutForm.phone.trim(),
         orderType: checkoutForm.orderType,
         deliveryAddress:
-          checkoutForm.orderType === 'Delivery'
+          checkoutForm.orderType === "Delivery"
             ? checkoutForm.deliveryAddress.trim()
-            : '',
+            : "",
         orderItems: cart.map((c) => ({
           menuItemId: c._id,
           name: c.name,
@@ -388,11 +407,11 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
       clearCart();
       setShowCheckout(false);
       setCartOpen(false);
-      showToast('Order placed successfully! 🎉');
-      setActiveTab('orders');
-      navigate('/student/order');
+      showToast("Order placed successfully! 🎉");
+      setActiveTab("orders");
+      navigate("/student/order");
     } catch (err) {
-      showToast(err.message, 'error');
+      showToast(err.message, "error");
     } finally {
       setPlacing(false);
     }
@@ -404,7 +423,10 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
   const handleCancelOrder = async (id) => {
     const targetOrder = orders.find((order) => order._id === id);
     if (targetOrder && !canCancelOrder(targetOrder)) {
-      showToast('You can cancel only within 2 minutes of placing an order', 'error');
+      showToast(
+        "You can cancel only within 2 minutes of placing an order",
+        "error",
+      );
       return;
     }
 
@@ -415,17 +437,17 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
         saveLocalOrders(next);
         return next;
       });
-      showToast('Order cancelled');
+      showToast("Order cancelled");
     } catch (err) {
       // If API cancel fails (e.g., local fallback order id), cancel locally.
       setOrders((prev) => {
         const next = prev.map((o) =>
-          o._id === id ? { ...o, status: 'Cancelled' } : o
+          o._id === id ? { ...o, status: "Cancelled" } : o,
         );
         saveLocalOrders(next);
         return next;
       });
-      showToast('Order cancelled locally', 'error');
+      showToast("Order cancelled locally", "error");
     }
   };
 
@@ -433,16 +455,20 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
      STATUS HELPERS
      ================================================================ */
   const statusConfig = {
-    pending: { emoji: '⏳', cls: 'status-pending', label: 'Pending' },
-    preparing: { emoji: '📋', cls: 'status-preparing', label: 'Preparing' },
-    cooking: { emoji: '👨‍🍳', cls: 'status-cooking', label: 'Cooking' },
-    ready_for_pickup: { emoji: '✅', cls: 'status-ready', label: 'Ready for Pickup' },
-    completed: { emoji: '🎉', cls: 'status-completed', label: 'Completed' },
-    cancelled: { emoji: '❌', cls: 'status-cancelled', label: 'Cancelled' },
+    pending: { emoji: "⏳", cls: "status-pending", label: "Pending" },
+    preparing: { emoji: "📋", cls: "status-preparing", label: "Preparing" },
+    cooking: { emoji: "👨‍🍳", cls: "status-cooking", label: "Cooking" },
+    ready_for_pickup: {
+      emoji: "✅",
+      cls: "status-ready",
+      label: "Ready for Pickup",
+    },
+    completed: { emoji: "🎉", cls: "status-completed", label: "Completed" },
+    cancelled: { emoji: "❌", cls: "status-cancelled", label: "Cancelled" },
     // Legacy support
-    Pending: { emoji: '⏳', cls: 'status-pending', label: 'Pending' },
-    Completed: { emoji: '🎉', cls: 'status-completed', label: 'Completed' },
-    Cancelled: { emoji: '❌', cls: 'status-cancelled', label: 'Cancelled' },
+    Pending: { emoji: "⏳", cls: "status-pending", label: "Pending" },
+    Completed: { emoji: "🎉", cls: "status-completed", label: "Completed" },
+    Cancelled: { emoji: "❌", cls: "status-cancelled", label: "Cancelled" },
   };
 
   const getCancellationDeadline = (order) => {
@@ -454,7 +480,7 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
   };
 
   const canCancelOrder = (order) => {
-    if (order.status !== 'pending' && order.status !== 'Pending') return false;
+    if (order.status !== "pending" && order.status !== "Pending") return false;
     return currentTime <= getCancellationDeadline(order);
   };
 
@@ -465,18 +491,21 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
 
   const filteredOrders = orders.filter((order) => {
     const statusMatch =
-      orderStatusFilter === 'all' || order.status === orderStatusFilter;
+      orderStatusFilter === "all" || order.status === orderStatusFilter;
 
     const searchText = orderSearchQuery.trim().toLowerCase();
     if (!searchText) return statusMatch;
 
-    const orderId = order._id?.slice(-8).toLowerCase() || '';
+    const orderId = order._id?.slice(-8).toLowerCase() || "";
     const orderItemsText = (order.orderItems || [])
-      .map((oi) => oi.name || '')
-      .join(' ')
+      .map((oi) => oi.name || "")
+      .join(" ")
       .toLowerCase();
 
-    return statusMatch && (orderId.includes(searchText) || orderItemsText.includes(searchText));
+    return (
+      statusMatch &&
+      (orderId.includes(searchText) || orderItemsText.includes(searchText))
+    );
   });
 
   /* ================================================================
@@ -495,47 +524,51 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
         <div className="so-header-right">
           <div className="tab-switcher">
             <button
-              className={`tab-btn ${activeTab === 'menu' ? 'active' : ''}`}
-              onClick={() => { setActiveTab('menu'); setConfirmedOrder(null); }}
+              className={`tab-btn ${activeTab === "menu" ? "active" : ""}`}
+              onClick={() => {
+                setActiveTab("menu");
+                setConfirmedOrder(null);
+              }}
             >
               🍕 Menu
             </button>
             <button
-              className={`tab-btn ${activeTab === 'orders' ? 'active' : ''}`}
-              onClick={() => setActiveTab('orders')}
+              className={`tab-btn ${activeTab === "orders" ? "active" : ""}`}
+              onClick={() => setActiveTab("orders")}
             >
               📋 My Orders
             </button>
           </div>
-          {activeTab === 'menu' && (
-            <Link to="/chatbot" className="btn-chatbot-nav">Chatbot</Link>
+          {activeTab === "menu" && (
+            <Link to="/chatbot" className="btn-chatbot-nav">
+              Chatbot
+            </Link>
           )}
-          {activeTab === 'menu' && (
-            <button
-              className="cart-fab"
-              onClick={() => setCartOpen(true)}
-            >
+          {activeTab === "menu" && (
+            <button className="cart-fab" onClick={() => setCartOpen(true)}>
               🛒
-              {cartCount > 0 && (
-                <span className="cart-badge">{cartCount}</span>
-              )}
+              {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
             </button>
           )}
         </div>
       </header>
 
       {/* ===== ORDER CONFIRMATION ===== */}
-      {confirmedOrder && activeTab === 'menu' && (
+      {confirmedOrder && activeTab === "menu" && (
         <div className="confirmation-banner">
           <div className="confirmation-icon">🎉</div>
           <h2>Order Placed!</h2>
-          <p className="conf-id">Order #{confirmedOrder._id?.slice(-8).toUpperCase()}</p>
+          <p className="conf-id">
+            Order #{confirmedOrder._id?.slice(-8).toUpperCase()}
+          </p>
           <div className="conf-details">
             <span>📋 {confirmedOrder.orderItems?.length} item(s)</span>
             <span>💰 Rs. {confirmedOrder.totalAmount?.toFixed(2)}</span>
             <span>📦 {confirmedOrder.orderType}</span>
           </div>
-          <p className="conf-status">Status: <strong>⏳ Pending</strong></p>
+          <p className="conf-status">
+            Status: <strong>⏳ Pending</strong>
+          </p>
           <button
             className="btn-continue"
             onClick={() => setConfirmedOrder(null)}
@@ -546,7 +579,7 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
       )}
 
       {/* ===== MENU TAB ===== */}
-      {activeTab === 'menu' && !confirmedOrder && (
+      {activeTab === "menu" && !confirmedOrder && (
         <>
           {/* Search */}
           <div className="search-bar-wrapper">
@@ -561,7 +594,7 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
               {searchQuery && (
                 <button
                   className="search-clear"
-                  onClick={() => setSearchQuery('')}
+                  onClick={() => setSearchQuery("")}
                 >
                   ✕
                 </button>
@@ -574,10 +607,10 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
             {CATEGORIES.map((cat) => (
               <button
                 key={cat}
-                className={`so-chip ${activeCategory === cat ? 'active' : ''}`}
+                className={`so-chip ${activeCategory === cat ? "active" : ""}`}
                 onClick={() => setActiveCategory(cat)}
               >
-                {cat === 'all' ? '🔖 All' : `${CATEGORY_EMOJIS[cat]} ${cat}`}
+                {cat === "all" ? "🔖 All" : `${CATEGORY_EMOJIS[cat]} ${cat}`}
               </button>
             ))}
           </div>
@@ -621,8 +654,11 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
                         />
                       </div>
                     ) : (
-                      <div className="so-item-image-fallback" aria-hidden="true">
-                        {CATEGORY_EMOJIS[item.category] || '🍽️'}
+                      <div
+                        className="so-item-image-fallback"
+                        aria-hidden="true"
+                      >
+                        {CATEGORY_EMOJIS[item.category] || "🍽️"}
                       </div>
                     )}
 
@@ -654,7 +690,9 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
                           >
                             −
                           </button>
-                          <span className="so-qty-value">{inCart.quantity}</span>
+                          <span className="so-qty-value">
+                            {inCart.quantity}
+                          </span>
                           <button
                             className="so-qty-btn"
                             onClick={() => updateQuantity(item._id, 1)}
@@ -689,18 +727,29 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
       )}
 
       {/* ===== MY ORDERS TAB ===== */}
-      {activeTab === 'orders' && (
+      {activeTab === "orders" && (
         <div className="my-orders-section">
           <div className="my-orders-header">
             <h2>📋 My Orders</h2>
             <div className="my-orders-tools">
               <div className="my-orders-status-filters">
-                {['all', 'pending', 'preparing', 'cooking', 'ready_for_pickup', 'completed', 'cancelled'].map((status) => {
-                  const statusLabel = status === 'all' ? 'All' : statusConfig[status]?.label || status;
+                {[
+                  "all",
+                  "pending",
+                  "preparing",
+                  "cooking",
+                  "ready_for_pickup",
+                  "completed",
+                  "cancelled",
+                ].map((status) => {
+                  const statusLabel =
+                    status === "all"
+                      ? "All"
+                      : statusConfig[status]?.label || status;
                   return (
                     <button
                       key={status}
-                      className={`my-orders-filter-btn ${orderStatusFilter === status ? 'active' : ''}`}
+                      className={`my-orders-filter-btn ${orderStatusFilter === status ? "active" : ""}`}
                       onClick={() => setOrderStatusFilter(status)}
                     >
                       {statusLabel}
@@ -720,7 +769,7 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
                 {orderSearchQuery && (
                   <button
                     className="my-orders-search-clear"
-                    onClick={() => setOrderSearchQuery('')}
+                    onClick={() => setOrderSearchQuery("")}
                   >
                     ✕
                   </button>
@@ -744,20 +793,22 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
               <p>Place your first order from the menu!</p>
               <button
                 className="btn-continue"
-                onClick={() => setActiveTab('menu')}
+                onClick={() => setActiveTab("menu")}
               >
                 Browse Menu
               </button>
             </div>
           )}
 
-          {!ordersLoading && orders.length > 0 && filteredOrders.length === 0 && (
-            <div className="so-empty-state">
-              <div className="so-empty-icon">🔎</div>
-              <h3>No matching orders</h3>
-              <p>Try changing the status filter or search text</p>
-            </div>
-          )}
+          {!ordersLoading &&
+            orders.length > 0 &&
+            filteredOrders.length === 0 && (
+              <div className="so-empty-state">
+                <div className="so-empty-icon">🔎</div>
+                <h3>No matching orders</h3>
+                <p>Try changing the status filter or search text</p>
+              </div>
+            )}
 
           {!ordersLoading && filteredOrders.length > 0 && (
             <div className="orders-list">
@@ -775,12 +826,12 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
                         </span>
                       </div>
                       <span className="order-date">
-                        {new Date(order.createdAt).toLocaleDateString('en-LK', {
-                          day: 'numeric',
-                          month: 'short',
-                          year: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit',
+                        {new Date(order.createdAt).toLocaleDateString("en-LK", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
                         })}
                       </span>
                     </div>
@@ -801,18 +852,20 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
 
                     <div className="order-card-footer">
                       <div className="order-total">
-                        Total: <strong>Rs. {order.totalAmount?.toFixed(2)}</strong>
+                        Total:{" "}
+                        <strong>Rs. {order.totalAmount?.toFixed(2)}</strong>
                       </div>
                       <div className="order-meta-tags">
                         <span className="order-type-tag">
-                          {order.orderType === 'Delivery' ? '🚚' : '🏪'}{' '}
+                          {order.orderType === "Delivery" ? "🚚" : "🏪"}{" "}
                           {order.orderType}
                         </span>
-                        {(order.status === 'Pending' || order.status === 'pending') && (
+                        {(order.status === "Pending" ||
+                          order.status === "pending") && (
                           <span className="order-cancel-window-tag">
                             {canCancelOrder(order)
                               ? `Cancel in ${getRemainingCancelSeconds(order)}s`
-                              : 'Cancel window closed'}
+                              : "Cancel window closed"}
                           </span>
                         )}
                       </div>
@@ -839,10 +892,7 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
           <div className="cart-panel" onClick={(e) => e.stopPropagation()}>
             <div className="cart-header">
               <h2>🛒 Your Cart</h2>
-              <button
-                className="cart-close"
-                onClick={() => setCartOpen(false)}
-              >
+              <button className="cart-close" onClick={() => setCartOpen(false)}>
                 ✕
               </button>
             </div>
@@ -927,10 +977,7 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
           className="so-modal-overlay"
           onClick={() => setShowCheckout(false)}
         >
-          <div
-            className="so-modal"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="so-modal" onClick={(e) => e.stopPropagation()}>
             <h2>📝 Checkout</h2>
 
             <div className="checkout-summary">
@@ -966,7 +1013,7 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
                   pattern="[A-Za-z]{2}\d{8}"
                   maxLength={10}
                   required
-                  className={studentIdError ? 'input-error' : ''}
+                  className={studentIdError ? "input-error" : ""}
                 />
                 {studentIdError && (
                   <span className="field-error">{studentIdError}</span>
@@ -987,7 +1034,7 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
                   pattern="\d{10}"
                   maxLength={10}
                   required
-                  className={phoneError ? 'input-error' : ''}
+                  className={phoneError ? "input-error" : ""}
                 />
                 {phoneError && (
                   <span className="field-error">{phoneError}</span>
@@ -999,18 +1046,18 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
                 <div className="order-type-toggle">
                   <button
                     type="button"
-                    className={`type-btn ${checkoutForm.orderType === 'Pickup' ? 'active' : ''}`}
+                    className={`type-btn ${checkoutForm.orderType === "Pickup" ? "active" : ""}`}
                     onClick={() =>
-                      setCheckoutForm((p) => ({ ...p, orderType: 'Pickup' }))
+                      setCheckoutForm((p) => ({ ...p, orderType: "Pickup" }))
                     }
                   >
                     🏪 Pickup
                   </button>
                   <button
                     type="button"
-                    className={`type-btn ${checkoutForm.orderType === 'Delivery' ? 'active' : ''}`}
+                    className={`type-btn ${checkoutForm.orderType === "Delivery" ? "active" : ""}`}
                     onClick={() =>
-                      setCheckoutForm((p) => ({ ...p, orderType: 'Delivery' }))
+                      setCheckoutForm((p) => ({ ...p, orderType: "Delivery" }))
                     }
                   >
                     🚚 Delivery
@@ -1018,7 +1065,7 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
                 </div>
               </div>
 
-              {checkoutForm.orderType === 'Delivery' && (
+              {checkoutForm.orderType === "Delivery" && (
                 <div className="so-form-group">
                   <label htmlFor="deliveryAddress">Delivery Address</label>
                   <textarea
@@ -1045,7 +1092,9 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
                   className="so-btn-place"
                   disabled={placing || cart.length === 0}
                 >
-                  {placing ? 'Placing…' : `Place Order — Rs. ${cartTotal.toFixed(2)}`}
+                  {placing
+                    ? "Placing…"
+                    : `Place Order — Rs. ${cartTotal.toFixed(2)}`}
                 </button>
               </div>
             </form>
@@ -1055,9 +1104,7 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
 
       {/* ===== TOAST ===== */}
       {toast && (
-        <div className={`so-toast so-toast-${toast.type}`}>
-          {toast.message}
-        </div>
+        <div className={`so-toast so-toast-${toast.type}`}>{toast.message}</div>
       )}
 
       {/* ===== FOOTER ===== */}
@@ -1082,17 +1129,26 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
               <h4 className="text-white font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-2">
                 <li>
-                  <Link to="/menu" className="hover:text-brand-400 transition-colors">
+                  <Link
+                    to="/menu"
+                    className="hover:text-brand-400 transition-colors"
+                  >
                     Menu
                   </Link>
                 </li>
                 <li>
-                  <Link to="/table" className="hover:text-brand-400 transition-colors">
+                  <Link
+                    to="/table"
+                    className="hover:text-brand-400 transition-colors"
+                  >
                     Reservations
                   </Link>
                 </li>
                 <li>
-                  <Link to="/" className="hover:text-brand-400 transition-colors">
+                  <Link
+                    to="/"
+                    className="hover:text-brand-400 transition-colors"
+                  >
                     Home
                   </Link>
                 </li>
@@ -1102,17 +1158,26 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
               <h4 className="text-white font-semibold mb-4">Legal</h4>
               <ul className="space-y-2">
                 <li>
-                  <a href="#" className="hover:text-brand-400 transition-colors">
+                  <a
+                    href="#"
+                    className="hover:text-brand-400 transition-colors"
+                  >
                     Privacy Policy
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-brand-400 transition-colors">
+                  <a
+                    href="#"
+                    className="hover:text-brand-400 transition-colors"
+                  >
                     Terms of Service
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-brand-400 transition-colors">
+                  <a
+                    href="#"
+                    className="hover:text-brand-400 transition-colors"
+                  >
                     Contact Us
                   </a>
                 </li>

@@ -1,4 +1,4 @@
-import * as orderService from '../services/orderService.js';
+import * as orderService from "../services/orderService.js";
 
 /**
  * POST /api/orders
@@ -8,7 +8,7 @@ export const createOrder = async (req, res, next) => {
     const order = await orderService.createOrder(req.body);
 
     res.status(201).json({
-      status: 'success',
+      status: "success",
       data: { order },
     });
   } catch (error) {
@@ -24,7 +24,7 @@ export const getAllOrders = async (req, res, next) => {
     const orders = await orderService.getAllOrders(req.query, req.user);
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       results: orders.length,
       data: { orders },
     });
@@ -41,7 +41,7 @@ export const getOrderById = async (req, res, next) => {
     const order = await orderService.getOrderById(req.params.id);
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: { order },
     });
   } catch (error) {
@@ -57,7 +57,7 @@ export const updateOrder = async (req, res, next) => {
     const order = await orderService.updateOrder(req.params.id, req.body);
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: { order },
     });
   } catch (error) {
@@ -73,7 +73,7 @@ export const deleteOrder = async (req, res, next) => {
     await orderService.deleteOrder(req.params.id);
 
     res.status(204).json({
-      status: 'success',
+      status: "success",
       data: null,
     });
   } catch (error) {
@@ -89,7 +89,7 @@ export const cancelOrder = async (req, res, next) => {
     const order = await orderService.cancelOrder(req.params.id);
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: { order },
     });
   } catch (error) {

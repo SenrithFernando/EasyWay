@@ -1,27 +1,27 @@
-import Order from '../models/orderModel.js';
-import mongoose from 'mongoose';
+import Order from "../models/orderModel.js";
+import mongoose from "mongoose";
 
 const CANCELLATION_WINDOW_MS = 2 * 60 * 1000;
-const PLACEHOLDER_MENU_ITEM_ID = '000000000000000000000001';
+const PLACEHOLDER_MENU_ITEM_ID = "000000000000000000000001";
 
 const FALLBACK_ORDERS = [
   {
-    _id: 'fallback-order-1',
-    studentName: 'Student Demo',
-    orderType: 'Pickup',
-    status: 'pending',
+    _id: "fallback-order-1",
+    studentName: "Student Demo",
+    orderType: "Pickup",
+    status: "pending",
     totalAmount: 800,
     createdAt: new Date(Date.now() - 60 * 1000).toISOString(),
     cancellationDeadline: new Date(Date.now() + 60 * 1000).toISOString(),
     orderItems: [
       {
-        name: 'Veg Rice Bowl',
+        name: "Veg Rice Bowl",
         quantity: 1,
         price: 450,
         subtotal: 450,
       },
       {
-        name: 'Fruit Smoothie',
+        name: "Fruit Smoothie",
         quantity: 1,
         price: 350,
         subtotal: 350,
@@ -29,15 +29,15 @@ const FALLBACK_ORDERS = [
     ],
   },
   {
-    _id: 'fallback-order-2',
-    studentName: 'Student Demo',
-    orderType: 'Delivery',
-    status: 'completed',
+    _id: "fallback-order-2",
+    studentName: "Student Demo",
+    orderType: "Delivery",
+    status: "completed",
     totalAmount: 650,
     createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
     orderItems: [
       {
-        name: 'Chicken Kottu',
+        name: "Chicken Kottu",
         quantity: 1,
         price: 650,
         subtotal: 650,
@@ -67,7 +67,7 @@ const normalizeOrderItems = (items = []) => {
   return items.map((item) => {
     const rawId = item?.menuItemId;
     const validId =
-      typeof rawId === 'string' && /^[0-9a-fA-F]{24}$/.test(rawId)
+      typeof rawId === "string" && /^[0-9a-fA-F]{24}$/.test(rawId)
         ? rawId
         : PLACEHOLDER_MENU_ITEM_ID;
 
@@ -86,9 +86,9 @@ const buildFallbackCreatedOrder = (data) => {
     orderItems: data.orderItems || [],
     totalAmount: data.totalAmount,
     orderType: data.orderType,
-    deliveryAddress: data.deliveryAddress || '',
+    deliveryAddress: data.deliveryAddress || "",
     phone: data.phone,
-    status: 'pending',
+    status: "pending",
     cancellationDeadline: new Date(now.getTime() + CANCELLATION_WINDOW_MS),
     createdAt: now,
     updatedAt: now,
@@ -103,7 +103,8 @@ export const createOrder = async (data) => {
     ...data,
     orderItems: normalizeOrderItems(data.orderItems || []),
     cancellationDeadline:
-      data.cancellationDeadline || new Date(Date.now() + CANCELLATION_WINDOW_MS),
+      data.cancellationDeadline ||
+      new Date(Date.now() + CANCELLATION_WINDOW_MS),
   };
 
   if (mongoose.connection.readyState !== 1) {
@@ -114,7 +115,7 @@ export const createOrder = async (data) => {
     const order = await Order.create(payload);
     return order;
   } catch (error) {
-    if (error.message?.includes('buffering timed out')) {
+    if (error.message?.includes("buffering timed out")) {
       return buildFallbackCreatedOrder(payload);
     }
     throw error;
@@ -134,14 +135,14 @@ export const getAllOrders = async (queryParams = {}, user = {}) => {
 
   if (queryParams.status) filter.status = queryParams.status;
   if (queryParams.studentName)
-    filter.studentName = { $regex: queryParams.studentName, $options: 'i' };
+    filter.studentName = { $regex: queryParams.studentName, $options: "i" };
   if (queryParams.orderType) filter.orderType = queryParams.orderType;
 
   try {
     const orders = await Order.find(filter).sort({ createdAt: -1 });
     return orders;
   } catch (error) {
-    if (error.message?.includes('buffering timed out')) {
+    if (error.message?.includes("buffering timed out")) {
       return getFallbackOrders(queryParams);
     }
     throw error;
@@ -153,10 +154,10 @@ export const getAllOrders = async (queryParams = {}, user = {}) => {
  * Populates menu item references.
  */
 export const getOrderById = async (id) => {
-  const order = await Order.findById(id).populate('orderItems.menuItemId');
+  const order = await Order.findById(id).populate("orderItems.menuItemId");
 
   if (!order) {
-    const error = new Error('Order not found');
+    const error = new Error("Order not found");
     error.statusCode = 404;
     throw error;
   }
@@ -174,7 +175,7 @@ export const updateOrder = async (id, data) => {
   });
 
   if (!order) {
-    const error = new Error('Order not found');
+    const error = new Error("Order not found");
     error.statusCode = 404;
     throw error;
   }
@@ -189,7 +190,7 @@ export const deleteOrder = async (id) => {
   const order = await Order.findByIdAndDelete(id);
 
   if (!order) {
-    const error = new Error('Order not found');
+    const error = new Error("Order not found");
     error.statusCode = 404;
     throw error;
   }
@@ -204,13 +205,13 @@ export const cancelOrder = async (id) => {
   const order = await Order.findById(id);
 
   if (!order) {
-    const error = new Error('Order not found');
+    const error = new Error("Order not found");
     error.statusCode = 404;
     throw error;
   }
 
-  if (order.status !== 'pending') {
-    const error = new Error('Only pending orders can be cancelled');
+  if (order.status !== "pending") {
+    const error = new Error("Only pending orders can be cancelled");
     error.statusCode = 400;
     throw error;
   }
@@ -220,12 +221,12 @@ export const cancelOrder = async (id) => {
     new Date(new Date(order.createdAt).getTime() + CANCELLATION_WINDOW_MS);
 
   if (new Date() > effectiveDeadline) {
-    const error = new Error('Cancellation deadline has passed');
+    const error = new Error("Cancellation deadline has passed");
     error.statusCode = 400;
     throw error;
   }
 
-  order.status = 'cancelled';
+  order.status = "cancelled";
   await order.save();
 
   return order;
