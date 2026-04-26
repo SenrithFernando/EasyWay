@@ -93,10 +93,8 @@ export default function VendorDashboard() {
       setOrders(orderData || []);
 
       // 3. Fetch Menu Items
-      if (currentVendor) {
-        const menuData = await getAllMenuItems({ vendor: currentVendor._id });
-        setMenuItems(menuData || []);
-      }
+      const menuData = await getAllMenuItems({ vendor: userData.id });
+      setMenuItems(menuData || []);
 
       // 4. Fetch Articles
       const blogRes = await fetch('/api/blogs', {
@@ -130,7 +128,7 @@ export default function VendorDashboard() {
   const handleMenuSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = { ...menuFormData, vendor: vendor._id };
+      const data = { ...menuFormData, vendor: user.id };
       if (editingMenuItem) {
         await updateMenuItem(editingMenuItem._id, data);
         showToast('Item updated successfully');

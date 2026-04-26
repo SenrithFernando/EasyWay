@@ -66,7 +66,19 @@ export const getAllMenuItems = async (queryParams = {}) => {
 
   const filter = {};
 
-  if (queryParams.vendor) filter.vendor = queryParams.vendor;
+  if (queryParams.vendor) {
+    try {
+      const Canteen = mongoose.model('Canteen');
+      const canteen = await Canteen.findOne({ owner: queryParams.vendor });
+      if (canteen) {
+        filter.vendor = { $in: [queryParams.vendor, canteen._id] };
+      } else {
+        filter.vendor = queryParams.vendor;
+      }
+    } catch (err) {
+      filter.vendor = queryParams.vendor;
+    }
+  }
   if (queryParams.category) filter.category = queryParams.category;
   if (queryParams.available !== undefined)
     filter.available = queryParams.available === 'true';

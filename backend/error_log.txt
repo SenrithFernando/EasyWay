@@ -47,3 +47,40 @@ Error: Please only order items from one canteen at a time
     at Module.createOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/services/orderService.js:143:21)
     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
     at async createOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/controllers/orderController.js:8:19)
+
+
+[2026-04-26T01:39:13.238Z] Validation failed: status: Status must be Pending, Completed, or Cancelled
+ValidationError: Validation failed: status: Status must be Pending, Completed, or Cancelled
+    at model.Query.validate (/Users/senrithfernando/Coding/MERN/EasyWay/backend/node_modules/mongoose/lib/query.js:4187:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async model.Query._findOneAndUpdate (/Users/senrithfernando/Coding/MERN/EasyWay/backend/node_modules/mongoose/lib/query.js:3614:5)
+    at async model.Query.exec (/Users/senrithfernando/Coding/MERN/EasyWay/backend/node_modules/mongoose/lib/query.js:4797:63)
+    at async Module.updateOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/services/orderService.js:247:17)
+    at async updateOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/controllers/orderController.js:57:19)
+
+
+[2026-04-26T01:39:16.504Z] Validation failed: status: Status must be Pending, Completed, or Cancelled
+ValidationError: Validation failed: status: Status must be Pending, Completed, or Cancelled
+    at model.Query.validate (/Users/senrithfernando/Coding/MERN/EasyWay/backend/node_modules/mongoose/lib/query.js:4187:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async model.Query._findOneAndUpdate (/Users/senrithfernando/Coding/MERN/EasyWay/backend/node_modules/mongoose/lib/query.js:3614:5)
+    at async model.Query.exec (/Users/senrithfernando/Coding/MERN/EasyWay/backend/node_modules/mongoose/lib/query.js:4797:63)
+    at async Module.updateOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/services/orderService.js:247:17)
+    at async updateOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/controllers/orderController.js:57:19)
+
+
+[2026-04-26T01:39:37.221Z] Validation failed: status: Status must be Pending, Completed, or Cancelled
+ValidationError: Validation failed: status: Status must be Pending, Completed, or Cancelled
+    at model.Query.validate (/Users/senrithfernando/Coding/MERN/EasyWay/backend/node_modules/mongoose/lib/query.js:4187:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async model.Query._findOneAndUpdate (/Users/senrithfernando/Coding/MERN/EasyWay/backend/node_modules/mongoose/lib/query.js:3614:5)
+    at async model.Query.exec (/Users/senrithfernando/Coding/MERN/EasyWay/backend/node_modules/mongoose/lib/query.js:4797:63)
+    at async Module.updateOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/services/orderService.js:247:17)
+    at async updateOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/controllers/orderController.js:57:19)
+
+
+[2026-04-26T01:48:46.925Z] Only pending orders can be cancelled
+Error: Only pending orders can be cancelled
+    at Module.cancelOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/services/orderService.js:289:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async cancelOrder (file:///Users/senrithfernando/Coding/MERN/EasyWay/backend/controllers/orderController.js:89:19)

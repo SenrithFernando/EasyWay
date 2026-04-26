@@ -193,7 +193,17 @@ export const getAllOrders = async (queryParams = {}, userContext = null) => {
     if (role === 'student') {
       filter.studentId = userContext._id;
     } else if (role === 'vendor') {
-      filter.vendor = userContext._id;
+      try {
+        const Canteen = mongoose.model('Canteen');
+        const canteen = await Canteen.findOne({ owner: userContext._id });
+        if (canteen) {
+          filter.vendor = { $in: [userContext._id, canteen._id] };
+        } else {
+          filter.vendor = userContext._id;
+        }
+      } catch (err) {
+        filter.vendor = userContext._id;
+      }
     }
     // Admin can see everything, no filter added
   }
