@@ -242,7 +242,7 @@ export function ReservationPage() {
               </h2>
 
               <div className="flex gap-3 mb-6 overflow-x-auto pb-2 hide-scrollbar">
-                {INITIAL_DATE_OPTIONS.map((date) => (<button key={date} onClick={() => { setSelectedDate(date); setSelectedTable(null); }} className={`px-5 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${selectedDate === date ? 'bg-surface-900 text-white shadow-md' : 'bg-surface-50 text-surface-600 hover:bg-surface-100'}`}>
+                {INITIAL_DATE_OPTIONS.map((date) => (<button key={date} data-testid={`date-option-${date.replace(/\s+/g, '-').toLowerCase()}`} onClick={() => { setSelectedDate(date); setSelectedTable(null); }} className={`px-5 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${selectedDate === date ? 'bg-surface-900 text-white shadow-md' : 'bg-surface-50 text-surface-600 hover:bg-surface-100'}`}>
                       {date}
                     </button>))}
               </div>
@@ -270,6 +270,7 @@ export function ReservationPage() {
                   return (
                       <button 
                         key={i} 
+                        data-testid={`time-slot-${slot.time.replace(/\s+/g, '-').toLowerCase()}`}
                         disabled={!isSlotAvailable} 
                         onClick={() => { setSelectedTime(slot.time); setSelectedTable(null); }} 
                         className={`py-3 rounded-xl text-sm font-medium transition-all border ${!isSlotAvailable ? 'bg-surface-50 border-surface-100 text-surface-400 cursor-not-allowed' : selectedTime === slot.time ? 'bg-brand-50 border-brand-500 text-brand-700 shadow-sm' : 'bg-surface-0 border-surface-200 text-surface-700 hover:border-brand-300'}`}
@@ -291,7 +292,7 @@ export function ReservationPage() {
               <div className="mb-6">
                 <label className="block text-sm font-medium text-surface-700 mb-3">Number of Seats Required</label>
                 <div className="flex gap-3 overflow-x-auto pb-2 hide-scrollbar">
-                  {[1, 2, 3, 4].map((num) => (<button key={num} onClick={() => setSelectedSeats(num)} className={`px-5 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${selectedSeats === num ? 'bg-surface-900 text-white shadow-md' : 'bg-surface-50 text-surface-600 hover:bg-surface-100'}`}>
+                  {[1, 2, 3, 4].map((num) => (<button key={num} data-testid={`seat-option-${num}`} onClick={() => setSelectedSeats(num)} className={`px-5 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${selectedSeats === num ? 'bg-surface-900 text-white shadow-md' : 'bg-surface-50 text-surface-600 hover:bg-surface-100'}`}>
                       {num} {num === 1 ? 'Seat' : 'Seats'}
                     </button>))}
                 </div>
@@ -301,7 +302,7 @@ export function ReservationPage() {
               <div>
                 <label className="block text-sm font-medium text-surface-700 mb-3">Area</label>
                 <div className="flex gap-3 overflow-x-auto pb-2 hide-scrollbar">
-                  {LOCATIONS.map((loc) => (<button key={loc.id} onClick={() => { setSelectedLocation(loc.id); setSelectedTable(null); }} className={`px-5 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${selectedLocation === loc.id ? 'bg-surface-900 text-white shadow-md' : 'bg-surface-50 text-surface-600 hover:bg-surface-100'}`}>
+                  {LOCATIONS.map((loc) => (<button key={loc.id} data-testid={`area-option-${loc.id}`} onClick={() => { setSelectedLocation(loc.id); setSelectedTable(null); }} className={`px-5 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${selectedLocation === loc.id ? 'bg-surface-900 text-white shadow-md' : 'bg-surface-50 text-surface-600 hover:bg-surface-100'}`}>
                       {loc.name}
                     </button>))}
                 </div>
@@ -369,6 +370,7 @@ export function ReservationPage() {
                       return (
                         <button 
                           key={table.id} 
+                          data-testid={`table-slot-${table.id}`}
                           disabled={isDisabled} 
                           onClick={() => setSelectedTable(table.id)} 
                           className={`
@@ -435,12 +437,12 @@ export function ReservationPage() {
                 </div>
               </div>
 
-              <button className={`w-full inline-flex items-center justify-center font-medium rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-brand-500 to-brand-400 text-white hover:from-brand-600 hover:to-brand-500 focus:ring-brand-500 shadow-soft px-8 py-3.5 text-lg ${isSubmitting ? 'opacity-75 cursor-wait' : ''}`} disabled={!selectedTime || !selectedTable || !selectedSeats || isSubmitting} onClick={handleConfirm}>
+              <button data-testid="confirm-reservation-btn" className={`w-full inline-flex items-center justify-center font-medium rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-brand-500 to-brand-400 text-white hover:from-brand-600 hover:to-brand-500 focus:ring-brand-500 shadow-soft px-8 py-3.5 text-lg ${isSubmitting ? 'opacity-75 cursor-wait' : ''}`} disabled={!selectedTime || !selectedTable || !selectedSeats || isSubmitting} onClick={handleConfirm}>
                 {isSubmitting ? 'Confirming...' : 'Confirm Reservation'}
               </button>
             </div>
           </div>
-        </div> /* Success State */) : (<motion.div initial={{
+        </div> /* Success State */) : (<motion.div data-testid="reservation-success" initial={{
                 opacity: 0,
                 scale: 0.95,
             }} animate={{
