@@ -56,7 +56,9 @@ export function StudentDashboard() {
                     });
                     if (orderResponse.ok) {
                         const data = await orderResponse.json();
-                        setOrders(data.slice(0, 3)); // Show top 3 recent
+                        // Extract orders from data.data.orders if it exists, fallback to data if it's an array
+                        const ordersList = data.data?.orders || (Array.isArray(data) ? data : []);
+                        setOrders(ordersList.slice(0, 3)); // Show top 3 recent
                     }
                 } catch (error) { console.error("Order error:", error); } 
                 finally { setIsLoadingOrders(false); }
@@ -246,6 +248,8 @@ export function StudentDashboard() {
                         <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-tight border ${
                           order.status === 'Completed' ? 'bg-success-100 text-success-700 border-success-200' : 
                           order.status === 'Cancelled' ? 'bg-red-100 text-red-700 border-red-200' :
+                          order.status === 'Ready' ? 'bg-blue-100 text-blue-700 border-blue-200' :
+                          order.status === 'Preparing' ? 'bg-indigo-100 text-indigo-700 border-indigo-200 animate-pulse' :
                           'bg-amber-100 text-amber-700 border-amber-200'
                         }`}>
                           {order.status}

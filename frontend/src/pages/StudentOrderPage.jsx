@@ -44,7 +44,8 @@ const saveLocalOrders = (orders) => {
 
 const mergeOrdersById = (primary, secondary) => {
   const map = new Map();
-  [...primary, ...secondary].forEach((order) => {
+  // Prioritize primary (server/fresh) data over secondary (cached) data
+  [...secondary, ...primary].forEach((order) => {
     if (order && order._id) map.set(order._id, order);
   });
   return Array.from(map.values()).sort(
@@ -272,9 +273,16 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
               <h2 className="text-2xl font-bold mb-2">Order Confirmed!</h2>
               <p className="text-brand-600 font-mono text-sm mb-6">ID: #{confirmedOrder._id?.slice(-8).toUpperCase()}</p>
               
-              <div className="flex justify-center gap-8 mb-8 text-sm font-medium text-surface-600">
+              <div className="flex justify-center gap-6 mb-8 text-sm font-medium text-surface-600">
                 <span className="flex items-center gap-1.5"><Package size={16}/> {confirmedOrder.orderItems?.length} Items</span>
                 <span className="flex items-center gap-1.5"><Clock size={16}/> Pickup</span>
+                <span className={`flex items-center gap-1.5 px-2 py-0.5 rounded-lg border ${
+                  confirmedOrder.status === 'Ready' ? 'bg-blue-50 text-blue-700 border-blue-100' :
+                  confirmedOrder.status === 'Preparing' ? 'bg-indigo-50 text-indigo-700 border-indigo-100' :
+                  'bg-brand-50 text-brand-700 border-brand-100'
+                }`}>
+                  <Info size={14}/> {confirmedOrder.status || 'Pending'}
+                </span>
               </div>
               
               <div className="flex gap-4">
@@ -618,7 +626,13 @@ export default function StudentOrderPage({ initialTab = 'menu' }) {
 
                 <div className="mt-8 flex items-center gap-3 p-4 bg-brand-50 rounded-2xl text-brand-700 text-sm">
                   <Info size={18} />
-                  <p>Order is {selectedOrder.status === 'Completed' ? 'ready/picked up' : 'being prepared at the counter'}.</p>
+                  <p>Status: <span className="font-black uppercase tracking-tight">{selectedOrder.status}</span> — {
+                    selectedOrder.status === 'Completed' ? 'Picked up' : 
+                    selectedOrder.status === 'Ready' ? 'Ready for pickup' :
+                    selectedOrder.status === 'Preparing' ? 'Being prepared' :
+                    selectedOrder.status === 'Cancelled' ? 'Order cancelled' :
+                    'Waiting for vendor acceptance'
+                  }</p>
                 </div>
 
                 <button 
