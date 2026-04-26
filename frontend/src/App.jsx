@@ -30,6 +30,8 @@ import { VendorReviewsPage } from './pages/VendorReviewsPage';
 import { VendorAnalyticsPage } from './pages/VendorAnalyticsPage';
 import { AdminCanteenFeedbacksPage } from './pages/AdminCanteenFeedbacksPage';
 
+import ChatBotWidget from './components/ui/ChatBotWidget';
+
 function App() {
   return (
     <>
@@ -73,6 +75,7 @@ function App() {
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <ChatBotWidget />
     </>
   );
 }
